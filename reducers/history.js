@@ -1,22 +1,22 @@
 import R from 'ramda';
 
-export default (profileId) => {
+export default ({profileId}) => {
 
-  const startWithMenu = [{
+  const startWithHome = [{
     name: 'HOME'
   }];
   const startWithLogin = [{
     name: 'LOGIN'
   }];
 
-  const defaultState = profileId ? startWithMenu : startWithLogin;
+  const defaultState = profileId ? startWithHome : startWithLogin;
 
   return (state = defaultState, action) => {
     switch (action.type) {
       case 'RESET_HISTORY':
         return defaultState;
       case 'GO_TO':
-        return [action.route, ...startWithMenu];
+        return [action.route, ...startWithHome];
       case 'NAVIGATE_TO':
         return [action.route, ...state];
       case 'START_LOADING':
@@ -36,7 +36,7 @@ export default (profileId) => {
         return state;
       case 'SKIP_LOGIN':
       case 'LOGIN':
-        return startWithMenu;
+        return startWithHome;
       case 'LOGOUT':
         return startWithLogin;
       default:

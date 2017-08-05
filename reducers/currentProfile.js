@@ -1,5 +1,5 @@
 
-export default (profileId) => {
+export default ({profileId}) => {
 
   const defaultState = {
     _id: profileId

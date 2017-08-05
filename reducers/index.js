@@ -8,9 +8,9 @@ import docLoaders from './docLoaders';
 
 
 export default config => {
-  const currentProfile = createCurrentProfileReducer(config.profileId);
-  const history = createHistoryReducer(config.profileId);
-  const documents = createDocumentsReducer(config.actionHandlers, config.getRelevantDocsIds);
+  const currentProfile = createCurrentProfileReducer(config);
+  const history = createHistoryReducer(config);
+  const documents = createDocumentsReducer(config);
   return {
     currentProfile,
     history,

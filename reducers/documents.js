@@ -2,7 +2,7 @@ import R from 'ramda';
 
 const defaultState = {};
 
-export default (actionHandlers, getRelevantDocsIds) => {
+export default ({actionHandlers, getRelevantDocsIds}) => {
   const actionHandlersKeys = R.flatten(Object.values(actionHandlers).map(hs => Object.keys(hs)));
   return (state = defaultState, action) => {
     switch (action.type) {

@@ -16,8 +16,8 @@ export default config => {
     currentProfile,
     history,
     events,
-		documents,
-		processing_local,
+    documents,
+    processing_local,
     dialog,
     docLoaders,
     notifications

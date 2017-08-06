@@ -1,7 +1,7 @@
 export const resetHistory = () => {
-	return {
-		type: 'RESET_HISTORY'
-	}
+  return {
+    type: 'RESET_HISTORY'
+  }
 }
 
 export const navigateTo = (routeName, params) => {

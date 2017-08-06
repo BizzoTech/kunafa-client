@@ -4,6 +4,6 @@ import * as notificationActions from './notifications';
 
 export default {
   ...historyActions,
-	...dialogActions,
+  ...dialogActions,
   ...notificationActions
 }

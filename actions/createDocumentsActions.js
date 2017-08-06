@@ -4,9 +4,9 @@ PouchDB.plugin(require('pouchdb-find'));
 export default config => {
   const host = config.HOST;
   const publicDb = new PouchDB(`http://${host}/public`, {
-   ajax: {
-    timeout: 60000
-   }
+    ajax: {
+      timeout: 60000
+    }
   });
   const loadDocs = (query, overrideAction = {}) => dispatch => {
     return publicDb.find(query).then(result => {
@@ -17,7 +17,7 @@ export default config => {
         }
       })
     }).then(docs => {
-      if (docs && docs.length > 0) {
+      if(docs && docs.length > 0) {
         dispatch({
           type: 'LOAD_DOCS',
           docs,
@@ -33,10 +33,10 @@ export default config => {
   //const TTL = 0; // Live Update
 
   const reLoadDoc = (doc, overrideAction = {}) => dispatch => {
-    if (!doc || !doc._id) {
+    if(!doc || !doc._id) {
       return Promise.resolve();
     }
-    if (!doc.invalidCache && doc.fetchedAt && (Date.now() - doc.fetchedAt < TTL)) {
+    if(!doc.invalidCache && doc.fetchedAt && (Date.now() - doc.fetchedAt < TTL)) {
       //console.log("loaded from cache");
       return Promise.resolve();
     }
@@ -58,13 +58,13 @@ export default config => {
 
   const loadMoreDocs = loaderName => (dispatch, getState) => {
     const loaderState = getState().docLoaders[loaderName];
-    if (loaderState) {
+    if(loaderState) {
       const {
         query,
         loaded,
         endReached
       } = loaderState;
-      if (endReached) {
+      if(endReached) {
         return;
       }
 

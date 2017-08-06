@@ -5,6 +5,7 @@ import createDocumentsReducer from './documents';
 import processing_local from './processing_local';
 import dialog from './dialog';
 import docLoaders from './docLoaders';
+import notifications from './notifications';
 
 
 export default config => {
@@ -18,6 +19,7 @@ export default config => {
 		documents,
 		processing_local,
     dialog,
-    docLoaders
+    docLoaders,
+    notifications
   }
 }

@@ -2,7 +2,7 @@ import R from 'ramda';
 
 const defaultState = {};
 
-export default config => (state = defaultState, action) {
+export default config => (state = defaultState, action) => {
   switch (action.type) {
     case 'LOAD_EVENTS':
       return R.merge(state, R.indexBy(R.prop('_id'), action.events));

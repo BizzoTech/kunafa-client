@@ -8,15 +8,13 @@ import docLoaders from './docLoaders';
 import notifications from './notifications';
 
 
-export default config => {
-  return {
-    currentProfile,
-    history,
-    events,
-    documents,
-    processing_local,
-    dialog,
-    docLoaders,
-    notifications
-  }
+export default {
+  currentProfile,
+  history,
+  events,
+  documents,
+  processing_local,
+  dialog,
+  docLoaders,
+  notifications
 }

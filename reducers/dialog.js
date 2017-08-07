@@ -4,7 +4,7 @@ const defaultState = {
   currentDialog: undefined
 }
 
-export default(state = defaultState, action) => {
+export default config => (state = defaultState, action) => {
   switch(action.type) {
   case 'OPEN_DIALOG':
     return action.dialog;

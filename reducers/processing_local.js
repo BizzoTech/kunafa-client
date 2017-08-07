@@ -2,7 +2,7 @@ const defaultState = {
   isProcessing: false
 }
 
-export default(state = defaultState, action) => {
+export default config => (state = defaultState, action) => {
   switch(action.type) {
   case 'START_PROCESSING_LOCAL':
     return {

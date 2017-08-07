@@ -2,7 +2,7 @@ import R from 'ramda';
 
 const defaultState = {}
 
-export default(state = defaultState, action) => {
+export default config => (state = defaultState, action) => {
   switch(action.type) {
   case 'CREATE_DOCS_LOADER':
     return {

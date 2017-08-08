@@ -29,7 +29,7 @@ export default config => {
     });
   }
 
-  const TTL = 5 * 60 * 1000; //5 minuts
+  const TTL = config.TTL || 5 * 60 * 1000; //5 minuts
   //const TTL = 0; // Live Update
 
   const reLoadDoc = (doc, overrideAction = {}) => dispatch => {

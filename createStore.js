@@ -8,6 +8,7 @@ import ReduxThunkMiddleware from 'redux-thunk';
 
 import reducers from './reducers';
 import middlewares from './middlewares';
+import actions from './actions';
 
 export default config => {
   const allReducers = {
@@ -26,6 +27,11 @@ export default config => {
   const AppMiddleware = applyMiddleware(ReduxThunkMiddleware, ...R.map(r => r(config), allMiddlewares));
 
   const AppStore = createStore(AppReducer, AppMiddleware);
+
+  AppStore.actions = {
+    ...actions,
+    ...config.actions
+  }
 
   return AppStore;
 }

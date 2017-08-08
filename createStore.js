@@ -23,13 +23,13 @@ export default appConfig => {
     actionCreators: allActionCreators
   }
 
-  const allReducers = {
+  const _allReducers = {
     ...reducers,
     ...config.reducers
   }
-  const AppReducer = combineReducers({
-    ...R.map(r => r(config), allReducers)
-  });
+  const allReducers = R.map(reducer => (...args) => reducer(...args, config), _allReducers);
+
+  const AppReducer = combineReducers(allReducers);
 
 
   const _allMiddlewares = [

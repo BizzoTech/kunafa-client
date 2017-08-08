@@ -18,10 +18,10 @@ export default config => {
     ...R.map(r => r(config), allReducers)
   });
 
-  const allMiddlewares = {
+  const allMiddlewares = [
     ...config.middlewares,
     ...middlewares
-  }
+  ]
 
   const AppMiddleware = applyMiddleware(ReduxThunkMiddleware, ...R.map(r => r(config), allMiddlewares));
 

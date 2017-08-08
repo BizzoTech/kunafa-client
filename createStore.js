@@ -7,6 +7,7 @@ import {
 import ReduxThunkMiddleware from 'redux-thunk';
 
 import reducers from './reducers';
+import middlewares from './middlewares';
 
 export default config => {
   const allReducers = {
@@ -17,7 +18,12 @@ export default config => {
     ...R.map(r => r(config), allReducers)
   });
 
-  const AppMiddleware = applyMiddleware(ReduxThunkMiddleware, ...R.map(r => r(config), config.middlewares));
+  const allMiddlewares = {
+    ...config.middlewares,
+    ...middlewares
+  }
+
+  const AppMiddleware = applyMiddleware(ReduxThunkMiddleware, ...R.map(r => r(config), allMiddlewares));
 
   const AppStore = createStore(AppReducer, AppMiddleware);
 

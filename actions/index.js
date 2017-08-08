@@ -4,8 +4,10 @@ import * as notificationActions from './notifications';
 import createDocumentsActions from './createDocumentsActions';
 
 export default config => {
-  ...createDocumentsActions(config),
-  ...historyActions,
-  ...dialogActions,
-  ...notificationActions
+  return {
+    ...createDocumentsActions(config),
+    ...historyActions,
+    ...dialogActions,
+    ...notificationActions
+  }
 }

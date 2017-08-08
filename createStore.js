@@ -11,6 +11,11 @@ import middlewares from './middlewares';
 import actions from './actions';
 
 export default config => {
+  const allActions = {
+    ...actions(config),
+    ...config.actions
+  }
+
   const allReducers = {
     ...reducers,
     ...config.reducers
@@ -24,14 +29,13 @@ export default config => {
     ...middlewares
   ]
 
-  const AppMiddleware = applyMiddleware(ReduxThunkMiddleware, ...R.map(r => r(config), allMiddlewares));
+  const AppMiddleware = applyMiddleware(ReduxThunkMiddleware, ...R.map(r => r({ ...config,
+    actions: allActions
+  }), allMiddlewares));
 
   const AppStore = createStore(AppReducer, AppMiddleware);
 
-  AppStore.actions = {
-    ...actions,
-    ...config.actions
-  }
+  AppStore.actions = allActions;
 
   return AppStore;
 }

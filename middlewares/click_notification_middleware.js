@@ -1,6 +1,6 @@
-export default({
+export default(store, {
   getNotificationRoute
-}) => store => next => action => {
+}) => next => action => {
   if(action.type === 'CLICK_NOTIFICATION') {
     if(action.notification && action.notification.actionType) {
       const notification = action.notification;
@@ -9,8 +9,7 @@ export default({
       if(route) {
         next({
           type: action.external ?
-            'GO_TO' :
-            'NAVIGATE_TO',
+            'GO_TO' : 'NAVIGATE_TO',
           route
         });
       }

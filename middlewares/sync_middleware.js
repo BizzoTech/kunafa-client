@@ -73,7 +73,7 @@ const syncChanges = (db, paths, store, dispatch) => {
   return changes;
 }
 
-export default({getLocalDbUrl, paths}) => store => next => {
+export default(store, {getLocalDbUrl, paths}) => next => {
   const profileId = store.getState().currentProfile._id;
   const localDbUrl = getLocalDbUrl(profileId);
   let db = new PouchDB(localDbUrl);

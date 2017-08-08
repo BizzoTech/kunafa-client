@@ -1,6 +1,8 @@
 import R from 'ramda';
 
-export default config => store => next => action => {
+export default(store, {
+  actionCreators
+}) => next => action => {
 
   let result = next(action);
 
@@ -15,7 +17,7 @@ export default config => store => next => action => {
   if(action.type === 'UPDATE_EVENT' || action.type === "ADD_EVENT") {
     if(!action.doc.draft && action.doc.appliedOn) {
       for(docId of Object.keys(action.doc.appliedOn)) {
-        store.dispatch(config.actions.reLoadDoc({
+        store.dispatch(actionCreators.reLoadDoc({
           _id: docId
         }));
       }

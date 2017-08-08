@@ -10,13 +10,18 @@ import reducers from './reducers';
 import middlewares from './middlewares';
 import actionCreators from './actionCreators';
 
-export default config => {
+export default appConfig => {
   const _allActionCreators = {
-    ...actionCreators(config),
-    ...config.actionCreators
+    ...actionCreators(appConfig),
+    ...appConfig.actionCreators
   }
 
   const allActionCreators = R.map(actionCreator => (...args) => actionCreator(...args, _allActionCreators), _allActionCreators);
+
+  const config = {
+    ...appConfig,
+    actionCreators: allActionCreators
+  }
 
   const allReducers = {
     ...reducers,
@@ -26,14 +31,14 @@ export default config => {
     ...R.map(r => r(config), allReducers)
   });
 
-  const allMiddlewares = [
+
+  const _allMiddlewares = [
     ...config.middlewares,
     ...middlewares
-  ]
+  ];
+  const allMiddlewares = R.map(middleware => store => middleware(store, config), _allMiddlewares);
 
-  const AppMiddleware = applyMiddleware(ReduxThunkMiddleware, ...R.map(r => r({ ...config,
-    actions: allActionCreators
-  }), allMiddlewares));
+  const AppMiddleware = applyMiddleware(ReduxThunkMiddleware, ...allMiddlewares);
 
   const AppStore = createStore(AppReducer, AppMiddleware);
 

@@ -8,13 +8,15 @@ import ReduxThunkMiddleware from 'redux-thunk';
 
 import reducers from './reducers';
 import middlewares from './middlewares';
-import actions from './actions';
+import actionCreators from './actionCreators';
 
 export default config => {
-  const allActions = {
-    ...actions(config),
-    ...config.actions
+  const _allActionCreators = {
+    ...actionCreators(config),
+    ...config.actionCreators
   }
+
+  const allActionCreators = R.map(actionCreator => (...args) => actionCreator(...args, _allActionCreators), _allActionCreators);
 
   const allReducers = {
     ...reducers,
@@ -30,12 +32,17 @@ export default config => {
   ]
 
   const AppMiddleware = applyMiddleware(ReduxThunkMiddleware, ...R.map(r => r({ ...config,
-    actions: allActions
+    actions: allActionCreators
   }), allMiddlewares));
 
   const AppStore = createStore(AppReducer, AppMiddleware);
 
-  AppStore.actions = allActions;
+  AppStore.actions = allActionCreators;
+
+  setTimeout(() => {
+    const initialActions = config.getInitialActions(AppStore.getState, allActionCreators);
+    initialActions.forEach(AppStore.dispatch);
+  }, 500);
 
   return AppStore;
 }

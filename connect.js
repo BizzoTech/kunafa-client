@@ -10,14 +10,15 @@ import PropTypes from 'prop-types'
 export default(mapStateToProps, mapDispatchToProps) => component => {
 
   const Wrapped = connect(mapStateToProps, (dispatch, ownProps) => {
+    const pkgActions = bindActionCreators(ownProps.actions, dispatch);
     if(mapDispatchToProps) {
       const userActions = mapDispatchToProps(dispatch, ownProps);
       return {
-        ...(bindActionCreators(ownProps.actions, dispatch)),
+        ...pkgActions,
         ...userActions
       };
     }
-    return bindActionCreators(ownProps.actions, dispatch);
+    return pkgActions;
   })(component);
 
   class Wrapper extends Component {

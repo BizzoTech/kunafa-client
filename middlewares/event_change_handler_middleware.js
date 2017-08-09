@@ -17,7 +17,7 @@ export default(store, {
   if(action.type === 'UPDATE_EVENT' || action.type === "ADD_EVENT") {
     if(!action.doc.draft && action.doc.appliedOn) {
       for(docId of Object.keys(action.doc.appliedOn)) {
-        store.dispatch(actionCreators.reLoadDoc({
+        store.dispatch(actionCreators.fetchDoc({
           _id: docId
         }));
       }

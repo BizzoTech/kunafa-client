@@ -14,11 +14,11 @@ const getDefaultAction = act => {
   }
 }
 
-const initialLoad = async(db, paths, dispatch) => {
+const initialLoad = async(db, syncPaths, dispatch) => {
   const result = await db.allDocs({
     include_docs: true
   });
-  paths.forEach(path => {
+  syncPaths.forEach(path => {
     if(path.actions.load) {
       dispatch({
         type: path.actions.load,
@@ -28,14 +28,14 @@ const initialLoad = async(db, paths, dispatch) => {
   })
 }
 
-const syncChanges = (db, paths, store, dispatch) => {
+const syncChanges = (db, syncPaths, store, dispatch) => {
   const changes = db.changes({
     since: 'now',
     live: true,
     include_docs: true
   });
   changes.on('change', change => {
-    paths.forEach((path) => {
+    syncPaths.forEach((path) => {
       if(path.filter && !(path.filter(change.doc))) {
         return;
       }
@@ -73,14 +73,14 @@ const syncChanges = (db, paths, store, dispatch) => {
   return changes;
 }
 
-export default(store, {getLocalDbUrl, paths}) => next => {
+export default(store, {getLocalDbUrl, syncPaths}) => next => {
   const profileId = store.getState().currentProfile._id;
   const localDbUrl = getLocalDbUrl(profileId);
   let db = new PouchDB(localDbUrl);
   //Initial Load docs to improve render performance by tracking new changes only
-  initialLoad(db, paths, next);
+  initialLoad(db, syncPaths, next);
 
-  let changes = syncChanges(db, paths, store, next);
+  let changes = syncChanges(db, syncPaths, store, next);
 
   const getDocs = (state, action) => [action.doc];
   const mergedActions = {
@@ -102,7 +102,7 @@ export default(store, {getLocalDbUrl, paths}) => next => {
       });
     }
   }
-  paths.forEach(path => {
+  syncPaths.forEach(path => {
     if(Array.isArray(path.actions.insert)) {
       path.actions.insert.forEach(mergeAction("insert"));
     } else {
@@ -173,9 +173,9 @@ export default(store, {getLocalDbUrl, paths}) => next => {
         const localDbUrl = getLocalDbUrl(profileId);
         db = new PouchDB(localDbUrl);
         //Initial Load docs to improve render performance by tracking new changes only
-        initialLoad(db, paths, next);
+        initialLoad(db, syncPaths, next);
 
-        changes = syncChanges(db, paths, store, next);
+        changes = syncChanges(db, syncPaths, store, next);
       }
     }
   }

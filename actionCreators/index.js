@@ -1,13 +1,11 @@
 import * as historyActions from './history';
 import * as dialogActions from './dialog';
 import * as notificationActions from './notifications';
-import createDocumentsActions from './createDocumentsActions';
+import * as documentsActions from './documents';
 
-export default config => {
-  return {
-    ...createDocumentsActions(config),
-    ...historyActions,
-    ...dialogActions,
-    ...notificationActions
-  }
+export default {
+  ...documentsActions,
+  ...historyActions,
+  ...dialogActions,
+  ...notificationActions
 }

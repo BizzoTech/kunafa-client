@@ -28,7 +28,7 @@ export default(store, config) => {
     const localOnly = needLocalProcessing.includes(action) || shouldWaitForOtherAction;
     const _id = state.currentProfile._id ?
       `${state.currentProfile._id}-${Date.now()}-${action.type}` :
-      `anonymous-${info.device_unique_id}-${Date.now()}-${action.type}`;
+      `anonymous-${deviceInfo.device_unique_id}-${Date.now()}-${action.type}`;
     return {
       _id,
       type: "EVENT",

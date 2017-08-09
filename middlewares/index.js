@@ -4,8 +4,8 @@ import syncMiddleware from './sync_middleware';
 import eventSourcingMiddleware from './event_sourcing_middleware';
 
 export default [
-  eventChangeHandlerMiddleware,
-  clickNotificationMiddleware,
+  eventSourcingMiddleware,
   syncMiddleware,
-  eventSourcingMiddleware
+  clickNotificationMiddleware,
+  eventChangeHandlerMiddleware
 ]

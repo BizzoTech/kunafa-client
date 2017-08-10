@@ -1,7 +1,17 @@
 {
   "name": "kunafa-client",
   "version": "0.0.1",
-  "private": true,
+  "license" : "MIT",
+  "author": {
+    "name": "Emad Shaaban",
+    "email": "emad.shaaban92@gmail.com"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "transpile": "yarn run transpile:babel && yarn run transpile:flow",
+    "transpile:babel": "rm -rf lib && babel -d lib src",
+    "transpile:flow": "flow-copy-source src lib"
+  },
   "dependencies": {
     "moment": "^2.17.1",
     "pouchdb": "^6.2.0",
@@ -13,5 +23,14 @@
     "reselect-map": "^1.0.3",
     "util": "^0.10.3",
     "uuid": "^3.0.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.25.0",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-react": "^6.24.1",
+    "flow-bin": "^0.52.0",
+    "flow-copy-source": "^1.2.0"
   }
 }

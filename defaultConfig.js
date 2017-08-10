@@ -7,9 +7,7 @@ export default {
   getRelevantDocsIds: action => {
     return [];
   },
-  needLocalProcessing: action => {
-    return false;
-  },
+  needLocalProcessing: [],
   processLocalEvent: event => Promise.resolve(event),
   localOnlyActions: [],
   getActionPreProcessors: action => {

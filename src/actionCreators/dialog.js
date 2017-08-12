@@ -1,5 +1,7 @@
 // @flow
-export const openDialog = (dialog: any) => {
+import type {Dialog} from '../types';
+
+export const openDialog = (dialog: Dialog) => {
   return {
     type: 'OPEN_DIALOG',
     dialog

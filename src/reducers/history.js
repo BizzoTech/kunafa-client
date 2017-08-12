@@ -1,4 +1,9 @@
+// @flow
 import R from 'ramda';
+
+import type {Route, Action} from '../types';
+
+type HistoryState = Array<Route>;
 
 const startWithHome = [{
   name: 'HOME'
@@ -7,7 +12,7 @@ const startWithLogin = [{
   name: 'LOGIN'
 }];
 
-export default(state, action, config) => {
+export default(state: HistoryState, action: Action, config: any) => {
   const defaultState = config.profileId ? startWithHome : startWithLogin;
   if(state === undefined){
     return defaultState;

@@ -1,20 +1,31 @@
+// @flow
 import R from 'ramda';
+import type {Event, Action} from '../types';
 
-const defaultState = {};
+type EventsState = {
+  [string]: Event
+}
 
-export default(state = defaultState, action) => {
-  switch(action.type) {
-  case 'LOAD_EVENTS':
-    return R.merge(state, R.indexBy(R.prop('_id'), action.events));
-  case 'ADD_EVENT':
-  case 'UPDATE_EVENT':
-    return R.assoc(action.doc._id, action.doc, state);
-  case 'REMOVE_EVENT':
-    return R.dissoc(action.doc._id, state);
-  case 'LOGIN':
-  case 'LOGOUT':
-    return defaultState;
-  default:
-    return state;
+
+const defaultState : EventsState = {};
+
+export default(state : EventsState = defaultState, action : Action) => {
+  switch (action.type) {
+    case 'LOAD_EVENTS':
+      const newEvents = R.indexBy(e => e._id)(action.events);
+      return {
+        ...state,
+        ...newEvents
+      }
+    case 'ADD_EVENT':
+    case 'UPDATE_EVENT':
+      return R.assoc(action.doc._id, action.doc, state);
+    case 'REMOVE_EVENT':
+      return R.dissoc(action.doc._id, state);
+    case 'LOGIN':
+    case 'LOGOUT':
+      return defaultState;
+    default:
+      return state;
   }
 }

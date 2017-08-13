@@ -6,7 +6,7 @@
     "name": "Emad Shaaban",
     "email": "emad.shaaban92@gmail.com"
   },
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "transpile": "yarn run transpile:babel && yarn run transpile:flow",
     "transpile:babel": "rm -rf lib && babel -d lib src",
@@ -17,6 +17,7 @@
     "pouchdb": "^6.2.0",
     "pouchdb-find": "^6.2.0",
     "ramda": "^0.24.0",
+    "react-redux": "^5.0.5",
     "redux": "^3.7.2",
     "redux-thunk": "^2.1.0",
     "reselect": "^3.0.1",

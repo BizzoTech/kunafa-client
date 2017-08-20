@@ -10,7 +10,8 @@
   "scripts": {
     "transpile": "yarn run transpile:babel && yarn run transpile:flow",
     "transpile:babel": "rm -rf lib && babel -d lib src",
-    "transpile:flow": "flow-copy-source src lib"
+    "transpile:flow": "flow-copy-source src lib",
+    "flow": "flow"
   },
   "dependencies": {
     "moment": "^2.17.1",

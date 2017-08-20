@@ -1,5 +1,5 @@
 // @flow
-import React, {Component} from 'react';
+import * as React from 'react';
 import {
   connect as originalConnect
 } from 'react-redux';
@@ -8,12 +8,13 @@ import {
 } from 'redux';
 import PropTypes from 'prop-types';
 
-type MapStateToProps<S, SP> = (state: S) => SP;
-type MapDispatchToProps<DP> = (dispatch: Function) => DP
+import type {MapStateToProps, MapDispatchToProps} from 'react-redux';
+import type { Dispatch} from "redux";
 
-const connect = <S, SP: Object, DP: Object>(mapStateToProps: MapStateToProps<S, SP>, mapDispatchToProps: MapDispatchToProps<DP>) => (component: Component<void, any, any>): Component<void, SP & DP, any> => {
 
-  const Wrapped = originalConnect(mapStateToProps, (dispatch, ownProps) => {
+const connect = <S, A: { type: $Subtype<string> }, OP: {}, SP: {}, DP: {}>(mapStateToProps: ?MapStateToProps<S, OP, SP>, mapDispatchToProps: ?MapDispatchToProps<A, OP, DP>) => (component: React.ComponentType<$Supertype<SP & DP & OP>>): React.ComponentType<OP> => {
+
+  const Wrapped = originalConnect(mapStateToProps, (dispatch: Dispatch<A>, ownProps: {actions : {}} & OP) => {
     const pkgActions = bindActionCreators(ownProps.actions, dispatch);
     if(typeof mapDispatchToProps === 'function') {
       const userActions = mapDispatchToProps(dispatch, ownProps);
@@ -25,9 +26,10 @@ const connect = <S, SP: Object, DP: Object>(mapStateToProps: MapStateToProps<S, 
     return pkgActions;
   }, null)(component);
 
-  class Wrapper extends Component<void, SP & DP, any> {
+  class Wrapper extends React.Component<OP> {
     render(){
-      return <Wrapped actions={this.context.store.actions} {...this.props} />;
+      const actions: {} = this.context.store.actions;
+      return <Wrapped actions={actions} {...this.props} />;
     }
   }
 

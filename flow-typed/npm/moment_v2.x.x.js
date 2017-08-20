@@ -1,5 +1,5 @@
-// flow-typed signature: 176e3a527f2c771b38fcb2267c232bbe
-// flow-typed version: b0a2f0a72a/moment_v2.x.x/flow_>=v0.28.x
+// flow-typed signature: 97b6c70aea8e71ff15a576064d0b48e0
+// flow-typed version: 468280fffb/moment_v2.x.x/flow_>=v0.28.x
 
 type moment$MomentOptions = {
   y?: number|string,
@@ -101,6 +101,7 @@ declare class moment$MomentDuration {
   get(unit: string): number;
   toJSON(): string;
   toISOString(): string;
+  isValid(): bool;
 }
 declare class moment$Moment {
   static ISO_8601: string;

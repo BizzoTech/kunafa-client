@@ -6,13 +6,14 @@ type EventsState = {
   [string]: Event
 }
 
+const indexBy = R.reduceBy((acc, elem) => elem, null);
 
 const defaultState : EventsState = {};
 
 export default(state : EventsState = defaultState, action : Action) => {
   switch (action.type) {
     case 'LOAD_EVENTS':
-      const newEvents = R.indexBy(e => e._id)(action.events);
+      const newEvents = indexBy(e => e._id, action.events);
       return {
         ...state,
         ...newEvents

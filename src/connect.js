@@ -12,7 +12,7 @@ import type {MapStateToProps, MapDispatchToProps, Connector} from 'react-redux';
 import type { Dispatch} from "redux";
 
 
-const connect = <S, A: { type: $Subtype<string> }, OP: {}, SP: {}, DP: {}>(mapStateToProps: ?MapStateToProps<S, OP, SP>, mapDispatchToProps: ?MapDispatchToProps<A, OP, DP>) => (component: React.ComponentType<any>): React.ComponentType<OP> => {
+const connect = <S, A: { type: $Subtype<string> }, OP: {}, SP: {}, DP: {}>(mapStateToProps?: MapStateToProps<S, OP, SP>, mapDispatchToProps?: MapDispatchToProps<A, OP, DP>) => (component: React.ComponentType<any>): React.ComponentType<OP> => {
 
   const Wrapped = originalConnect(mapStateToProps, (dispatch: Dispatch<A>, ownProps: {actions : {}} & OP) => {
     const pkgActions = bindActionCreators(ownProps.actions, dispatch);

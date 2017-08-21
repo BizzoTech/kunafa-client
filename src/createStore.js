@@ -1,3 +1,4 @@
+// @flow
 import R from 'ramda';
 import {
   createStore,
@@ -12,9 +13,11 @@ import actionCreators from './actionCreators';
 
 import defaultConfig from './defaultConfig';
 
-export default appConfig => {
+import type {AppConfig, StrictAppConfig, SyncPath, ActionCreator} from './types';
 
-  const syncPaths = R.append({
+export default (appConfig: AppConfig) => {
+
+  const syncPaths: Array<SyncPath> = R.append({
     name: "events",
     filter: (doc) => {
       return doc.type == "EVENT"; // & !doc.appliedOnClient;
@@ -33,7 +36,7 @@ export default appConfig => {
     syncPaths
   }
 
-  const _allActionCreators = {
+  const _allActionCreators: { [string]: ActionCreator} = {
     ...actionCreators,
     ...config.actionCreators
   }
@@ -55,9 +58,9 @@ export default appConfig => {
 
   const AppReducer = combineReducers(allReducers);
   const AppMiddleware = applyMiddleware(ReduxThunkMiddleware, ...allMiddlewares);
-  const AppStore = createStore(AppReducer, AppMiddleware);
+  const store = createStore(AppReducer, AppMiddleware);
 
-  AppStore.actions = allActionCreators;
+  const AppStore = {...store, actions: allActionCreators};
 
   setTimeout(() => {
     const initialActions = config.getInitialActions(AppStore.getState, allActionCreators);

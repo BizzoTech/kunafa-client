@@ -1,4 +1,7 @@
-export default {
+// @flow
+import type {AppConfig, StrictAppConfig, SyncPath, Route} from './types';
+
+const defaultConfig: StrictAppConfig = {
   actionCreators: {},
   reducers: {},
   middlewares: [],
@@ -21,10 +24,22 @@ export default {
   keepInCache: (doc, state) => {
     return false;
   },
-  getDeepLinkRoute: () => {},
-  getNotificationRoute: () => {},
+  getDeepLinkRoute: (url): Route => {
+    return {
+      name: 'HOME'
+    }
+  },
+  getNotificationRoute: (notification): Route => {
+    return {
+      name: 'HOME'
+    }
+  },
   getInitialActions: () => {},
   renderDialogContent: () => {},
   statusBarColor: getState => '#000000',
-  progressBarColor: getState => '#000000'
+  progressBarColor: getState => '#000000',
+  isConnected: () => false
 }
+
+
+export default defaultConfig;

@@ -4,9 +4,11 @@ import * as dialogActions from './dialog';
 import * as notificationActions from './notifications';
 import * as documentsActions from './documents';
 
-export default {
+import type {ActionCreator} from '../types';
+
+export default ({
   ...documentsActions,
   ...historyActions,
   ...dialogActions,
   ...notificationActions
-}
+}: { [string]: ActionCreator})

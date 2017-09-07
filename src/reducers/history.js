@@ -13,7 +13,7 @@ const startWithLogin = [{
 }];
 
 export default(state: HistoryState, action: Action, config: any) => {
-  const defaultState = config.profileId ? startWithHome : startWithLogin;
+  const defaultState = config && config.profileId ? startWithHome : startWithLogin;
   if(state === undefined){
     return defaultState;
   }
@@ -24,10 +24,6 @@ export default(state: HistoryState, action: Action, config: any) => {
     return [action.route, ...startWithHome];
   case 'NAVIGATE_TO':
     return [action.route, ...state];
-  case 'START_LOADING':
-    return [{
-      name: 'LOADING'
-        }, ...state];
   case 'TRANSITE_TO':
     return state.length > 1 ? R.update(0, action.route, state) : [action.route, ...state];
   case 'GO_BACK':
@@ -39,6 +35,10 @@ export default(state: HistoryState, action: Action, config: any) => {
       }, R.tail(state));
     }
     return state;
+  case 'START_LOADING':
+    return [{
+      name: 'LOADING'
+        }, ...state];
   case 'SKIP_LOGIN':
   case 'LOGIN':
     return startWithHome;

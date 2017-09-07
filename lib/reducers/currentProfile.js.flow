@@ -1,6 +1,6 @@
 export default(state, action, config) => {
   const defaultState = {
-    _id: config.profileId
+    _id: config ? config.profileId : undefined
   }
   if(state === undefined){
     return defaultState;

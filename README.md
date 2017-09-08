@@ -1,3 +1,1 @@
-[![Build Status](https://travis-ci.org/BizzoTech/kunafa-client.svg?branch=master)](https://travis-ci.org/BizzoTech/kunafa-client)
-
-[![Coverage Status](https://coveralls.io/repos/github/BizzoTech/kunafa-client/badge.svg?branch=master)](https://coveralls.io/github/BizzoTech/kunafa-client?branch=master)
+[![Build Status](https://travis-ci.org/BizzoTech/kunafa-client.svg?branch=master)](https://travis-ci.org/BizzoTech/kunafa-client) [![Coverage Status](https://coveralls.io/repos/github/BizzoTech/kunafa-client/badge.svg?branch=master)](https://coveralls.io/github/BizzoTech/kunafa-client?branch=master) [![codebeat badge](https://codebeat.co/badges/02c5dd9e-a61a-4834-b6e7-794ea50e4385)](https://codebeat.co/projects/github-com-bizzotech-kunafa-client-master)

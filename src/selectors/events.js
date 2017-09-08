@@ -27,8 +27,7 @@ export const eventsByRelevantDocSelector = createSelector(sortedEventsSelector, 
   const eventsGroupedByDocId = R.groupBy(event => event.docId, eventsWithDocIds);
   return R.map(events => {
     return events.filter(event => {
-      const appliedOnClientRev: ?string = R.path([
-        'action', 'appliedOnClient', event.docId
+      const appliedOnClientRev: ?string = R.path(['appliedOnClient', event.docId
       ], event);
       return appliedOnClientRev === undefined
     });

@@ -1,2 +1,2 @@
-lib/*
-flow-typed/*
+lib
+flow-typed

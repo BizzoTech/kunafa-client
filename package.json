@@ -9,8 +9,8 @@
   "main": "lib/index.js",
   "scripts": {
     "transpile": "yarn run transpile:babel && yarn run transpile:flow",
-    "transpile:babel": "rm -rf lib && babel -d lib src",
-    "transpile:flow": "flow-copy-source src lib",
+    "transpile:babel": "rm -rf lib && babel -d lib src --ignore '**/*.test.js' ",
+    "transpile:flow": "flow-copy-source src lib --ignore '**/*.test.js' ",
     "flow": "flow",
     "test": "jest",
     "test:watch": "jest --watch"

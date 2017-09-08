@@ -3,11 +3,6 @@ import R from 'ramda';
 const defaultState = {};
 
 export default(state = defaultState, action, config) => {
-  const {
-    actionHandlers,
-    getRelevantDocsIds
-  } = config;
-  const actionHandlersKeys = R.flatten(Object.values(actionHandlers).map(hs => Object.keys(hs)));
   switch(action.type) {
   case 'LOAD_DOCS':
   case 'LOAD_DOCS_FROM_CACHE':
@@ -20,6 +15,14 @@ export default(state = defaultState, action, config) => {
       }); //{...state, [doc._id]: doc};
     }, state);
   default:
+    if(!config || !config.actionHandlers || !config.getRelevantDocsIds){
+      return state;
+    }
+    const {
+      actionHandlers,
+      getRelevantDocsIds
+    } = config;
+    const actionHandlersKeys = R.flatten(Object.values(actionHandlers).map(hs => Object.keys(hs)));
     if(actionHandlersKeys.includes(action.type)) {
       const relevantDocsIds = getRelevantDocsIds(action);
       const relevantDocsToAdd = relevantDocsIds.filter(docId => {

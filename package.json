@@ -18,7 +18,8 @@
   },
   "jest": {
     "coverageDirectory": "./coverage/",
-    "collectCoverage": true
+    "collectCoverage": true,
+    "collectCoverageFrom" : ["**/*.{js,jsx}", "!**/node_modules/**", "!**/flow-typed/**", "!**/lib/**", "!**/coverage/**", "!**/index.js"]
   },
   "dependencies": {
     "moment": "^2.17.1",

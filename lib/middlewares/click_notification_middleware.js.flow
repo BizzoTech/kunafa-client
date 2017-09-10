@@ -2,9 +2,8 @@ export default(store, {
   getNotificationRoute
 }) => next => action => {
   if(action.type === 'CLICK_NOTIFICATION') {
-    if(action.notification && action.notification.actionType) {
+    if(action.notification) {
       const notification = action.notification;
-      const actionType = notification.actionType;
       const route = getNotificationRoute(notification);
       if(route) {
         next({

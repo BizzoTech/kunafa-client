@@ -16,10 +16,8 @@ export default(store, config) => {
     getRelevantDocsIds,
     deviceInfo
   } = config;
-  const createClientAction = (action, state) => {
+  const createEvent = (action, state) => {
     const eventsList = R.values(state.events);
-    const events_size = eventsList.length;
-
     const localOnlyEvents = eventsList.filter(R.prop('localOnly'));
     const localProcessingDocumentsIds = R.flatten(localOnlyEvents.map(event => event.relevantDocsIds));
     const relevantDocsIds = getRelevantDocsIds(action);
@@ -52,7 +50,7 @@ export default(store, config) => {
       setTimeout(() => {
         next({
           type: 'ADD_EVENT',
-          doc: createClientAction(action, store.getState())
+          doc: createEvent(action, store.getState())
         });
       }, 0);
     }

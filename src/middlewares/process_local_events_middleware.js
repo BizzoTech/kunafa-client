@@ -7,7 +7,7 @@ export default(store, {
   isConnected
 }) => next => action => {
   if(action.type === 'PROCESS_LOCAL_ONLY') {
-    isConnected().then(isConnected => {
+    return isConnected().then(isConnected => {
       //console.log('First, is ' + (isConnected ? 'online' : 'offline'));
       if(isConnected) {
         const localOnlyEvents = R.sort((a1, a2) => a1.createdAt - a2.createdAt, R.values(store.getState().events).filter(R.prop('localOnly')))
@@ -18,7 +18,7 @@ export default(store, {
           type: 'START_PROCESSING_LOCAL'
         });
         //console.log(localOnlyEvents);
-        Promise.each(localOnlyEvents, (event, index, length) => {
+        return Promise.each(localOnlyEvents, (event, index, length) => {
           return processLocalEvent(event, progress => {
             next({
               type: 'START_PROCESSING_LOCAL',

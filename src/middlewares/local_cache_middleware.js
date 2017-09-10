@@ -31,7 +31,7 @@ export default(store, {
 
     setTimeout(async() => {
       if(action.type === 'LOAD_DOCS') {
-        for(let doc of action.docs) {
+        for(const doc of action.docs) {
           await cacheStore.save(doc._id, doc);
         }
         if(action.docs.length > 1) {

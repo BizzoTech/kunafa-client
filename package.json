@@ -14,7 +14,9 @@
     "flow": "flow",
     "test": "jest",
     "test:watch": "jest --watch",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "jest": {
     "coverageDirectory": "./coverage/",
@@ -40,7 +42,8 @@
     "reselect": "^3.0.1",
     "reselect-map": "^1.0.3",
     "util": "^0.10.3",
-    "uuid": "^3.0.0"
+    "uuid": "^3.0.0",
+    "snyk": "^1.40.2"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -57,5 +60,6 @@
     "jest": "^21.0.1",
     "redux-testkit": "^1.0.6",
     "regenerator-runtime": "^0.11.0"
-  }
+  },
+  "snyk": true
 }

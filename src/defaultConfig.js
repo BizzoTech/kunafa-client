@@ -5,6 +5,7 @@ const defaultConfig: StrictAppConfig = {
   actionCreators: {},
   reducers: {},
   middlewares: [],
+  selectors: {},
   syncPaths: [],
   actionHandlers: {},
   getRelevantDocsIds: action => {

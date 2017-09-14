@@ -9,6 +9,7 @@ import ReduxThunkMiddleware from 'redux-thunk';
 
 import reducers from './reducers';
 import middlewares from './middlewares';
+import selectors from './selectors';
 import actionCreators from './actionCreators';
 
 import defaultConfig from './defaultConfig';
@@ -56,11 +57,16 @@ export default (appConfig: AppConfig) => {
   ];
   const allMiddlewares = R.map(middleware => store => middleware(store, config), _allMiddlewares);
 
+  const allSelectors = {
+    ...selectors,
+    ...config.selectors
+  }
+
   const AppReducer = combineReducers(allReducers);
   const AppMiddleware = applyMiddleware(ReduxThunkMiddleware, ...allMiddlewares);
   const store = createStore(AppReducer, AppMiddleware);
 
-  const AppStore = {...store, actions: allActionCreators};
+  const AppStore = {...store, actions: allActionCreators, selectors: allSelectors};
 
   setTimeout(() => {
     const initialActions = config.getInitialActions(AppStore.getState, allActionCreators);

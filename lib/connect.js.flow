@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import {
   connect as originalConnect
@@ -8,13 +7,10 @@ import {
 } from 'redux';
 import PropTypes from 'prop-types';
 
-import type {MapStateToProps, MapDispatchToProps, Connector} from 'react-redux';
-import type { Dispatch} from "redux";
 
+const connect = (mapStateToProps, mapDispatchToProps) => component => {
 
-const connect = <S, A: { type: $Subtype<string> }, OP: {}, SP: {}, DP: {}>(mapStateToProps?: MapStateToProps<S, OP, SP>, mapDispatchToProps?: MapDispatchToProps<A, OP, DP>) => (component: React.ComponentType<any>): React.ComponentType<OP> => {
-
-  const Wrapped = originalConnect(mapStateToProps, (dispatch: Dispatch<A>, ownProps: {actions : {}} & OP) => {
+  const Wrapped = originalConnect(mapStateToProps, (dispatch, ownProps) => {
     const pkgActions = bindActionCreators(ownProps.actions, dispatch);
     if(typeof mapDispatchToProps === 'function') {
       const userActions = mapDispatchToProps(dispatch, ownProps);
@@ -26,10 +22,11 @@ const connect = <S, A: { type: $Subtype<string> }, OP: {}, SP: {}, DP: {}>(mapSt
     return pkgActions;
   }, null)(component);
 
-  class Wrapper extends React.Component<OP> {
+  class Wrapper extends React.Component {
     render(){
-      const actions: {} = this.context.store.actions;
-      return <Wrapped actions={actions} {...this.props} />;
+      const actions = this.context.store.actions;
+      const selectors = this.context.store.selectors;
+      return <Wrapped actions={actions} selectors={selectors} {...this.props} />;
     }
   }
 

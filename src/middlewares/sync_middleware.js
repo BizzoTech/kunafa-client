@@ -1,6 +1,7 @@
 import R from 'ramda';
 import PouchDB from 'pouchdb';
-PouchDB.plugin(require('pouchdb-find'));
+import PouchdbFind from 'pouchdb-find';
+PouchDB.plugin(PouchdbFind);
 
 const getDefaultAction = act => {
   let action = act;

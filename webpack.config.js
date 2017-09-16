@@ -25,14 +25,17 @@ module.exports = {
       : 'js/kunafa.bundle.min.js'
   },
   externals: {
-    react: "react"
+    react: "react",
+    redux: "redux",
+    "react-redux": "react-redux"
   },
   plugins: [],
   module: {
     loaders: [
       {
         test: /\.js$/,
-        loader: 'babel-loader'
+        loader: 'babel-loader',
+        exclude: /node_modules/
       }
     ]
   }

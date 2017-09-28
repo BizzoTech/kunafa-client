@@ -27,7 +27,10 @@ module.exports = {
   externals: {
     react: "react",
     redux: "redux",
-    "react-redux": "react-redux"
+    "react-redux": "react-redux",
+    pouchdb: "pouchdb",
+    "pouchdb-find": "pouchdb-find",
+
   },
   plugins: [],
   module: {

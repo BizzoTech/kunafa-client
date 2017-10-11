@@ -39,7 +39,19 @@ const defaultConfig: StrictAppConfig = {
   renderDialogContent: () => {},
   statusBarColor: getState => '#000000',
   progressBarColor: getState => '#000000',
-  isConnected: () => false
+  isConnected: () => false,
+  deviceInfo: {
+    device_unique_id: 'default'
+  },
+  cacheStore: {
+    keys: () => [],
+    get: () => undefined,
+    save: () => undefined,
+    delete: () => undefined,
+    getAll: async() => {
+      return [];
+    }
+  }
 }
 
 

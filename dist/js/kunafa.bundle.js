@@ -6102,7 +6102,7 @@ exports.default = function (appConfig) {
     };
   }, _allReducers);
 
-  var _allMiddlewares = [].concat(_toConsumableArray(config.middlewares), _toConsumableArray(_middlewares2.default));
+  var _allMiddlewares = config.ssr ? [] : [].concat(_toConsumableArray(config.middlewares), _toConsumableArray(_middlewares2.default));
   var allMiddlewares = _ramda2.default.map(function (middleware) {
     return function (store) {
       return middleware(store, config);
@@ -6116,6 +6116,12 @@ exports.default = function (appConfig) {
   var store = (0, _redux.createStore)(AppReducer, AppMiddleware);
 
   var AppStore = Object.assign({}, store, { actions: allActionCreators, selectors: allSelectors });
+
+  if (config.ssr) {
+    var initialActions = config.getInitialActions(AppStore.getState, allActionCreators);
+    initialActions.forEach(AppStore.dispatch);
+    return AppStore;
+  }
 
   setTimeout(function () {
     var initialActions = config.getInitialActions(AppStore.getState, allActionCreators);
@@ -21334,6 +21340,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 var defaultConfig = {
   actionCreators: {},
@@ -21381,6 +21388,43 @@ var defaultConfig = {
   },
   isConnected: function isConnected() {
     return false;
+  },
+  deviceInfo: {
+    device_unique_id: 'default'
+  },
+  cacheStore: {
+    keys: function keys() {
+      return [];
+    },
+    get: function get() {
+      return undefined;
+    },
+    save: function save() {
+      return undefined;
+    },
+    delete: function _delete() {
+      return undefined;
+    },
+    getAll: function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                return _context.abrupt('return', []);
+
+              case 1:
+              case 'end':
+                return _context.stop();
+            }
+          }
+        }, _callee, undefined);
+      }));
+
+      return function getAll() {
+        return _ref.apply(this, arguments);
+      };
+    }()
   }
 };
 exports.default = defaultConfig;

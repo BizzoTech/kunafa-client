@@ -51,7 +51,7 @@ export default (appConfig: AppConfig) => {
   }
   const allReducers = R.map(reducer => (...args) => reducer(...args, config), _allReducers);
 
-  const _allMiddlewares = [
+  const _allMiddlewares = config.ssr ? [] : [
     ...config.middlewares,
     ...middlewares
   ];
@@ -67,6 +67,12 @@ export default (appConfig: AppConfig) => {
   const store = createStore(AppReducer, AppMiddleware);
 
   const AppStore = {...store, actions: allActionCreators, selectors: allSelectors};
+
+  if(config.ssr){
+    const initialActions = config.getInitialActions(AppStore.getState, allActionCreators);
+    initialActions.forEach(AppStore.dispatch);
+    return AppStore;
+  }
 
   setTimeout(() => {
     const initialActions = config.getInitialActions(AppStore.getState, allActionCreators);

@@ -13739,7 +13739,9 @@ exports.default = function (state, action, config) {
       }].concat(_toConsumableArray(state));
     case 'SKIP_LOGIN':
     case 'LOGIN':
-      return startWithHome;
+      return state.length > 1 ? _ramda2.default.filter(function (route) {
+        return route.name !== 'LOGIN' && route.name !== 'LOADING';
+      }, state) : startWithHome;
     case 'LOGOUT':
       return startWithLogin;
     default:

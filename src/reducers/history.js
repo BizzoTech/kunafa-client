@@ -41,7 +41,7 @@ export default(state: HistoryState, action: Action, config: any) => {
         }, ...state];
   case 'SKIP_LOGIN':
   case 'LOGIN':
-    return startWithHome;
+    return state.length > 1 ? R.filter(route => route.name !== 'LOGIN' && route.name !== 'LOADING', state) : startWithHome;
   case 'LOGOUT':
     return startWithLogin;
   default:

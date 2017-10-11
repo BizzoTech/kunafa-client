@@ -6059,7 +6059,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-exports.default = function (appConfig) {
+exports.default = function (appConfig, preloadedState) {
 
   var syncPaths = _ramda2.default.append({
     name: "events",
@@ -6113,7 +6113,7 @@ exports.default = function (appConfig) {
 
   var AppReducer = (0, _redux.combineReducers)(allReducers);
   var AppMiddleware = _redux.applyMiddleware.apply(undefined, [_reduxThunk2.default].concat(_toConsumableArray(allMiddlewares)));
-  var store = (0, _redux.createStore)(AppReducer, AppMiddleware);
+  var store = (0, _redux.createStore)(AppReducer, preloadedState, AppMiddleware);
 
   var AppStore = Object.assign({}, store, { actions: allActionCreators, selectors: allSelectors });
 

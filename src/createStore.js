@@ -16,7 +16,7 @@ import defaultConfig from './defaultConfig';
 
 import type {AppConfig, StrictAppConfig, SyncPath, ActionCreator} from './types';
 
-export default (appConfig: AppConfig) => {
+export default (appConfig: AppConfig, preloadedState) => {
 
   const syncPaths: Array<SyncPath> = R.append({
     name: "events",
@@ -64,7 +64,7 @@ export default (appConfig: AppConfig) => {
 
   const AppReducer = combineReducers(allReducers);
   const AppMiddleware = applyMiddleware(ReduxThunkMiddleware, ...allMiddlewares);
-  const store = createStore(AppReducer, AppMiddleware);
+  const store = createStore(AppReducer, preloadedState, AppMiddleware);
 
   const AppStore = {...store, actions: allActionCreators, selectors: allSelectors};
 

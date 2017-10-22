@@ -6,6 +6,8 @@ import {
   combineReducers
 } from 'redux';
 import ReduxThunkMiddleware from 'redux-thunk';
+import { composeWithDevTools } from 'redux-devtools-extension';
+
 
 import reducers from './reducers';
 import middlewares from './middlewares';
@@ -64,7 +66,13 @@ export default (appConfig: AppConfig, preloadedState) => {
 
   const AppReducer = combineReducers(allReducers);
   const AppMiddleware = applyMiddleware(ReduxThunkMiddleware, ...allMiddlewares);
-  const store = createStore(AppReducer, preloadedState, AppMiddleware);
+
+  let store = {};
+  if(config.useReduxDevTools){
+    store = createStore(AppReducer, preloadedState, composeWithDevTools(AppMiddleware));
+  } else{
+    store = createStore(AppReducer, preloadedState, AppMiddleware);
+  }
 
   const AppStore = {...store, actions: allActionCreators, selectors: allSelectors};
 

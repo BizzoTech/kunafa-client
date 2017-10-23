@@ -164,13 +164,32 @@ describe('History reducer', () => {
     Reducer(history).withState(state).expect(action).toReturnState(result);
   });
 
-  it('LOGIN action should remove all routes and start with home', () => {
+  it('LOGIN action should remove all LOGIN & LOADING routes', () => {
     const state = [{
-      name: 'ANY_ROUTE1'
+      name: 'LOADING'
     },{
-      name: 'ANY_ROUTE2'
+      name: 'LOGIN'
+    },{
+      name: 'ANY_ROUTE'
     },{
       name: 'HOME'
+    }];
+    const action = {
+      type: 'LOGIN'
+    }
+    const result = [{
+      name: 'ANY_ROUTE'
+    },{
+      name: 'HOME'
+    }];
+    Reducer(history).withState(state).expect(action).toReturnState(result);
+  });
+
+  it('LOGIN action should startWithHome if no routes in history to go back to', () => {
+    const state = [{
+      name: 'LOADING'
+    },{
+      name: 'LOGIN'
     }];
     const action = {
       type: 'LOGIN'

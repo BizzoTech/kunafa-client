@@ -7,7 +7,9 @@ let publicDb = null;
 export const loadDocs = (query, loaderName, config) => dispatch => {
   if(publicDb === null) {
     const host = config.HOST;
-    publicDb = new PouchDB(`http://${host}/public`, {
+    const ssl = config.SSL || "off";
+    const protocol = ssl === "on" ? 'https': 'http';
+    publicDb = new PouchDB(`${protocol}://${host}/public`, {
       ajax: {
         timeout: 60000
       }

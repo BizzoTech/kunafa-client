@@ -21281,7 +21281,9 @@ var loadDocs = exports.loadDocs = function loadDocs(query, loaderName, config) {
   return function (dispatch) {
     if (publicDb === null) {
       var host = config.HOST;
-      publicDb = new _pouchdb2.default('http://' + host + '/public', {
+      var ssl = config.SSL || "off";
+      var protocol = ssl === "on" ? 'https' : 'http';
+      publicDb = new _pouchdb2.default(protocol + '://' + host + '/public', {
         ajax: {
           timeout: 60000
         }

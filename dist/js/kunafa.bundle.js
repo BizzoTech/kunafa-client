@@ -13736,14 +13736,13 @@ var _ramda2 = _interopRequireDefault(_ramda);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+var startWithHome = {
+  path: [""]
+};
 
-var startWithHome = [{
-  name: 'HOME'
-}];
-var startWithLogin = [{
-  name: 'LOGIN'
-}];
+var startWithLogin = {
+  path: ['login']
+};
 
 exports.default = function (state, action, config) {
   var defaultState = config && config.profileId ? startWithHome : startWithLogin;
@@ -13752,32 +13751,32 @@ exports.default = function (state, action, config) {
   }
   switch (action.type) {
     case 'RESET_HISTORY':
-      return defaultState;
+      return startWithHome;
     case 'GO_TO':
-      return [action.route].concat(startWithHome);
+      return Object.assign({}, action.route, {
+        previous: startWithHome
+      });
     case 'NAVIGATE_TO':
-      return [action.route].concat(_toConsumableArray(state));
+      return Object.assign({}, action.route, {
+        previous: state
+      });
     case 'TRANSITE_TO':
-      return state.length > 1 ? _ramda2.default.update(0, action.route, state) : [action.route].concat(_toConsumableArray(state));
+      return state.previous ? Object.assign({}, action.route, {
+        previous: state.previous
+      }) : Object.assign({}, action.route, {
+        previous: startWithHome
+      });
     case 'GO_BACK':
-      if (state.length > 1) {
-        var currentRoute = state[0];
-        var newRoute = state[1];
-        return _ramda2.default.update(0, Object.assign({}, newRoute, {
-          backFrom: currentRoute
-        }), _ramda2.default.tail(state));
-      }
-      return state;
-    case 'START_LOADING':
-      return [{
-        name: 'LOADING'
-      }].concat(_toConsumableArray(state));
+      return state.previous ? Object.assign({}, state.previous, {
+        backFrom: _ramda2.default.dissoc('previous', state)
+      }) : state;
     case 'SKIP_LOGIN':
     case 'LOGIN':
-      var newState = _ramda2.default.filter(function (route) {
-        return route.name !== 'LOGIN' && route.name !== 'LOADING';
-      }, state);
-      return newState.length > 1 ? newState : startWithHome;
+      if (state.path.length && state.path[0] === "login") {
+        return state.previous ? state.previous : startWithHome;
+      } else {
+        return state;
+      }
     case 'LOGOUT':
       return startWithLogin;
     default:
@@ -21168,22 +21167,21 @@ var resetHistory = exports.resetHistory = function resetHistory() {
     type: 'RESET_HISTORY'
   };
 };
-var navigateTo = exports.navigateTo = function navigateTo(routeName, params) {
+
+var navigateTo = exports.navigateTo = function navigateTo(path) {
   return {
     type: 'NAVIGATE_TO',
     route: {
-      name: routeName,
-      params: params
+      path: path
     }
   };
 };
 
-var transiteTo = exports.transiteTo = function transiteTo(routeName, params) {
+var transiteTo = exports.transiteTo = function transiteTo(path) {
   return {
     type: 'TRANSITE_TO',
     route: {
-      name: routeName,
-      params: params
+      path: path
     }
   };
 };
@@ -21194,12 +21192,11 @@ var goBack = exports.goBack = function goBack() {
   };
 };
 
-var goTo = exports.goTo = function goTo(routeName, params) {
+var goTo = exports.goTo = function goTo(path) {
   return {
     type: 'GO_TO',
     route: {
-      name: routeName,
-      params: params
+      path: path
     }
   };
 };

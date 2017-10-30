@@ -1,28 +1,24 @@
 // @flow
-import type {Action} from '../types';
-
 export const resetHistory = () => {
   return {
     type: 'RESET_HISTORY'
   }
 }
 
-export const navigateTo = (routeName: string, params: ?Object) => {
+export const navigateTo = path => {
   return {
     type: 'NAVIGATE_TO',
     route: {
-      name: routeName,
-      params
+      path
     }
   }
 }
 
-export const transiteTo = (routeName: string, params: ?Object) => {
+export const transiteTo = path => {
   return {
     type: 'TRANSITE_TO',
     route: {
-      name: routeName,
-      params
+      path
     }
   }
 }
@@ -33,12 +29,11 @@ export const goBack = () => {
   }
 }
 
-export const goTo = (routeName: string, params: ?Object) => {
+export const goTo = path => {
   return {
     type: 'GO_TO',
     route: {
-      name: routeName,
-      params
+      path
     }
   }
 }

@@ -1,51 +1,62 @@
 // @flow
 import R from 'ramda';
 
-import type {Route, Action} from '../types';
+const startWithHome = {
+  path: [""]
+};
+const startWithLogin = {
+  path: ['login']
+};
 
-type HistoryState = Array<Route>;
-
-const startWithHome = [{
-  name: 'HOME'
-}];
-const startWithLogin = [{
-  name: 'LOGIN'
-}];
-
-export default(state: HistoryState, action: Action, config: any) => {
-  const defaultState = config && config.profileId ? startWithHome : startWithLogin;
-  if(state === undefined){
+export default(state, action, config) => {
+  const defaultState = config && config.profileId
+    ? startWithHome
+    : startWithLogin;
+  if (state === undefined) {
     return defaultState;
   }
-  switch(action.type) {
-  case 'RESET_HISTORY':
-    return defaultState;
-  case 'GO_TO':
-    return [action.route, ...startWithHome];
-  case 'NAVIGATE_TO':
-    return [action.route, ...state];
-  case 'TRANSITE_TO':
-    return state.length > 1 ? R.update(0, action.route, state) : [action.route, ...state];
-  case 'GO_BACK':
-    if(state.length > 1) {
-      const currentRoute = state[0];
-      const newRoute = state[1];
-      return R.update(0, { ...newRoute,
-        backFrom: currentRoute
-      }, R.tail(state));
-    }
-    return state;
-  case 'START_LOADING':
-    return [{
-      name: 'LOADING'
-        }, ...state];
-  case 'SKIP_LOGIN':
-  case 'LOGIN':
-    const newState = R.filter(route => route.name !== 'LOGIN' && route.name !== 'LOADING', state);
-    return newState.length > 1 ? newState : startWithHome;
-  case 'LOGOUT':
-    return startWithLogin;
-  default:
-    return state
+  switch (action.type) {
+    case 'RESET_HISTORY':
+      return startWithHome;
+    case 'GO_TO':
+      return {
+        ...action.route,
+        previous: startWithHome
+      };
+    case 'NAVIGATE_TO':
+      return {
+        ...action.route,
+        previous: state
+      };
+    case 'TRANSITE_TO':
+      return state.previous
+        ? {
+          ...action.route,
+          previous: state.previous
+        }
+        : {
+          ...action.route,
+          previous : startWithHome
+        };
+    case 'GO_BACK':
+      return state.previous
+        ? {
+          ...state.previous,
+          backFrom: R.dissoc('previous', state)
+        }
+        : state;
+    case 'SKIP_LOGIN':
+    case 'LOGIN':
+      if (state.path.length && state.path[0] === "login") {
+        return state.previous
+          ? state.previous
+          : startWithHome;
+      } else {
+        return state;
+      }
+    case 'LOGOUT':
+      return startWithLogin;
+    default:
+      return state
   }
 }

@@ -1,31 +1,22 @@
-import Promise from 'bluebird';
-
 import R from 'ramda';
 
-export default(store, {
-  processLocalEvent,
-  isConnected
-}) => next => action => {
-  if(action.type === 'PROCESS_LOCAL_ONLY') {
+export default(store, {processLocalEvent, isConnected}) => next => action => {
+  if (action.type === 'PROCESS_LOCAL_ONLY') {
     return isConnected().then(isConnected => {
       //console.log('First, is ' + (isConnected ? 'online' : 'offline'));
-      if(isConnected) {
+      if (isConnected) {
         const localOnlyEvents = R.sort((a1, a2) => a1.createdAt - a2.createdAt, R.values(store.getState().events).filter(R.prop('localOnly')))
-        if(localOnlyEvents.length < 1) {
+        if (localOnlyEvents.length < 1) {
           return
         }
-        next({
-          type: 'START_PROCESSING_LOCAL'
-        });
+        next({type: 'START_PROCESSING_LOCAL'});
         //console.log(localOnlyEvents);
-        return Promise.each(localOnlyEvents, (event, index, length) => {
-          return processLocalEvent(event, progress => {
-            next({
-              type: 'START_PROCESSING_LOCAL',
-              progress
-            });
-          }).then(event => {
-            setTimeout(() => {
+        return (async () => {
+          for (const event of localOnlyEvents) {
+            try {
+              await processLocalEvent(event, progress => {
+                next({type: 'START_PROCESSING_LOCAL', progress});
+              });
               next({
                 type: 'UPDATE_EVENT',
                 doc: {
@@ -34,13 +25,14 @@ export default(store, {
                   localOnly: undefined
                 }
               });
-            }, 0);
-          });
-        }).catch(console.log).finally(() => {
-          next({
-            type: 'END_PROCESSING_LOCAL'
-          });
-        });
+            } catch (e) {
+              console.log(e);
+            } finally {
+              next({type: 'END_PROCESSING_LOCAL'});
+            }
+          }
+        })();
+
       }
     });
   } else {

@@ -7,6 +7,7 @@ import {
 } from 'redux';
 import ReduxThunkMiddleware from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import PouchDB from 'pouchdb';
 
 
 import reducers from './reducers';
@@ -16,7 +17,7 @@ import actionCreators from './actionCreators';
 
 import defaultConfig from './defaultConfig';
 
-import type {AppConfig, StrictAppConfig, SyncPath, ActionCreator} from './types';
+import type { AppConfig, StrictAppConfig, SyncPath, ActionCreator } from './types';
 
 export default (appConfig: AppConfig, preloadedState) => {
 
@@ -39,7 +40,7 @@ export default (appConfig: AppConfig, preloadedState) => {
     syncPaths
   }
 
-  const _allActionCreators: { [string]: ActionCreator} = {
+  const _allActionCreators: { [string]: ActionCreator } = {
     ...actionCreators,
     ...config.actionCreators
   }
@@ -68,15 +69,15 @@ export default (appConfig: AppConfig, preloadedState) => {
   const AppMiddleware = applyMiddleware(ReduxThunkMiddleware, ...allMiddlewares);
 
   let store = {};
-  if(config.useReduxDevTools){
+  if (config.useReduxDevTools) {
     store = createStore(AppReducer, preloadedState, composeWithDevTools(AppMiddleware));
-  } else{
+  } else {
     store = createStore(AppReducer, preloadedState, AppMiddleware);
   }
 
-  const AppStore = {...store, actions: allActionCreators, selectors: allSelectors};
+  const AppStore = { ...store, actions: allActionCreators, selectors: allSelectors };
 
-  if(config.ssr){
+  if (config.ssr) {
     const initialActions = config.getInitialActions(AppStore.getState, allActionCreators);
     initialActions.forEach(AppStore.dispatch);
     return AppStore;
@@ -87,16 +88,44 @@ export default (appConfig: AppConfig, preloadedState) => {
     initialActions.forEach(AppStore.dispatch);
   }, 500);
 
-  setInterval(async() => {
+  setInterval(async () => {
     const hasLocalEvents = R.values(AppStore.getState().events).some(R.prop('localOnly'));
     const isProcessing = AppStore.getState().processing_local.isProcessing;
     const isConnected = await config.isConnected();
-    if(hasLocalEvents && !isProcessing && isConnected) {
+    if (hasLocalEvents && !isProcessing && isConnected) {
       AppStore.dispatch({
         type: 'PROCESS_LOCAL_ONLY'
       });
     }
   }, 1000);
+
+  const localSharedDB = new PouchDB("shared", { auto_compaction: true });
+  setTimeout(async () => {
+    const sharedDocs = await localSharedDB.allDocs({ include_docs: true });
+    store.dispatch({
+      type: 'LOAD_SHARED_DOCS',
+      docs: sharedDocs.rows.filter(r => !r.id.startsWith('_design')).reduce((obj, row) => { return { ...obj, [row.id]: row.doc } }, {})
+    })
+
+    const changes = localSharedDB.changes({
+      since: 'now',
+      live: true,
+      include_docs: true
+    });
+    changes.on('change', change => {
+      if (change.doc._deleted) {
+        store.dispatch({
+          type: 'REMOVE_SHARED_DOC',
+          doc: change.doc
+        });
+      } else {
+        store.dispatch({
+          type: 'SET_SHARED_DOC',
+          doc: change.doc
+        });
+      }
+    });
+  }, 0);
 
   return AppStore;
 }

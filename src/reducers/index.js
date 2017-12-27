@@ -6,6 +6,7 @@ import processing_local from './processing_local';
 import dialog from './dialog';
 import docLoaders from './docLoaders';
 import notifications from './notifications';
+import sharedDocs from './sharedDocs';
 
 
 export default {
@@ -16,5 +17,6 @@ export default {
   processing_local,
   dialog,
   docLoaders,
-  notifications
+  notifications,
+  sharedDocs
 }

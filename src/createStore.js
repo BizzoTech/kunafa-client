@@ -104,7 +104,7 @@ export default (appConfig: AppConfig, preloadedState) => {
     const sharedDocs = await localSharedDB.allDocs({ include_docs: true });
     store.dispatch({
       type: 'LOAD_SHARED_DOCS',
-      docs: sharedDocs.rows.filter(r => !r.id.startsWith('_design')).reduce((obj, row) => { return { ...obj, [row.id]: row.doc } }, {})
+      docs: sharedDocs.rows.filter(r => !r.id.startsWith('_design')).map(r => r.doc)
     })
 
     const changes = localSharedDB.changes({

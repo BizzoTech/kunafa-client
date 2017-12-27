@@ -2324,8 +2324,6 @@ var _defaultConfig2 = _interopRequireDefault(_defaultConfig);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -2450,9 +2448,9 @@ exports.default = function (appConfig, preloadedState) {
               type: 'LOAD_SHARED_DOCS',
               docs: sharedDocs.rows.filter(function (r) {
                 return !r.id.startsWith('_design');
-              }).reduce(function (obj, row) {
-                return Object.assign({}, obj, _defineProperty({}, row.id, row.doc));
-              }, {})
+              }).map(function (r) {
+                return r.doc;
+              })
             });
 
             changes = localSharedDB.changes({

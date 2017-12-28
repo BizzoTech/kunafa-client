@@ -2439,7 +2439,7 @@ exports.default = function (appConfig, preloadedState) {
         switch (_context2.prev = _context2.next) {
           case 0:
             _context2.next = 2;
-            return localSharedDB.allDocs({ include_docs: true });
+            return localSharedDB.allDocs({ include_docs: true, update_seq: true });
 
           case 2:
             sharedDocs = _context2.sent;
@@ -2454,7 +2454,7 @@ exports.default = function (appConfig, preloadedState) {
             });
 
             changes = localSharedDB.changes({
-              since: 'now',
+              since: sharedDocs.update_seq,
               live: true,
               include_docs: true
             });

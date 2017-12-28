@@ -1,6 +1,6 @@
 import R from 'ramda';
 
-export default(store, {processLocalEvent, isConnected}) => next => action => {
+export default (store, { processLocalEvent, isConnected }) => next => action => {
   if (action.type === 'PROCESS_LOCAL_ONLY') {
     return isConnected().then(isConnected => {
       //console.log('First, is ' + (isConnected ? 'online' : 'offline'));
@@ -9,13 +9,13 @@ export default(store, {processLocalEvent, isConnected}) => next => action => {
         if (localOnlyEvents.length < 1) {
           return
         }
-        next({type: 'START_PROCESSING_LOCAL'});
+        next({ type: 'START_PROCESSING_LOCAL' });
         //console.log(localOnlyEvents);
         return (async () => {
-          for (const event of localOnlyEvents) {
-            try {
+          try {
+            for (const event of localOnlyEvents) {
               await processLocalEvent(event, progress => {
-                next({type: 'START_PROCESSING_LOCAL', progress});
+                next({ type: 'START_PROCESSING_LOCAL', progress });
               });
               next({
                 type: 'UPDATE_EVENT',
@@ -25,11 +25,11 @@ export default(store, {processLocalEvent, isConnected}) => next => action => {
                   localOnly: undefined
                 }
               });
-            } catch (e) {
-              console.log(e);
-            } finally {
-              next({type: 'END_PROCESSING_LOCAL'});
             }
+          } catch (e) {
+            console.log(e);
+          } finally {
+            next({ type: 'END_PROCESSING_LOCAL' });
           }
         })();
 

@@ -4562,7 +4562,8 @@ var initialLoad = function () {
           case 0:
             _context.next = 2;
             return db.allDocs({
-              include_docs: true
+              include_docs: true,
+              update_seq: true
             });
 
           case 2:
@@ -4577,8 +4578,9 @@ var initialLoad = function () {
                 }).filter(path.filter)));
               }
             });
+            return _context.abrupt('return', result);
 
-          case 4:
+          case 5:
           case 'end':
             return _context.stop();
         }
@@ -4592,8 +4594,10 @@ var initialLoad = function () {
 }();
 
 var syncChanges = function syncChanges(db, syncPaths, store, dispatch) {
+  var update_seq = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : "now";
+
   var changes = db.changes({
-    since: 'now',
+    since: update_seq,
     live: true,
     include_docs: true
   });
@@ -4643,9 +4647,26 @@ exports.default = function (store, _ref2) {
     var localDbUrl = getLocalDbUrl(profileId);
     var db = new _pouchdb2.default(localDbUrl);
     //Initial Load docs to improve render performance by tracking new changes only
-    initialLoad(db, syncPaths, next);
+    setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+      var result, changes;
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return initialLoad(db, syncPaths, next);
 
-    var changes = syncChanges(db, syncPaths, store, next);
+            case 2:
+              result = _context2.sent;
+              changes = syncChanges(db, syncPaths, store, next, result.update_seq);
+
+            case 4:
+            case 'end':
+              return _context2.stop();
+          }
+        }
+      }, _callee2, undefined);
+    })), 0);
 
     var getDocs = function getDocs(state, action) {
       return [action.doc];
@@ -4742,9 +4763,26 @@ exports.default = function (store, _ref2) {
           var _localDbUrl = getLocalDbUrl(_profileId);
           db = new _pouchdb2.default(_localDbUrl);
           //Initial Load docs to improve render performance by tracking new changes only
-          initialLoad(db, syncPaths, next);
+          setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+            var result, changes;
+            return regeneratorRuntime.wrap(function _callee3$(_context3) {
+              while (1) {
+                switch (_context3.prev = _context3.next) {
+                  case 0:
+                    _context3.next = 2;
+                    return initialLoad(db, syncPaths, next);
 
-          changes = syncChanges(db, syncPaths, store, next);
+                  case 2:
+                    result = _context3.sent;
+                    changes = syncChanges(db, syncPaths, store, next, result.update_seq);
+
+                  case 4:
+                  case 'end':
+                    return _context3.stop();
+                }
+              }
+            }, _callee3, undefined);
+          })), 0);
         }
       }
     };

@@ -5,43 +5,45 @@ PouchDB.plugin(PouchdbFind);
 
 const getDefaultAction = act => {
   let action = act;
-  if(Array.isArray(action)) {
+  if (Array.isArray(action)) {
     action = action[0];
   }
-  if(typeof action === 'string') {
+  if (typeof action === 'string') {
     return action;
   } else {
     return action.type;
   }
 }
 
-const initialLoad = async(db, syncPaths, dispatch) => {
+const initialLoad = async (db, syncPaths, dispatch) => {
   const result = await db.allDocs({
-    include_docs: true
+    include_docs: true,
+    update_seq: true
   });
   syncPaths.forEach(path => {
-    if(path.actions.load) {
+    if (path.actions.load) {
       dispatch({
         type: path.actions.load,
         [path.name]: result.rows.map(r => r.doc).filter(path.filter)
       })
     }
-  })
+  });
+  return result;
 }
 
-const syncChanges = (db, syncPaths, store, dispatch) => {
+const syncChanges = (db, syncPaths, store, dispatch, update_seq = "now") => {
   const changes = db.changes({
-    since: 'now',
+    since: update_seq,
     live: true,
     include_docs: true
   });
   changes.on('change', change => {
     syncPaths.forEach((path) => {
-      if(path.filter && !(path.filter(change.doc))) {
+      if (path.filter && !(path.filter(change.doc))) {
         return;
       }
       //console.log(change)
-      if(change.doc._deleted) {
+      if (change.doc._deleted) {
         setTimeout(() => {
           dispatch({
             type: getDefaultAction(path.actions.remove),
@@ -51,7 +53,7 @@ const syncChanges = (db, syncPaths, store, dispatch) => {
         return;
       }
       const pathState = store.getState()[path.name];
-      if(pathState[change.doc._id]) {
+      if (pathState[change.doc._id]) {
         setTimeout(() => {
           dispatch({
             type: getDefaultAction(path.actions.update),
@@ -74,14 +76,16 @@ const syncChanges = (db, syncPaths, store, dispatch) => {
   return changes;
 }
 
-export default(store, {getLocalDbUrl, syncPaths}) => next => {
+export default (store, { getLocalDbUrl, syncPaths }) => next => {
   const profileId = store.getState().currentProfile._id;
   const localDbUrl = getLocalDbUrl(profileId);
   let db = new PouchDB(localDbUrl);
   //Initial Load docs to improve render performance by tracking new changes only
-  initialLoad(db, syncPaths, next);
+  setTimeout(async () => {
+    const result = await initialLoad(db, syncPaths, next);
 
-  let changes = syncChanges(db, syncPaths, store, next);
+    let changes = syncChanges(db, syncPaths, store, next, result.update_seq);
+  }, 0);
 
   const getDocs = (state, action) => [action.doc];
   const mergedActions = {
@@ -90,13 +94,13 @@ export default(store, {getLocalDbUrl, syncPaths}) => next => {
     remove: []
   };
   const mergeAction = actName => action => {
-    if(typeof action === 'string') {
+    if (typeof action === 'string') {
       mergedActions[actName].push({
         type: action,
         getDocs
       });
     }
-    if(typeof action === 'object') {
+    if (typeof action === 'object') {
       mergedActions[actName].push({
         type: action.type,
         getDocs: action.getDocs || getDocs
@@ -104,19 +108,19 @@ export default(store, {getLocalDbUrl, syncPaths}) => next => {
     }
   }
   syncPaths.forEach(path => {
-    if(Array.isArray(path.actions.insert)) {
+    if (Array.isArray(path.actions.insert)) {
       path.actions.insert.forEach(mergeAction("insert"));
     } else {
       mergeAction("insert")(path.actions.insert);
     }
 
-    if(Array.isArray(path.actions.update)) {
+    if (Array.isArray(path.actions.update)) {
       path.actions.update.forEach(mergeAction("update"));
     } else {
       mergeAction("update")(path.actions.update);
     }
 
-    if(Array.isArray(path.actions.remove)) {
+    if (Array.isArray(path.actions.remove)) {
       path.actions.remove.forEach(mergeAction("remove"));
     } else {
       mergeAction("remove")(path.actions.remove);
@@ -127,10 +131,10 @@ export default(store, {getLocalDbUrl, syncPaths}) => next => {
     const bulk = [];
     const state = store.getState();
     mergedActions.insert.forEach(insertAction => {
-      if(insertAction.type === action.type) {
+      if (insertAction.type === action.type) {
         const docs = insertAction.getDocs(state, action);
         docs.forEach(doc => {
-          if(doc.draft) {
+          if (doc.draft) {
             //db.put(R.omit(['draft'], doc));
             bulk.push(R.omit(['draft'], doc));
           }
@@ -138,10 +142,10 @@ export default(store, {getLocalDbUrl, syncPaths}) => next => {
       }
     });
     mergedActions.update.forEach(updateAction => {
-      if(updateAction.type === action.type) {
+      if (updateAction.type === action.type) {
         const docs = updateAction.getDocs(state, action);
         docs.forEach(doc => {
-          if(doc.draft) {
+          if (doc.draft) {
             //db.put(R.omit(['draft'], doc));
             bulk.push(R.omit(['draft'], doc));
           }
@@ -149,7 +153,7 @@ export default(store, {getLocalDbUrl, syncPaths}) => next => {
       }
     });
     mergedActions.remove.forEach(removeAction => {
-      if(removeAction.type === action.type) {
+      if (removeAction.type === action.type) {
         const docs = removeAction.getDocs(state, action);
         docs.forEach(doc => {
           //db.remove(doc)
@@ -161,22 +165,24 @@ export default(store, {getLocalDbUrl, syncPaths}) => next => {
       }
     });
 
-    if(bulk.length) {
+    if (bulk.length) {
       setTimeout(() => {
         db.bulkDocs(bulk);
       }, 0);
     } else {
       next(action);
 
-      if(action.type === 'LOGIN' || action.type === 'LOGOUT') {
+      if (action.type === 'LOGIN' || action.type === 'LOGOUT') {
         changes.cancel();
         const profileId = store.getState().currentProfile._id;
         const localDbUrl = getLocalDbUrl(profileId);
         db = new PouchDB(localDbUrl);
         //Initial Load docs to improve render performance by tracking new changes only
-        initialLoad(db, syncPaths, next);
+        setTimeout(async () => {
+          const result = await initialLoad(db, syncPaths, next);
 
-        changes = syncChanges(db, syncPaths, store, next);
+          let changes = syncChanges(db, syncPaths, store, next, result.update_seq);
+        }, 0);
       }
     }
   }

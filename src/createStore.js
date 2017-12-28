@@ -101,14 +101,14 @@ export default (appConfig: AppConfig, preloadedState) => {
 
   const localSharedDB = new PouchDB("shared", { auto_compaction: true });
   setTimeout(async () => {
-    const sharedDocs = await localSharedDB.allDocs({ include_docs: true });
+    const sharedDocs = await localSharedDB.allDocs({ include_docs: true, update_seq: true });
     store.dispatch({
       type: 'LOAD_SHARED_DOCS',
       docs: sharedDocs.rows.filter(r => !r.id.startsWith('_design')).map(r => r.doc)
     })
 
     const changes = localSharedDB.changes({
-      since: 'now',
+      since: sharedDocs.update_seq,
       live: true,
       include_docs: true
     });

@@ -57,36 +57,13 @@ export default (store, config) => {
 
     let result = next(action);
 
-    const updateEventsToSetAppliedOnClient = (doc, docEvents) => {
-      docEvents.forEach(event => {
-        const isAppliedOn = event.appliedOn && event.appliedOn[doc._id];
-        if (isAppliedOn && event.appliedOn[doc._id] <= doc._rev) {
-          event.appliedOnClient = event.appliedOnClient || {};
-          if (!event.appliedOnClient[doc._id]) {
-            next({
-              type: 'UPDATE_EVENT',
-              doc: {
-                ...event,
-                draft: true,
-                appliedOnClient: {
-                  ...(event.appliedOnClient),
-                  [doc._id]: doc._rev
-                }
-              }
-            });
-          }
-        } else {
-          next(event.action);
-        }
-      });
-    }
 
     if (action.type === 'LOAD_DOCS' || action.type === 'LOAD_DOCS_FROM_CACHE') {
       setTimeout(() => {
         const eventsByRelevantDoc = eventsByRelevantDocSelector(store.getState());
         action.docs.forEach(doc => {
           const docEvents = eventsByRelevantDoc[doc._id] || [];
-          updateEventsToSetAppliedOnClient(doc, docEvents)
+          updateEventsToSetAppliedOnClient(doc, docEvents, next);
         });
       }, 0);
     }
@@ -94,4 +71,28 @@ export default (store, config) => {
     return result;
 
   }
+}
+
+const updateEventsToSetAppliedOnClient = (doc, docEvents, next) => {
+  docEvents.forEach(event => {
+    const isAppliedOn = event.appliedOn && event.appliedOn[doc._id];
+    if (isAppliedOn && event.appliedOn[doc._id] <= doc._rev) {
+      event.appliedOnClient = event.appliedOnClient || {};
+      if (!event.appliedOnClient[doc._id]) {
+        next({
+          type: 'UPDATE_EVENT',
+          doc: {
+            ...event,
+            draft: true,
+            appliedOnClient: {
+              ...(event.appliedOnClient),
+              [doc._id]: doc._rev
+            }
+          }
+        });
+      }
+    } else {
+      next(event.action);
+    }
+  });
 }

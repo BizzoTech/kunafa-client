@@ -25,18 +25,15 @@ const processEvents = async (processLocalEvent, events, next) => {
 }
 
 
-export default (store, { processLocalEvent, isConnected }) => next => action => {
+export default (store, { processLocalEvent, isConnected }) => next => async (action) => {
   if (action.type === 'PROCESS_LOCAL_ONLY') {
-    return isConnected().then(isConnected => {
-      //console.log('First, is ' + (isConnected ? 'online' : 'offline'));
-      if (isConnected) {
-        const localOnlyEvents = R.sort((a1, a2) => a1.createdAt - a2.createdAt, R.values(store.getState().events).filter(R.prop('localOnly')))
-        if (localOnlyEvents.length < 1) {
-          return
-        }
-        return processEvents(processLocalEvent, localOnlyEvents, next);
+    if (await isConnected()) {
+      const localOnlyEvents = R.sort((a1, a2) => a1.createdAt - a2.createdAt, R.values(store.getState().events).filter(R.prop('localOnly')))
+      if (localOnlyEvents.length < 1) {
+        return
       }
-    });
+      return processEvents(processLocalEvent, localOnlyEvents, next);
+    }
   } else {
     return next(action);
   }

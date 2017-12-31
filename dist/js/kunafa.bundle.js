@@ -3999,24 +3999,60 @@ exports.default = function (store, _ref2) {
   var processLocalEvent = _ref2.processLocalEvent,
       isConnected = _ref2.isConnected;
   return function (next) {
-    return function (action) {
-      if (action.type === 'PROCESS_LOCAL_ONLY') {
-        return isConnected().then(function (isConnected) {
-          //console.log('First, is ' + (isConnected ? 'online' : 'offline'));
-          if (isConnected) {
-            var localOnlyEvents = (0, _sort2.default)(function (a1, a2) {
-              return a1.createdAt - a2.createdAt;
-            }, (0, _values2.default)(store.getState().events).filter((0, _prop2.default)('localOnly')));
-            if (localOnlyEvents.length < 1) {
-              return;
+    return function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(action) {
+        var localOnlyEvents;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                if (!(action.type === 'PROCESS_LOCAL_ONLY')) {
+                  _context2.next = 10;
+                  break;
+                }
+
+                _context2.next = 3;
+                return isConnected();
+
+              case 3:
+                if (!_context2.sent) {
+                  _context2.next = 8;
+                  break;
+                }
+
+                localOnlyEvents = (0, _sort2.default)(function (a1, a2) {
+                  return a1.createdAt - a2.createdAt;
+                }, (0, _values2.default)(store.getState().events).filter((0, _prop2.default)('localOnly')));
+
+                if (!(localOnlyEvents.length < 1)) {
+                  _context2.next = 7;
+                  break;
+                }
+
+                return _context2.abrupt('return');
+
+              case 7:
+                return _context2.abrupt('return', processEvents(processLocalEvent, localOnlyEvents, next));
+
+              case 8:
+                _context2.next = 11;
+                break;
+
+              case 10:
+                return _context2.abrupt('return', next(action));
+
+              case 11:
+              case 'end':
+                return _context2.stop();
             }
-            return processEvents(processLocalEvent, localOnlyEvents, next);
           }
-        });
-      } else {
-        return next(action);
-      }
-    };
+        }, _callee2, undefined);
+      }));
+
+      return function (_x4) {
+        return _ref3.apply(this, arguments);
+      };
+    }();
   };
 };
 
@@ -4890,32 +4926,12 @@ exports.default = function (store, config) {
 
       var result = next(action);
 
-      var updateEventsToSetAppliedOnClient = function updateEventsToSetAppliedOnClient(doc, docEvents) {
-        docEvents.forEach(function (event) {
-          var isAppliedOn = event.appliedOn && event.appliedOn[doc._id];
-          if (isAppliedOn && event.appliedOn[doc._id] <= doc._rev) {
-            event.appliedOnClient = event.appliedOnClient || {};
-            if (!event.appliedOnClient[doc._id]) {
-              next({
-                type: 'UPDATE_EVENT',
-                doc: Object.assign({}, event, {
-                  draft: true,
-                  appliedOnClient: Object.assign({}, event.appliedOnClient, _defineProperty({}, doc._id, doc._rev))
-                })
-              });
-            }
-          } else {
-            next(event.action);
-          }
-        });
-      };
-
       if (action.type === 'LOAD_DOCS' || action.type === 'LOAD_DOCS_FROM_CACHE') {
         setTimeout(function () {
           var eventsByRelevantDoc = eventsByRelevantDocSelector(store.getState());
           action.docs.forEach(function (doc) {
             var docEvents = eventsByRelevantDoc[doc._id] || [];
-            updateEventsToSetAppliedOnClient(doc, docEvents);
+            updateEventsToSetAppliedOnClient(doc, docEvents, next);
           });
         }, 0);
       }
@@ -4923,6 +4939,26 @@ exports.default = function (store, config) {
       return result;
     };
   };
+};
+
+var updateEventsToSetAppliedOnClient = function updateEventsToSetAppliedOnClient(doc, docEvents, next) {
+  docEvents.forEach(function (event) {
+    var isAppliedOn = event.appliedOn && event.appliedOn[doc._id];
+    if (isAppliedOn && event.appliedOn[doc._id] <= doc._rev) {
+      event.appliedOnClient = event.appliedOnClient || {};
+      if (!event.appliedOnClient[doc._id]) {
+        next({
+          type: 'UPDATE_EVENT',
+          doc: Object.assign({}, event, {
+            draft: true,
+            appliedOnClient: Object.assign({}, event.appliedOnClient, _defineProperty({}, doc._id, doc._rev))
+          })
+        });
+      }
+    } else {
+      next(event.action);
+    }
+  });
 };
 
 /***/ }),

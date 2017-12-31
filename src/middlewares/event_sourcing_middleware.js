@@ -7,7 +7,7 @@ const {
   eventsByRelevantDocSelector
 } = kunafaSelectors;
 
-export default(store, config) => {
+export default (store, config) => {
   const {
     localOnlyActions,
     needLocalProcessing,
@@ -46,7 +46,7 @@ export default(store, config) => {
 
   return next => action => {
 
-    if(!localOnlyActions.includes(action.type) && action.type !== 'ADD_PROFILE') {
+    if (!localOnlyActions.includes(action.type) && action.type !== 'ADD_PROFILE') {
       setTimeout(() => {
         next({
           type: 'ADD_EVENT',
@@ -57,32 +57,36 @@ export default(store, config) => {
 
     let result = next(action);
 
-    if(action.type === 'LOAD_DOCS' || action.type === 'LOAD_DOCS_FROM_CACHE') {
+    const updateEventsToSetAppliedOnClient = (doc, docEvents) => {
+      docEvents.forEach(event => {
+        const isAppliedOn = event.appliedOn && event.appliedOn[doc._id];
+        if (isAppliedOn && event.appliedOn[doc._id] <= doc._rev) {
+          event.appliedOnClient = event.appliedOnClient || {};
+          if (!event.appliedOnClient[doc._id]) {
+            next({
+              type: 'UPDATE_EVENT',
+              doc: {
+                ...event,
+                draft: true,
+                appliedOnClient: {
+                  ...(event.appliedOnClient),
+                  [doc._id]: doc._rev
+                }
+              }
+            });
+          }
+        } else {
+          next(event.action);
+        }
+      });
+    }
+
+    if (action.type === 'LOAD_DOCS' || action.type === 'LOAD_DOCS_FROM_CACHE') {
       setTimeout(() => {
         const eventsByRelevantDoc = eventsByRelevantDocSelector(store.getState());
         action.docs.forEach(doc => {
           const docEvents = eventsByRelevantDoc[doc._id] || [];
-          docEvents.forEach(event => {
-            const isAppliedOn = event.appliedOn && event.appliedOn[doc._id];
-            if(isAppliedOn && event.appliedOn[doc._id] <= doc._rev) {
-              event.appliedOnClient = event.appliedOnClient || {};
-              if(!event.appliedOnClient[doc._id]) {
-                next({
-                  type: 'UPDATE_EVENT',
-                  doc: {
-                    ...event,
-                    draft: true,
-                    appliedOnClient: {
-                      ...(event.appliedOnClient),
-            [doc._id]: doc._rev
-                    }
-                  }
-                });
-              }
-            } else {
-              next(event.action);
-            }
-          });
+          updateEventsToSetAppliedOnClient(doc, docEvents)
         });
       }, 0);
     }

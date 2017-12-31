@@ -3890,9 +3890,114 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-exports.default = function (store, _ref) {
-  var processLocalEvent = _ref.processLocalEvent,
-      isConnected = _ref.isConnected;
+var processEvents = function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(processLocalEvent, events, next) {
+    var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, event;
+
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            next({ type: 'START_PROCESSING_LOCAL' });
+            _context.prev = 1;
+            _iteratorNormalCompletion = true;
+            _didIteratorError = false;
+            _iteratorError = undefined;
+            _context.prev = 5;
+            _iterator = events[Symbol.iterator]();
+
+          case 7:
+            if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
+              _context.next = 15;
+              break;
+            }
+
+            event = _step.value;
+            _context.next = 11;
+            return processLocalEvent(event, function (progress) {
+              next({ type: 'START_PROCESSING_LOCAL', progress: progress });
+            });
+
+          case 11:
+            next({
+              type: 'UPDATE_EVENT',
+              doc: Object.assign({}, event, {
+                draft: "true",
+                localOnly: undefined
+              })
+            });
+
+          case 12:
+            _iteratorNormalCompletion = true;
+            _context.next = 7;
+            break;
+
+          case 15:
+            _context.next = 21;
+            break;
+
+          case 17:
+            _context.prev = 17;
+            _context.t0 = _context['catch'](5);
+            _didIteratorError = true;
+            _iteratorError = _context.t0;
+
+          case 21:
+            _context.prev = 21;
+            _context.prev = 22;
+
+            if (!_iteratorNormalCompletion && _iterator.return) {
+              _iterator.return();
+            }
+
+          case 24:
+            _context.prev = 24;
+
+            if (!_didIteratorError) {
+              _context.next = 27;
+              break;
+            }
+
+            throw _iteratorError;
+
+          case 27:
+            return _context.finish(24);
+
+          case 28:
+            return _context.finish(21);
+
+          case 29:
+            _context.next = 34;
+            break;
+
+          case 31:
+            _context.prev = 31;
+            _context.t1 = _context['catch'](1);
+
+            console.log(_context.t1);
+
+          case 34:
+            _context.prev = 34;
+
+            next({ type: 'END_PROCESSING_LOCAL' });
+            return _context.finish(34);
+
+          case 37:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, _callee, undefined, [[1, 31, 34, 37], [5, 17, 21, 29], [22,, 24, 28]]);
+  }));
+
+  return function processEvents(_x, _x2, _x3) {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+exports.default = function (store, _ref2) {
+  var processLocalEvent = _ref2.processLocalEvent,
+      isConnected = _ref2.isConnected;
   return function (next) {
     return function (action) {
       if (action.type === 'PROCESS_LOCAL_ONLY') {
@@ -3905,105 +4010,7 @@ exports.default = function (store, _ref) {
             if (localOnlyEvents.length < 1) {
               return;
             }
-            next({ type: 'START_PROCESSING_LOCAL' });
-            //console.log(localOnlyEvents);
-            return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-              var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, event;
-
-              return regeneratorRuntime.wrap(function _callee$(_context) {
-                while (1) {
-                  switch (_context.prev = _context.next) {
-                    case 0:
-                      _context.prev = 0;
-                      _iteratorNormalCompletion = true;
-                      _didIteratorError = false;
-                      _iteratorError = undefined;
-                      _context.prev = 4;
-                      _iterator = localOnlyEvents[Symbol.iterator]();
-
-                    case 6:
-                      if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                        _context.next = 14;
-                        break;
-                      }
-
-                      event = _step.value;
-                      _context.next = 10;
-                      return processLocalEvent(event, function (progress) {
-                        next({ type: 'START_PROCESSING_LOCAL', progress: progress });
-                      });
-
-                    case 10:
-                      next({
-                        type: 'UPDATE_EVENT',
-                        doc: Object.assign({}, event, {
-                          draft: "true",
-                          localOnly: undefined
-                        })
-                      });
-
-                    case 11:
-                      _iteratorNormalCompletion = true;
-                      _context.next = 6;
-                      break;
-
-                    case 14:
-                      _context.next = 20;
-                      break;
-
-                    case 16:
-                      _context.prev = 16;
-                      _context.t0 = _context['catch'](4);
-                      _didIteratorError = true;
-                      _iteratorError = _context.t0;
-
-                    case 20:
-                      _context.prev = 20;
-                      _context.prev = 21;
-
-                      if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
-                      }
-
-                    case 23:
-                      _context.prev = 23;
-
-                      if (!_didIteratorError) {
-                        _context.next = 26;
-                        break;
-                      }
-
-                      throw _iteratorError;
-
-                    case 26:
-                      return _context.finish(23);
-
-                    case 27:
-                      return _context.finish(20);
-
-                    case 28:
-                      _context.next = 33;
-                      break;
-
-                    case 30:
-                      _context.prev = 30;
-                      _context.t1 = _context['catch'](0);
-
-                      console.log(_context.t1);
-
-                    case 33:
-                      _context.prev = 33;
-
-                      next({ type: 'END_PROCESSING_LOCAL' });
-                      return _context.finish(33);
-
-                    case 36:
-                    case 'end':
-                      return _context.stop();
-                  }
-                }
-              }, _callee, undefined, [[0, 30, 33, 36], [4, 16, 20, 28], [21,, 23, 27]]);
-            }))();
+            return processEvents(processLocalEvent, localOnlyEvents, next);
           }
         });
       } else {
@@ -4883,28 +4890,32 @@ exports.default = function (store, config) {
 
       var result = next(action);
 
+      var updateEventsToSetAppliedOnClient = function updateEventsToSetAppliedOnClient(doc, docEvents) {
+        docEvents.forEach(function (event) {
+          var isAppliedOn = event.appliedOn && event.appliedOn[doc._id];
+          if (isAppliedOn && event.appliedOn[doc._id] <= doc._rev) {
+            event.appliedOnClient = event.appliedOnClient || {};
+            if (!event.appliedOnClient[doc._id]) {
+              next({
+                type: 'UPDATE_EVENT',
+                doc: Object.assign({}, event, {
+                  draft: true,
+                  appliedOnClient: Object.assign({}, event.appliedOnClient, _defineProperty({}, doc._id, doc._rev))
+                })
+              });
+            }
+          } else {
+            next(event.action);
+          }
+        });
+      };
+
       if (action.type === 'LOAD_DOCS' || action.type === 'LOAD_DOCS_FROM_CACHE') {
         setTimeout(function () {
           var eventsByRelevantDoc = eventsByRelevantDocSelector(store.getState());
           action.docs.forEach(function (doc) {
             var docEvents = eventsByRelevantDoc[doc._id] || [];
-            docEvents.forEach(function (event) {
-              var isAppliedOn = event.appliedOn && event.appliedOn[doc._id];
-              if (isAppliedOn && event.appliedOn[doc._id] <= doc._rev) {
-                event.appliedOnClient = event.appliedOnClient || {};
-                if (!event.appliedOnClient[doc._id]) {
-                  next({
-                    type: 'UPDATE_EVENT',
-                    doc: Object.assign({}, event, {
-                      draft: true,
-                      appliedOnClient: Object.assign({}, event.appliedOnClient, _defineProperty({}, doc._id, doc._rev))
-                    })
-                  });
-                }
-              } else {
-                next(event.action);
-              }
-            });
+            updateEventsToSetAppliedOnClient(doc, docEvents);
           });
         }, 0);
       }

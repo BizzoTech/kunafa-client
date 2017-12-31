@@ -4598,6 +4598,10 @@ var getDefaultAction = function getDefaultAction(act) {
   }
 };
 
+var getDocs = function getDocs(state, action) {
+  return [action.doc];
+};
+
 var initialLoad = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(db, syncPaths, dispatch) {
     var result;
@@ -4759,9 +4763,6 @@ exports.default = function (store, _ref2) {
       }, _callee2, undefined);
     })), 0);
 
-    var getDocs = function getDocs(state, action) {
-      return [action.doc];
-    };
     var mergedActions = getActionsFromPaths(syncPaths);
 
     return function () {

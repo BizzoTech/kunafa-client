@@ -15,6 +15,8 @@ const getDefaultAction = act => {
   }
 }
 
+const getDocs = (state, action) => [action.doc];
+
 const initialLoad = async (db, syncPaths, dispatch) => {
   const result = await db.allDocs({
     include_docs: true,
@@ -130,7 +132,7 @@ export default (store, { getLocalDbUrl, syncPaths }) => next => {
     changes = syncChanges(db, syncPaths, store, next, result.update_seq);
   }, 0);
 
-  const getDocs = (state, action) => [action.doc];
+  
   const mergedActions = getActionsFromPaths(syncPaths);
 
   return async (action) => {

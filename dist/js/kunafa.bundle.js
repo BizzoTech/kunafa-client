@@ -3914,20 +3914,20 @@ exports.default = function (store, _ref) {
                 while (1) {
                   switch (_context.prev = _context.next) {
                     case 0:
+                      _context.prev = 0;
                       _iteratorNormalCompletion = true;
                       _didIteratorError = false;
                       _iteratorError = undefined;
-                      _context.prev = 3;
+                      _context.prev = 4;
                       _iterator = localOnlyEvents[Symbol.iterator]();
 
-                    case 5:
+                    case 6:
                       if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                        _context.next = 22;
+                        _context.next = 14;
                         break;
                       }
 
                       event = _step.value;
-                      _context.prev = 7;
                       _context.next = 10;
                       return processLocalEvent(event, function (progress) {
                         next({ type: 'START_PROCESSING_LOCAL', progress: progress });
@@ -3941,66 +3941,68 @@ exports.default = function (store, _ref) {
                           localOnly: undefined
                         })
                       });
-                      _context.next = 16;
+
+                    case 11:
+                      _iteratorNormalCompletion = true;
+                      _context.next = 6;
                       break;
 
-                    case 13:
-                      _context.prev = 13;
-                      _context.t0 = _context['catch'](7);
-
-                      console.log(_context.t0);
+                    case 14:
+                      _context.next = 20;
+                      break;
 
                     case 16:
                       _context.prev = 16;
-
-                      next({ type: 'END_PROCESSING_LOCAL' });
-                      return _context.finish(16);
-
-                    case 19:
-                      _iteratorNormalCompletion = true;
-                      _context.next = 5;
-                      break;
-
-                    case 22:
-                      _context.next = 28;
-                      break;
-
-                    case 24:
-                      _context.prev = 24;
-                      _context.t1 = _context['catch'](3);
+                      _context.t0 = _context['catch'](4);
                       _didIteratorError = true;
-                      _iteratorError = _context.t1;
+                      _iteratorError = _context.t0;
 
-                    case 28:
-                      _context.prev = 28;
-                      _context.prev = 29;
+                    case 20:
+                      _context.prev = 20;
+                      _context.prev = 21;
 
                       if (!_iteratorNormalCompletion && _iterator.return) {
                         _iterator.return();
                       }
 
-                    case 31:
-                      _context.prev = 31;
+                    case 23:
+                      _context.prev = 23;
 
                       if (!_didIteratorError) {
-                        _context.next = 34;
+                        _context.next = 26;
                         break;
                       }
 
                       throw _iteratorError;
 
-                    case 34:
-                      return _context.finish(31);
+                    case 26:
+                      return _context.finish(23);
 
-                    case 35:
-                      return _context.finish(28);
+                    case 27:
+                      return _context.finish(20);
+
+                    case 28:
+                      _context.next = 33;
+                      break;
+
+                    case 30:
+                      _context.prev = 30;
+                      _context.t1 = _context['catch'](0);
+
+                      console.log(_context.t1);
+
+                    case 33:
+                      _context.prev = 33;
+
+                      next({ type: 'END_PROCESSING_LOCAL' });
+                      return _context.finish(33);
 
                     case 36:
                     case 'end':
                       return _context.stop();
                   }
                 }
-              }, _callee, undefined, [[3, 24, 28, 36], [7, 13, 16, 19], [29,, 31, 35]]);
+              }, _callee, undefined, [[0, 30, 33, 36], [4, 16, 20, 28], [21,, 23, 27]]);
             }))();
           }
         });
@@ -4646,9 +4648,9 @@ exports.default = function (store, _ref2) {
     var profileId = store.getState().currentProfile._id;
     var localDbUrl = getLocalDbUrl(profileId);
     var db = new _pouchdb2.default(localDbUrl);
-    //Initial Load docs to improve render performance by tracking new changes only
+    var changes = void 0;
     setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-      var result, changes;
+      var result;
       return regeneratorRuntime.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
@@ -4658,6 +4660,8 @@ exports.default = function (store, _ref2) {
 
             case 2:
               result = _context2.sent;
+              //Initial Load docs to improve render performance by tracking new changes only
+
               changes = syncChanges(db, syncPaths, store, next, result.update_seq);
 
             case 4:
@@ -4764,7 +4768,7 @@ exports.default = function (store, _ref2) {
           db = new _pouchdb2.default(_localDbUrl);
           //Initial Load docs to improve render performance by tracking new changes only
           setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
-            var result, changes;
+            var result;
             return regeneratorRuntime.wrap(function _callee3$(_context3) {
               while (1) {
                 switch (_context3.prev = _context3.next) {
@@ -4774,6 +4778,8 @@ exports.default = function (store, _ref2) {
 
                   case 2:
                     result = _context3.sent;
+
+
                     changes = syncChanges(db, syncPaths, store, next, result.update_seq);
 
                   case 4:

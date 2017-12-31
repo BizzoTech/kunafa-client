@@ -80,11 +80,11 @@ export default (store, { getLocalDbUrl, syncPaths }) => next => {
   const profileId = store.getState().currentProfile._id;
   const localDbUrl = getLocalDbUrl(profileId);
   let db = new PouchDB(localDbUrl);
-  //Initial Load docs to improve render performance by tracking new changes only
+  let changes;
   setTimeout(async () => {
-    const result = await initialLoad(db, syncPaths, next);
+    const result = await initialLoad(db, syncPaths, next); //Initial Load docs to improve render performance by tracking new changes only
 
-    let changes = syncChanges(db, syncPaths, store, next, result.update_seq);
+    changes = syncChanges(db, syncPaths, store, next, result.update_seq);
   }, 0);
 
   const getDocs = (state, action) => [action.doc];
@@ -181,7 +181,7 @@ export default (store, { getLocalDbUrl, syncPaths }) => next => {
         setTimeout(async () => {
           const result = await initialLoad(db, syncPaths, next);
 
-          let changes = syncChanges(db, syncPaths, store, next, result.update_seq);
+          changes = syncChanges(db, syncPaths, store, next, result.update_seq);
         }, 0);
       }
     }

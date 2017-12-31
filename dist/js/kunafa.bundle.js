@@ -2986,7 +2986,6 @@ var indexBy = (0, _reduceBy2.default)(function (acc, elem) {
   return elem;
 }, null);
 
-
 var defaultState = {};
 
 exports.default = function () {
@@ -3301,6 +3300,8 @@ exports.default = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+
 var defaultState = {
   currentDialog: undefined
 };
@@ -5210,7 +5211,6 @@ var eventsSelector = function eventsSelector(state) {
   return state.events;
 };
 
-
 var interestingEventsSelector = (0, _reselect.createSelector)(eventsSelector, function (events) {
   return (0, _values2.default)(events).filter(function (event) {
     return event.relevantDocsIds !== undefined && event.relevantDocsIds.length > 0;
@@ -5565,6 +5565,7 @@ var openDialog = exports.openDialog = function openDialog(dialog) {
     dialog: dialog
   };
 };
+
 var closeDialog = exports.closeDialog = function closeDialog() {
   return {
     type: 'CLOSE_DIALOG'
@@ -5812,6 +5813,7 @@ var defaultConfig = {
     }()
   }
 };
+
 exports.default = defaultConfig;
 
 /***/ })

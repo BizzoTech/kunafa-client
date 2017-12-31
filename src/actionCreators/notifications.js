@@ -1,12 +1,11 @@
-// @flow
-export const clickNotification = (notification: any) => {
+export const clickNotification = (notification) => {
   return {
     type: 'CLICK_NOTIFICATION',
     notification
   }
 }
 
-export const clickExternalNotification = (notification: any) => {
+export const clickExternalNotification = (notification) => {
   return {
     type: 'CLICK_NOTIFICATION',
     notification,

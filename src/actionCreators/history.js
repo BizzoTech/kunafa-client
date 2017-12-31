@@ -1,4 +1,3 @@
-// @flow
 export const resetHistory = () => {
   return {
     type: 'RESET_HISTORY'

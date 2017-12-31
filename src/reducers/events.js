@@ -1,16 +1,10 @@
-// @flow
 import R from 'ramda';
-import type {Event, Action} from '../types';
-
-type EventsState = {
-  [string]: Event
-}
 
 const indexBy = R.reduceBy((acc, elem) => elem, null);
 
-const defaultState : EventsState = {};
+const defaultState = {};
 
-export default(state : EventsState = defaultState, action : Action) => {
+export default(state = defaultState, action) => {
   switch (action.type) {
     case 'LOAD_EVENTS':
       const newEvents = indexBy(e => e._id, action.events);

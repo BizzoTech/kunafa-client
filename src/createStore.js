@@ -17,11 +17,9 @@ import actionCreators from './actionCreators';
 
 import defaultConfig from './defaultConfig';
 
-import type { AppConfig, StrictAppConfig, SyncPath, ActionCreator } from './types';
+export default (appConfig, preloadedState) => {
 
-export default (appConfig: AppConfig, preloadedState) => {
-
-  const syncPaths: Array<SyncPath> = R.append({
+  const syncPaths = R.append({
     name: "events",
     filter: (doc) => {
       return doc.type == "EVENT"; // & !doc.appliedOnClient;
@@ -40,7 +38,7 @@ export default (appConfig: AppConfig, preloadedState) => {
     syncPaths
   }
 
-  const _allActionCreators: { [string]: ActionCreator } = {
+  const _allActionCreators = {
     ...actionCreators,
     ...config.actionCreators
   }

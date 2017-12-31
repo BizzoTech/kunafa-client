@@ -1,7 +1,4 @@
-// @flow
-import type {AppConfig, StrictAppConfig, SyncPath, Route} from './types';
-
-const defaultConfig: StrictAppConfig = {
+const defaultConfig = {
   actionCreators: {},
   reducers: {},
   middlewares: [],
@@ -25,12 +22,12 @@ const defaultConfig: StrictAppConfig = {
   keepInCache: (doc, state) => {
     return false;
   },
-  getDeepLinkRoute: (url): Route => {
+  getDeepLinkRoute: (url) => {
     return {
       name: 'HOME'
     }
   },
-  getNotificationRoute: (notification): Route => {
+  getNotificationRoute: (notification) => {
     return {
       name: 'HOME'
     }

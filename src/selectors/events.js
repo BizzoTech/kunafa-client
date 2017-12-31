@@ -1,11 +1,9 @@
-// @flow
 import {
   createSelector
 } from 'reselect';
 import R from 'ramda';
-import type {State} from '../types';
 
-const eventsSelector = (state: State) => state.events;
+const eventsSelector = state => state.events;
 
 const interestingEventsSelector = createSelector(eventsSelector, events => {
   return R.values(events).filter(event => event.relevantDocsIds !== undefined && event.relevantDocsIds.length > 0);
@@ -27,7 +25,7 @@ export const eventsByRelevantDocSelector = createSelector(sortedEventsSelector, 
   const eventsGroupedByDocId = R.groupBy(event => event.docId, eventsWithDocIds);
   return R.map(events => {
     return events.filter(event => {
-      const appliedOnClientRev: ?string = R.path(['appliedOnClient', event.docId
+      const appliedOnClientRev = R.path(['appliedOnClient', event.docId
       ], event);
       return appliedOnClientRev === undefined
     });

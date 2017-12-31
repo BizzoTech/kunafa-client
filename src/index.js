@@ -1,4 +1,3 @@
-// @flow
 import connect from './connect';
 import createStore from './createStore';
 

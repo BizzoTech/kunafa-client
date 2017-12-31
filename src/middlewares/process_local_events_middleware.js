@@ -1,5 +1,30 @@
 import R from 'ramda';
 
+
+const processEvents = async (processLocalEvent, events, next) => {
+  next({ type: 'START_PROCESSING_LOCAL' });
+  try {
+    for (const event of events) {
+      await processLocalEvent(event, progress => {
+        next({ type: 'START_PROCESSING_LOCAL', progress });
+      });
+      next({
+        type: 'UPDATE_EVENT',
+        doc: {
+          ...event,
+          draft: "true",
+          localOnly: undefined
+        }
+      });
+    }
+  } catch (e) {
+    console.log(e);
+  } finally {
+    next({ type: 'END_PROCESSING_LOCAL' });
+  }
+}
+
+
 export default (store, { processLocalEvent, isConnected }) => next => action => {
   if (action.type === 'PROCESS_LOCAL_ONLY') {
     return isConnected().then(isConnected => {
@@ -9,30 +34,7 @@ export default (store, { processLocalEvent, isConnected }) => next => action => 
         if (localOnlyEvents.length < 1) {
           return
         }
-        next({ type: 'START_PROCESSING_LOCAL' });
-        //console.log(localOnlyEvents);
-        return (async () => {
-          try {
-            for (const event of localOnlyEvents) {
-              await processLocalEvent(event, progress => {
-                next({ type: 'START_PROCESSING_LOCAL', progress });
-              });
-              next({
-                type: 'UPDATE_EVENT',
-                doc: {
-                  ...event,
-                  draft: "true",
-                  localOnly: undefined
-                }
-              });
-            }
-          } catch (e) {
-            console.log(e);
-          } finally {
-            next({ type: 'END_PROCESSING_LOCAL' });
-          }
-        })();
-
+        return processEvents(processLocalEvent, localOnlyEvents, next);
       }
     });
   } else {

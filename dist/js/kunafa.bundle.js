@@ -4684,6 +4684,50 @@ var syncChanges = function syncChanges(db, syncPaths, store, dispatch) {
   return changes;
 };
 
+var getActionsFromPaths = function getActionsFromPaths(syncPaths) {
+  var mergedActions = {
+    insert: [],
+    update: [],
+    remove: []
+  };
+  var mergeAction = function mergeAction(actName) {
+    return function (action) {
+      if (typeof action === 'string') {
+        mergedActions[actName].push({
+          type: action,
+          getDocs: getDocs
+        });
+      }
+      if ((typeof action === 'undefined' ? 'undefined' : _typeof(action)) === 'object') {
+        mergedActions[actName].push({
+          type: action.type,
+          getDocs: action.getDocs || getDocs
+        });
+      }
+    };
+  };
+  syncPaths.forEach(function (path) {
+    if (Array.isArray(path.actions.insert)) {
+      path.actions.insert.forEach(mergeAction("insert"));
+    } else {
+      mergeAction("insert")(path.actions.insert);
+    }
+
+    if (Array.isArray(path.actions.update)) {
+      path.actions.update.forEach(mergeAction("update"));
+    } else {
+      mergeAction("update")(path.actions.update);
+    }
+
+    if (Array.isArray(path.actions.remove)) {
+      path.actions.remove.forEach(mergeAction("remove"));
+    } else {
+      mergeAction("remove")(path.actions.remove);
+    }
+  });
+  return mergedActions;
+};
+
 exports.default = function (store, _ref2) {
   var getLocalDbUrl = _ref2.getLocalDbUrl,
       syncPaths = _ref2.syncPaths;
@@ -4718,123 +4762,101 @@ exports.default = function (store, _ref2) {
     var getDocs = function getDocs(state, action) {
       return [action.doc];
     };
-    var mergedActions = {
-      insert: [],
-      update: [],
-      remove: []
-    };
-    var mergeAction = function mergeAction(actName) {
-      return function (action) {
-        if (typeof action === 'string') {
-          mergedActions[actName].push({
-            type: action,
-            getDocs: getDocs
-          });
-        }
-        if ((typeof action === 'undefined' ? 'undefined' : _typeof(action)) === 'object') {
-          mergedActions[actName].push({
-            type: action.type,
-            getDocs: action.getDocs || getDocs
-          });
-        }
-      };
-    };
-    syncPaths.forEach(function (path) {
-      if (Array.isArray(path.actions.insert)) {
-        path.actions.insert.forEach(mergeAction("insert"));
-      } else {
-        mergeAction("insert")(path.actions.insert);
-      }
+    var mergedActions = getActionsFromPaths(syncPaths);
 
-      if (Array.isArray(path.actions.update)) {
-        path.actions.update.forEach(mergeAction("update"));
-      } else {
-        mergeAction("update")(path.actions.update);
-      }
+    return function () {
+      var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(action) {
+        var bulk, state, _profileId, _localDbUrl, result;
 
-      if (Array.isArray(path.actions.remove)) {
-        path.actions.remove.forEach(mergeAction("remove"));
-      } else {
-        mergeAction("remove")(path.actions.remove);
-      }
-    });
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                bulk = [];
+                state = store.getState();
 
-    return function (action) {
-      var bulk = [];
-      var state = store.getState();
-      mergedActions.insert.forEach(function (insertAction) {
-        if (insertAction.type === action.type) {
-          var docs = insertAction.getDocs(state, action);
-          docs.forEach(function (doc) {
-            if (doc.draft) {
-              //db.put(R.omit(['draft'], doc));
-              bulk.push((0, _omit2.default)(['draft'], doc));
-            }
-          });
-        }
-      });
-      mergedActions.update.forEach(function (updateAction) {
-        if (updateAction.type === action.type) {
-          var docs = updateAction.getDocs(state, action);
-          docs.forEach(function (doc) {
-            if (doc.draft) {
-              //db.put(R.omit(['draft'], doc));
-              bulk.push((0, _omit2.default)(['draft'], doc));
-            }
-          });
-        }
-      });
-      mergedActions.remove.forEach(function (removeAction) {
-        if (removeAction.type === action.type) {
-          var docs = removeAction.getDocs(state, action);
-          docs.forEach(function (doc) {
-            //db.remove(doc)
-            bulk.push((0, _merge2.default)(doc, {
-              _deleted: true
-            }));
-          });
-          next(action);
-        }
-      });
+                mergedActions.insert.forEach(function (insertAction) {
+                  if (insertAction.type === action.type) {
+                    var docs = insertAction.getDocs(state, action);
+                    docs.forEach(function (doc) {
+                      if (doc.draft) {
+                        //db.put(R.omit(['draft'], doc));
+                        bulk.push((0, _omit2.default)(['draft'], doc));
+                      }
+                    });
+                  }
+                });
+                mergedActions.update.forEach(function (updateAction) {
+                  if (updateAction.type === action.type) {
+                    var docs = updateAction.getDocs(state, action);
+                    docs.forEach(function (doc) {
+                      if (doc.draft) {
+                        //db.put(R.omit(['draft'], doc));
+                        bulk.push((0, _omit2.default)(['draft'], doc));
+                      }
+                    });
+                  }
+                });
+                mergedActions.remove.forEach(function (removeAction) {
+                  if (removeAction.type === action.type) {
+                    var docs = removeAction.getDocs(state, action);
+                    docs.forEach(function (doc) {
+                      //db.remove(doc)
+                      bulk.push((0, _merge2.default)(doc, {
+                        _deleted: true
+                      }));
+                    });
+                    next(action);
+                  }
+                });
 
-      if (bulk.length) {
-        setTimeout(function () {
-          db.bulkDocs(bulk);
-        }, 0);
-      } else {
-        next(action);
-
-        if (action.type === 'LOGIN' || action.type === 'LOGOUT') {
-          changes.cancel();
-          var _profileId = store.getState().currentProfile._id;
-          var _localDbUrl = getLocalDbUrl(_profileId);
-          db = new _pouchdb2.default(_localDbUrl);
-          //Initial Load docs to improve render performance by tracking new changes only
-          setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
-            var result;
-            return regeneratorRuntime.wrap(function _callee3$(_context3) {
-              while (1) {
-                switch (_context3.prev = _context3.next) {
-                  case 0:
-                    _context3.next = 2;
-                    return initialLoad(db, syncPaths, next);
-
-                  case 2:
-                    result = _context3.sent;
-
-
-                    changes = syncChanges(db, syncPaths, store, next, result.update_seq);
-
-                  case 4:
-                  case 'end':
-                    return _context3.stop();
+                if (!bulk.length) {
+                  _context3.next = 9;
+                  break;
                 }
-              }
-            }, _callee3, undefined);
-          })), 0);
-        }
-      }
-    };
+
+                setTimeout(function () {
+                  db.bulkDocs(bulk);
+                }, 0);
+                _context3.next = 19;
+                break;
+
+              case 9:
+                next(action);
+
+                if (!(action.type === 'LOGIN' || action.type === 'LOGOUT')) {
+                  _context3.next = 19;
+                  break;
+                }
+
+                changes.cancel();
+                _profileId = store.getState().currentProfile._id;
+                _localDbUrl = getLocalDbUrl(_profileId);
+
+                db = new _pouchdb2.default(_localDbUrl);
+
+                //Initial Load docs to improve render performance by tracking new changes only
+                _context3.next = 17;
+                return initialLoad(db, syncPaths, next);
+
+              case 17:
+                result = _context3.sent;
+
+
+                changes = syncChanges(db, syncPaths, store, next, result.update_seq);
+
+              case 19:
+              case 'end':
+                return _context3.stop();
+            }
+          }
+        }, _callee3, undefined);
+      }));
+
+      return function (_x5) {
+        return _ref4.apply(this, arguments);
+      };
+    }();
   };
 };
 

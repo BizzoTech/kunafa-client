@@ -76,18 +76,8 @@ const syncChanges = (db, syncPaths, store, dispatch, update_seq = "now") => {
   return changes;
 }
 
-export default (store, { getLocalDbUrl, syncPaths }) => next => {
-  const profileId = store.getState().currentProfile._id;
-  const localDbUrl = getLocalDbUrl(profileId);
-  let db = new PouchDB(localDbUrl);
-  let changes;
-  setTimeout(async () => {
-    const result = await initialLoad(db, syncPaths, next); //Initial Load docs to improve render performance by tracking new changes only
 
-    changes = syncChanges(db, syncPaths, store, next, result.update_seq);
-  }, 0);
-
-  const getDocs = (state, action) => [action.doc];
+const getActionsFromPaths = syncPaths => {
   const mergedActions = {
     insert: [],
     update: [],
@@ -125,9 +115,25 @@ export default (store, { getLocalDbUrl, syncPaths }) => next => {
     } else {
       mergeAction("remove")(path.actions.remove);
     }
-  })
+  });
+  return mergedActions;
+}
 
-  return action => {
+export default (store, { getLocalDbUrl, syncPaths }) => next => {
+  const profileId = store.getState().currentProfile._id;
+  const localDbUrl = getLocalDbUrl(profileId);
+  let db = new PouchDB(localDbUrl);
+  let changes;
+  setTimeout(async () => {
+    const result = await initialLoad(db, syncPaths, next); //Initial Load docs to improve render performance by tracking new changes only
+
+    changes = syncChanges(db, syncPaths, store, next, result.update_seq);
+  }, 0);
+
+  const getDocs = (state, action) => [action.doc];
+  const mergedActions = getActionsFromPaths(syncPaths);
+
+  return async (action) => {
     const bulk = [];
     const state = store.getState();
     mergedActions.insert.forEach(insertAction => {
@@ -177,12 +183,11 @@ export default (store, { getLocalDbUrl, syncPaths }) => next => {
         const profileId = store.getState().currentProfile._id;
         const localDbUrl = getLocalDbUrl(profileId);
         db = new PouchDB(localDbUrl);
+        
         //Initial Load docs to improve render performance by tracking new changes only
-        setTimeout(async () => {
-          const result = await initialLoad(db, syncPaths, next);
+        const result = await initialLoad(db, syncPaths, next);
 
-          changes = syncChanges(db, syncPaths, store, next, result.update_seq);
-        }, 0);
+        changes = syncChanges(db, syncPaths, store, next, result.update_seq);
       }
     }
   }

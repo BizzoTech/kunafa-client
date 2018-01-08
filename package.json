@@ -12,7 +12,9 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "analyze": "webpack --json | webpack-bundle-size-analyzer"
+    "analyze": "webpack --json | webpack-bundle-size-analyzer",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "jest": {
     "coverageDirectory": "./coverage/",
@@ -40,7 +42,8 @@
     "reselect": "^3.0.1",
     "reselect-map": "^1.0.3",
     "util": "^0.10.3",
-    "uuid": "^3.0.0"
+    "uuid": "^3.0.0",
+    "snyk": "^1.65.3"
   },
   "peerDependencies": {
     "react": ">=16.0.0"
@@ -60,5 +63,6 @@
     "react": "^16.2.0",
     "redux-testkit": "^1.0.6",
     "webpack": "^3.6.0"
-  }
+  },
+  "snyk": true
 }

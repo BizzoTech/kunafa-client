@@ -24,13 +24,28 @@ module.exports = {
       ? 'js/kunafa.bundle.js'
       : 'js/kunafa.bundle.min.js'
   },
-  externals: {
-    react: "react",
-    redux: "redux",
-    "react-redux": "react-redux",
-    pouchdb: "pouchdb",
-    "pouchdb-find": "pouchdb-find",
+  // externals: {
+  //   react: "react",
+  //   redux: "redux",
+  //   "react-redux": "react-redux",
+  //   pouchdb: "pouchdb",
+  //   "pouchdb-find": "pouchdb-find",
 
+  // },
+  externals: function(context, request, callback) {
+    // Absolute & Relative paths are not externals
+    if (request.match(/^(\.{0,2})\//)) {
+      return callback();
+    }
+
+    try {
+      // Attempt to resolve the module via Node
+      require.resolve(request);
+      callback(null, request);
+    } catch(e) {
+      // Node couldn't find it, so it must be user-aliased
+      callback();
+    }
   },
   plugins: [],
   module: {

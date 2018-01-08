@@ -1,7 +1,7 @@
 import {
   createSelector
 } from 'reselect';
-import R from 'ramda';
+const R = require('ramda');
 
 const eventsSelector = state => state.events;
 

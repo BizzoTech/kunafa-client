@@ -1,4 +1,4 @@
-import R from 'ramda';
+const R = require('ramda');
 import PouchDB from 'pouchdb';
 import PouchdbFind from 'pouchdb-find';
 PouchDB.plugin(PouchdbFind);

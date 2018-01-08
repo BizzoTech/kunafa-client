@@ -1,5 +1,5 @@
 // @flow
-import R from 'ramda';
+const R = require('ramda');
 import {
   createStore,
   applyMiddleware,

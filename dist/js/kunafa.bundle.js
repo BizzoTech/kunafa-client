@@ -250,10 +250,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ramda = __webpack_require__(0);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
 var _redux = __webpack_require__(2);
 
 var _reduxThunk = __webpack_require__(11);
@@ -292,9 +288,11 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+var R = __webpack_require__(0);
+
 exports.default = function (appConfig, preloadedState) {
 
-  var syncPaths = _ramda2.default.append({
+  var syncPaths = R.append({
     name: "events",
     filter: function filter(doc) {
       return doc.type == "EVENT"; // & !doc.appliedOnClient;
@@ -312,7 +310,7 @@ exports.default = function (appConfig, preloadedState) {
   });
 
   var _allActionCreators = Object.assign({}, _actionCreators2.default, config.actionCreators);
-  var allActionCreators = _ramda2.default.map(function (actionCreator) {
+  var allActionCreators = R.map(function (actionCreator) {
     return function () {
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
@@ -325,7 +323,7 @@ exports.default = function (appConfig, preloadedState) {
   config.actionCreators = allActionCreators;
 
   var _allReducers = Object.assign({}, _reducers2.default, config.reducers);
-  var allReducers = _ramda2.default.map(function (reducer) {
+  var allReducers = R.map(function (reducer) {
     return function () {
       for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
         args[_key2] = arguments[_key2];
@@ -336,7 +334,7 @@ exports.default = function (appConfig, preloadedState) {
   }, _allReducers);
 
   var _allMiddlewares = config.ssr ? [] : [].concat(_toConsumableArray(config.middlewares), _toConsumableArray(_middlewares2.default));
-  var allMiddlewares = _ramda2.default.map(function (middleware) {
+  var allMiddlewares = R.map(function (middleware) {
     return function (store) {
       return middleware(store, config);
     };
@@ -373,7 +371,7 @@ exports.default = function (appConfig, preloadedState) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            hasLocalEvents = _ramda2.default.values(AppStore.getState().events).some(_ramda2.default.prop('localOnly'));
+            hasLocalEvents = R.values(AppStore.getState().events).some(R.prop('localOnly'));
             isProcessing = AppStore.getState().processing_local.isProcessing;
             _context.next = 4;
             return config.isConnected();
@@ -563,12 +561,7 @@ exports.default = function (state, action, config) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _ramda = __webpack_require__(0);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var R = __webpack_require__(0);
 
 var startWithHome = {
   path: [""]
@@ -601,7 +594,7 @@ exports.default = function (state, action, config) {
       });
     case 'GO_BACK':
       return state.previous ? Object.assign({}, state.previous, {
-        backFrom: _ramda2.default.dissoc('previous', state)
+        backFrom: R.dissoc('previous', state)
       }) : state;
     case 'SKIP_LOGIN':
     case 'LOGIN':
@@ -627,14 +620,9 @@ exports.default = function (state, action, config) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var R = __webpack_require__(0);
 
-var _ramda = __webpack_require__(0);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var indexBy = _ramda2.default.reduceBy(function (acc, elem) {
+var indexBy = R.reduceBy(function (acc, elem) {
   return elem;
 }, null);
 
@@ -652,9 +640,9 @@ exports.default = function () {
       return Object.assign({}, state, newEvents);
     case 'ADD_EVENT':
     case 'UPDATE_EVENT':
-      return _ramda2.default.assoc(action.doc._id, action.doc, state);
+      return R.assoc(action.doc._id, action.doc, state);
     case 'REMOVE_EVENT':
-      return _ramda2.default.dissoc(action.doc._id, state);
+      return R.dissoc(action.doc._id, state);
     case 'LOGIN':
     case 'LOGOUT':
       return defaultState;
@@ -674,15 +662,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ramda = __webpack_require__(0);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var R = __webpack_require__(0);
 
 var defaultState = {};
 
@@ -698,7 +682,7 @@ exports.default = function () {
         return !state[doc._id] || state[doc._id]._rev !== doc._rev;
       });
       return modifiedDocs.reduce(function (state, doc) {
-        return _ramda2.default.merge(state, _defineProperty({}, doc._id, doc)); //{...state, [doc._id]: doc};
+        return R.merge(state, _defineProperty({}, doc._id, doc)); //{...state, [doc._id]: doc};
       }, state);
     default:
       if (!config || !config.actionHandlers || !config.getRelevantDocsIds) {
@@ -707,7 +691,7 @@ exports.default = function () {
       var actionHandlers = config.actionHandlers,
           getRelevantDocsIds = config.getRelevantDocsIds;
 
-      var actionHandlersKeys = _ramda2.default.flatten(Object.values(actionHandlers).map(function (hs) {
+      var actionHandlersKeys = R.flatten(Object.values(actionHandlers).map(function (hs) {
         return Object.keys(hs);
       }));
       if (actionHandlersKeys.includes(action.type)) {
@@ -734,7 +718,7 @@ exports.default = function () {
         });
         if (updatedDocs.length > 0) {
           return updatedDocs.reduce(function (state, doc) {
-            return _ramda2.default.merge(state, _defineProperty({}, doc._id, doc)); //{...state, [doc._id]: doc};
+            return R.merge(state, _defineProperty({}, doc._id, doc)); //{...state, [doc._id]: doc};
           }, state);
         } else {
           return state;
@@ -786,12 +770,7 @@ exports.default = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _ramda = __webpack_require__(0);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var R = __webpack_require__(0);
 
 var defaultState = {
   currentDialog: undefined
@@ -828,13 +807,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ramda = __webpack_require__(0);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var R = __webpack_require__(0);
 
 var defaultState = {};
 
@@ -850,7 +825,7 @@ exports.default = function () {
         endReached: false
       }));
     case 'REMOVE_DOCS_LOADER':
-      return _ramda2.default.dissoc(action.loaderName, state);
+      return R.dissoc(action.loaderName, state);
     case 'LOAD_DOCS':
       if (!action.loaderName || !state[action.loaderName]) {
         return state;
@@ -884,13 +859,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ramda = __webpack_require__(0);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var R = __webpack_require__(0);
 
 var defaultState = {};
 
@@ -903,12 +874,12 @@ exports.default = function () {
       var updatedNotifications = action.notifications.filter(function (n) {
         return !state[n._id] || state[n._id]._rev !== n._rev;
       });
-      return _ramda2.default.merge(state, _ramda2.default.indexBy(_ramda2.default.prop('_id'), updatedNotifications));
+      return R.merge(state, R.indexBy(R.prop('_id'), updatedNotifications));
     case 'ADD_NOTIFICATION':
     case 'UPDATE_NOTIFICATION':
-      return _ramda2.default.merge(state, _defineProperty({}, action.doc._id, action.doc));
+      return R.merge(state, _defineProperty({}, action.doc._id, action.doc));
     case 'REMOVE_NOTIFICATION':
-      return _ramda2.default.omit([action.doc._id], state);
+      return R.omit([action.doc._id], state);
     default:
       return state;
   }
@@ -925,13 +896,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ramda = __webpack_require__(0);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var R = __webpack_require__(0);
 
 var defaultState = {};
 
@@ -944,11 +911,11 @@ exports.default = function () {
       var updatedDocs = action.docs.filter(function (n) {
         return !state[n._id] || state[n._id]._rev !== n._rev;
       });
-      return _ramda2.default.merge(state, _ramda2.default.indexBy(_ramda2.default.prop('_id'), updatedDocs));
+      return R.merge(state, R.indexBy(R.prop('_id'), updatedDocs));
     case 'SET_SHARED_DOC':
-      return _ramda2.default.merge(state, _defineProperty({}, action.doc._id, action.doc));
+      return R.merge(state, _defineProperty({}, action.doc._id, action.doc));
     case 'REMOVE_SHARED_DOC':
-      return _ramda2.default.omit([action.doc._id], state);
+      return R.omit([action.doc._id], state);
     default:
       return state;
   }
@@ -1004,13 +971,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ramda = __webpack_require__(0);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+var R = __webpack_require__(0);
 
 var processEvents = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(processLocalEvent, events, next) {
@@ -1142,9 +1105,9 @@ exports.default = function (store, _ref2) {
                   break;
                 }
 
-                localOnlyEvents = _ramda2.default.sort(function (a1, a2) {
+                localOnlyEvents = R.sort(function (a1, a2) {
                   return a1.createdAt - a2.createdAt;
-                }, _ramda2.default.values(store.getState().events).filter(_ramda2.default.prop('localOnly')));
+                }, R.values(store.getState().events).filter(R.prop('localOnly')));
 
                 if (!(localOnlyEvents.length < 1)) {
                   _context2.next = 7;
@@ -1189,13 +1152,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ramda = __webpack_require__(0);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+var R = __webpack_require__(0);
 
 var removeOldDocs = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(cacheDocTypes, cacheLimit, keepInCache, state, cacheStore) {
@@ -1213,7 +1172,7 @@ var removeOldDocs = function () {
             docs = items.filter(function (item) {
               return item && cacheDocTypes.includes(item.type);
             });
-            sortedDocs = _ramda2.default.sort(function (d1, d2) {
+            sortedDocs = R.sort(function (d1, d2) {
               return d2.fetchedAt - d1.fetchedAt;
             }, docs.filter(function (d) {
               return !(keepInCache(d, state) || d._id === state.currentProfile._id);
@@ -1224,7 +1183,7 @@ var removeOldDocs = function () {
               break;
             }
 
-            toBeRemovedDocs = _ramda2.default.takeLast(sortedDocs.length - cacheLimit, sortedDocs);
+            toBeRemovedDocs = R.takeLast(sortedDocs.length - cacheLimit, sortedDocs);
             _iteratorNormalCompletion = true;
             _didIteratorError = false;
             _iteratorError = undefined;
@@ -1424,12 +1383,7 @@ exports.default = function (store, _ref2) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _ramda = __webpack_require__(0);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var R = __webpack_require__(0);
 
 exports.default = function (store, _ref) {
   var actionCreators = _ref.actionCreators;
@@ -1548,10 +1502,6 @@ Object.defineProperty(exports, "__esModule", {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _ramda = __webpack_require__(0);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
 var _pouchdb = __webpack_require__(1);
 
 var _pouchdb2 = _interopRequireDefault(_pouchdb);
@@ -1565,6 +1515,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+var R = __webpack_require__(0);
 
 _pouchdb2.default.plugin(_pouchdbFind2.default);
 
@@ -1764,7 +1716,7 @@ exports.default = function (store, _ref2) {
                     docs.forEach(function (doc) {
                       if (doc.draft) {
                         //db.put(R.omit(['draft'], doc));
-                        bulk.push(_ramda2.default.omit(['draft'], doc));
+                        bulk.push(R.omit(['draft'], doc));
                       }
                     });
                   }
@@ -1775,7 +1727,7 @@ exports.default = function (store, _ref2) {
                     docs.forEach(function (doc) {
                       if (doc.draft) {
                         //db.put(R.omit(['draft'], doc));
-                        bulk.push(_ramda2.default.omit(['draft'], doc));
+                        bulk.push(R.omit(['draft'], doc));
                       }
                     });
                   }
@@ -1785,7 +1737,7 @@ exports.default = function (store, _ref2) {
                     var docs = removeAction.getDocs(state, action);
                     docs.forEach(function (doc) {
                       //db.remove(doc)
-                      bulk.push(_ramda2.default.merge(doc, {
+                      bulk.push(R.merge(doc, {
                         _deleted: true
                       }));
                     });
@@ -1858,10 +1810,6 @@ var _uuid = __webpack_require__(30);
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
-var _ramda = __webpack_require__(0);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
 var _selectors = __webpack_require__(4);
 
 var _selectors2 = _interopRequireDefault(_selectors);
@@ -1869,6 +1817,8 @@ var _selectors2 = _interopRequireDefault(_selectors);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var R = __webpack_require__(0);
 
 var eventsByRelevantDocSelector = _selectors2.default.eventsByRelevantDocSelector;
 
@@ -1881,9 +1831,9 @@ exports.default = function (store, config) {
       deviceInfo = config.deviceInfo;
 
   var createEvent = function createEvent(action, state) {
-    var eventsList = _ramda2.default.values(state.events);
-    var localOnlyEvents = eventsList.filter(_ramda2.default.prop('localOnly'));
-    var localProcessingDocumentsIds = _ramda2.default.flatten(localOnlyEvents.map(function (event) {
+    var eventsList = R.values(state.events);
+    var localOnlyEvents = eventsList.filter(R.prop('localOnly'));
+    var localProcessingDocumentsIds = R.flatten(localOnlyEvents.map(function (event) {
       return event.relevantDocsIds;
     }));
     var relevantDocsIds = getRelevantDocsIds(action);
@@ -1978,42 +1928,38 @@ exports.eventsByRelevantDocSelector = undefined;
 
 var _reselect = __webpack_require__(32);
 
-var _ramda = __webpack_require__(0);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var R = __webpack_require__(0);
 
 var eventsSelector = function eventsSelector(state) {
   return state.events;
 };
 
 var interestingEventsSelector = (0, _reselect.createSelector)(eventsSelector, function (events) {
-  return _ramda2.default.values(events).filter(function (event) {
+  return R.values(events).filter(function (event) {
     return event.relevantDocsIds !== undefined && event.relevantDocsIds.length > 0;
   });
 });
 
 var sortedEventsSelector = (0, _reselect.createSelector)(interestingEventsSelector, function (events) {
-  return _ramda2.default.sort(function (e1, e2) {
+  return R.sort(function (e1, e2) {
     return e1.createdAt - e2.createdAt;
   }, events);
 });
 
 var eventsByRelevantDocSelector = exports.eventsByRelevantDocSelector = (0, _reselect.createSelector)(sortedEventsSelector, function (events) {
-  var eventsWithDocIds = _ramda2.default.flatten(events.map(function (event) {
+  var eventsWithDocIds = R.flatten(events.map(function (event) {
     return event.relevantDocsIds.map(function (docId) {
       return Object.assign({}, event, {
         docId: docId
       });
     });
   }));
-  var eventsGroupedByDocId = _ramda2.default.groupBy(function (event) {
+  var eventsGroupedByDocId = R.groupBy(function (event) {
     return event.docId;
   }, eventsWithDocIds);
-  return _ramda2.default.map(function (events) {
+  return R.map(function (events) {
     return events.filter(function (event) {
-      var appliedOnClientRev = _ramda2.default.path(['appliedOnClient', event.docId], event);
+      var appliedOnClientRev = R.path(['appliedOnClient', event.docId], event);
       return appliedOnClientRev === undefined;
     });
   }, eventsGroupedByDocId);

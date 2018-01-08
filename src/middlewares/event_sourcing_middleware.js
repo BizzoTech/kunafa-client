@@ -1,6 +1,6 @@
 import uuid from 'uuid';
 
-import R from 'ramda';
+const R = require('ramda');
 
 import kunafaSelectors from '../selectors';
 const {

@@ -1,4 +1,4 @@
-import R from 'ramda';
+const R = require('ramda');
 
 const removeOldDocs = async (cacheDocTypes, cacheLimit, keepInCache, state, cacheStore) => {
   const items = await cacheStore.getAll();

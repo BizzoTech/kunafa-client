@@ -1,4 +1,4 @@
-import R from 'ramda';
+const R = require('ramda');
 
 const indexBy = R.reduceBy((acc, elem) => elem, null);
 

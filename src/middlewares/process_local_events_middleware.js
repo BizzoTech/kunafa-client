@@ -1,4 +1,4 @@
-import R from 'ramda';
+const R = require('ramda');
 
 
 const processEvents = async (processLocalEvent, events, next) => {

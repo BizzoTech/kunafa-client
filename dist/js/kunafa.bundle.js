@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("ramda/src/prop"), require("ramda/src/values"), require("ramda/src/merge"), require("pouchdb"), require("ramda/src/dissoc"), require("ramda/src/flatten"), require("ramda/src/omit"), require("ramda/src/sort"), require("redux"), require("ramda/src/map"), require("ramda/src/indexBy"), require("pouchdb-find"), require("react"), require("react-redux"), require("prop-types"), require("ramda/src/append"), require("redux-thunk"), require("redux-devtools-extension"), require("ramda/src/assoc"), require("ramda/src/reduceBy"), require("ramda/src/takeLast"), require("uuid"), require("ramda/src/path"), require("ramda/src/groupBy"), require("reselect"));
+		module.exports = factory(require("ramda"), require("pouchdb"), require("redux"), require("pouchdb-find"), require("react"), require("react-redux"), require("prop-types"), require("redux-thunk"), require("redux-devtools-extension"), require("uuid"), require("reselect"));
 	else if(typeof define === 'function' && define.amd)
-		define("kunafa", ["ramda/src/prop", "ramda/src/values", "ramda/src/merge", "pouchdb", "ramda/src/dissoc", "ramda/src/flatten", "ramda/src/omit", "ramda/src/sort", "redux", "ramda/src/map", "ramda/src/indexBy", "pouchdb-find", "react", "react-redux", "prop-types", "ramda/src/append", "redux-thunk", "redux-devtools-extension", "ramda/src/assoc", "ramda/src/reduceBy", "ramda/src/takeLast", "uuid", "ramda/src/path", "ramda/src/groupBy", "reselect"], factory);
+		define("kunafa", ["ramda", "pouchdb", "redux", "pouchdb-find", "react", "react-redux", "prop-types", "redux-thunk", "redux-devtools-extension", "uuid", "reselect"], factory);
 	else if(typeof exports === 'object')
-		exports["kunafa"] = factory(require("ramda/src/prop"), require("ramda/src/values"), require("ramda/src/merge"), require("pouchdb"), require("ramda/src/dissoc"), require("ramda/src/flatten"), require("ramda/src/omit"), require("ramda/src/sort"), require("redux"), require("ramda/src/map"), require("ramda/src/indexBy"), require("pouchdb-find"), require("react"), require("react-redux"), require("prop-types"), require("ramda/src/append"), require("redux-thunk"), require("redux-devtools-extension"), require("ramda/src/assoc"), require("ramda/src/reduceBy"), require("ramda/src/takeLast"), require("uuid"), require("ramda/src/path"), require("ramda/src/groupBy"), require("reselect"));
+		exports["kunafa"] = factory(require("ramda"), require("pouchdb"), require("redux"), require("pouchdb-find"), require("react"), require("react-redux"), require("prop-types"), require("redux-thunk"), require("redux-devtools-extension"), require("uuid"), require("reselect"));
 	else
-		root["kunafa"] = factory(root["ramda/src/prop"], root["ramda/src/values"], root["ramda/src/merge"], root["pouchdb"], root["ramda/src/dissoc"], root["ramda/src/flatten"], root["ramda/src/omit"], root["ramda/src/sort"], root["redux"], root["ramda/src/map"], root["ramda/src/indexBy"], root["pouchdb-find"], root["react"], root["react-redux"], root["prop-types"], root["ramda/src/append"], root["redux-thunk"], root["redux-devtools-extension"], root["ramda/src/assoc"], root["ramda/src/reduceBy"], root["ramda/src/takeLast"], root["uuid"], root["ramda/src/path"], root["ramda/src/groupBy"], root["reselect"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_6__, __WEBPACK_EXTERNAL_MODULE_7__, __WEBPACK_EXTERNAL_MODULE_8__, __WEBPACK_EXTERNAL_MODULE_9__, __WEBPACK_EXTERNAL_MODULE_10__, __WEBPACK_EXTERNAL_MODULE_11__, __WEBPACK_EXTERNAL_MODULE_15__, __WEBPACK_EXTERNAL_MODULE_16__, __WEBPACK_EXTERNAL_MODULE_17__, __WEBPACK_EXTERNAL_MODULE_19__, __WEBPACK_EXTERNAL_MODULE_20__, __WEBPACK_EXTERNAL_MODULE_21__, __WEBPACK_EXTERNAL_MODULE_26__, __WEBPACK_EXTERNAL_MODULE_27__, __WEBPACK_EXTERNAL_MODULE_37__, __WEBPACK_EXTERNAL_MODULE_42__, __WEBPACK_EXTERNAL_MODULE_44__, __WEBPACK_EXTERNAL_MODULE_45__, __WEBPACK_EXTERNAL_MODULE_46__) {
+		root["kunafa"] = factory(root["ramda"], root["pouchdb"], root["redux"], root["pouchdb-find"], root["react"], root["react-redux"], root["prop-types"], root["redux-thunk"], root["redux-devtools-extension"], root["uuid"], root["reselect"]);
+})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_7__, __WEBPACK_EXTERNAL_MODULE_8__, __WEBPACK_EXTERNAL_MODULE_9__, __WEBPACK_EXTERNAL_MODULE_11__, __WEBPACK_EXTERNAL_MODULE_12__, __WEBPACK_EXTERNAL_MODULE_30__, __WEBPACK_EXTERNAL_MODULE_32__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 13);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -99,54 +99,6 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_4__;
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_5__;
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_6__;
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_7__;
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_8__;
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_9__;
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_10__;
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_11__;
-
-/***/ }),
-/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -156,7 +108,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _events = __webpack_require__(43);
+var _events = __webpack_require__(31);
 
 var eventsSelectors = _interopRequireWildcard(_events);
 
@@ -165,7 +117,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 exports.default = Object.assign({}, eventsSelectors);
 
 /***/ }),
-/* 13 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -176,11 +128,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.createStore = exports.connect = undefined;
 
-var _connect = __webpack_require__(14);
+var _connect = __webpack_require__(6);
 
 var _connect2 = _interopRequireDefault(_connect);
 
-var _createStore = __webpack_require__(18);
+var _createStore = __webpack_require__(10);
 
 var _createStore2 = _interopRequireDefault(_createStore);
 
@@ -190,7 +142,7 @@ exports.connect = _connect2.default;
 exports.createStore = _createStore2.default;
 
 /***/ }),
-/* 14 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -204,15 +156,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(15);
+var _react = __webpack_require__(7);
 
 var React = _interopRequireWildcard(_react);
 
-var _reactRedux = __webpack_require__(16);
+var _reactRedux = __webpack_require__(8);
 
-var _redux = __webpack_require__(8);
+var _redux = __webpack_require__(2);
 
-var _propTypes = __webpack_require__(17);
+var _propTypes = __webpack_require__(9);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -270,25 +222,25 @@ var connect = function connect(mapStateToProps, mapDispatchToProps) {
 exports.default = connect;
 
 /***/ }),
-/* 15 */
+/* 7 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_15__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_7__;
 
 /***/ }),
-/* 16 */
+/* 8 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_16__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_8__;
 
 /***/ }),
-/* 17 */
+/* 9 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_17__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_9__;
 
 /***/ }),
-/* 18 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -298,51 +250,39 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _prop = __webpack_require__(0);
+var _ramda = __webpack_require__(0);
 
-var _prop2 = _interopRequireDefault(_prop);
+var _ramda2 = _interopRequireDefault(_ramda);
 
-var _values = __webpack_require__(1);
+var _redux = __webpack_require__(2);
 
-var _values2 = _interopRequireDefault(_values);
-
-var _map = __webpack_require__(9);
-
-var _map2 = _interopRequireDefault(_map);
-
-var _append = __webpack_require__(19);
-
-var _append2 = _interopRequireDefault(_append);
-
-var _redux = __webpack_require__(8);
-
-var _reduxThunk = __webpack_require__(20);
+var _reduxThunk = __webpack_require__(11);
 
 var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
-var _reduxDevtoolsExtension = __webpack_require__(21);
+var _reduxDevtoolsExtension = __webpack_require__(12);
 
-var _pouchdb = __webpack_require__(3);
+var _pouchdb = __webpack_require__(1);
 
 var _pouchdb2 = _interopRequireDefault(_pouchdb);
 
-var _reducers = __webpack_require__(22);
+var _reducers = __webpack_require__(13);
 
 var _reducers2 = _interopRequireDefault(_reducers);
 
-var _middlewares = __webpack_require__(34);
+var _middlewares = __webpack_require__(23);
 
 var _middlewares2 = _interopRequireDefault(_middlewares);
 
-var _selectors = __webpack_require__(12);
+var _selectors = __webpack_require__(4);
 
 var _selectors2 = _interopRequireDefault(_selectors);
 
-var _actionCreators = __webpack_require__(47);
+var _actionCreators = __webpack_require__(33);
 
 var _actionCreators2 = _interopRequireDefault(_actionCreators);
 
-var _defaultConfig = __webpack_require__(52);
+var _defaultConfig = __webpack_require__(38);
 
 var _defaultConfig2 = _interopRequireDefault(_defaultConfig);
 
@@ -354,7 +294,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 exports.default = function (appConfig, preloadedState) {
 
-  var syncPaths = (0, _append2.default)({
+  var syncPaths = _ramda2.default.append({
     name: "events",
     filter: function filter(doc) {
       return doc.type == "EVENT"; // & !doc.appliedOnClient;
@@ -372,7 +312,7 @@ exports.default = function (appConfig, preloadedState) {
   });
 
   var _allActionCreators = Object.assign({}, _actionCreators2.default, config.actionCreators);
-  var allActionCreators = (0, _map2.default)(function (actionCreator) {
+  var allActionCreators = _ramda2.default.map(function (actionCreator) {
     return function () {
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
@@ -385,7 +325,7 @@ exports.default = function (appConfig, preloadedState) {
   config.actionCreators = allActionCreators;
 
   var _allReducers = Object.assign({}, _reducers2.default, config.reducers);
-  var allReducers = (0, _map2.default)(function (reducer) {
+  var allReducers = _ramda2.default.map(function (reducer) {
     return function () {
       for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
         args[_key2] = arguments[_key2];
@@ -396,7 +336,7 @@ exports.default = function (appConfig, preloadedState) {
   }, _allReducers);
 
   var _allMiddlewares = config.ssr ? [] : [].concat(_toConsumableArray(config.middlewares), _toConsumableArray(_middlewares2.default));
-  var allMiddlewares = (0, _map2.default)(function (middleware) {
+  var allMiddlewares = _ramda2.default.map(function (middleware) {
     return function (store) {
       return middleware(store, config);
     };
@@ -433,7 +373,7 @@ exports.default = function (appConfig, preloadedState) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            hasLocalEvents = (0, _values2.default)(AppStore.getState().events).some((0, _prop2.default)('localOnly'));
+            hasLocalEvents = _ramda2.default.values(AppStore.getState().events).some(_ramda2.default.prop('localOnly'));
             isProcessing = AppStore.getState().processing_local.isProcessing;
             _context.next = 4;
             return config.isConnected();
@@ -509,25 +449,19 @@ exports.default = function (appConfig, preloadedState) {
 };
 
 /***/ }),
-/* 19 */
+/* 11 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_19__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_11__;
 
 /***/ }),
-/* 20 */
+/* 12 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_20__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_12__;
 
 /***/ }),
-/* 21 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_21__;
-
-/***/ }),
-/* 22 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -537,39 +471,39 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _currentProfile = __webpack_require__(23);
+var _currentProfile = __webpack_require__(14);
 
 var _currentProfile2 = _interopRequireDefault(_currentProfile);
 
-var _history = __webpack_require__(24);
+var _history = __webpack_require__(15);
 
 var _history2 = _interopRequireDefault(_history);
 
-var _events = __webpack_require__(25);
+var _events = __webpack_require__(16);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _documents = __webpack_require__(28);
+var _documents = __webpack_require__(17);
 
 var _documents2 = _interopRequireDefault(_documents);
 
-var _processing_local = __webpack_require__(29);
+var _processing_local = __webpack_require__(18);
 
 var _processing_local2 = _interopRequireDefault(_processing_local);
 
-var _dialog = __webpack_require__(30);
+var _dialog = __webpack_require__(19);
 
 var _dialog2 = _interopRequireDefault(_dialog);
 
-var _docLoaders = __webpack_require__(31);
+var _docLoaders = __webpack_require__(20);
 
 var _docLoaders2 = _interopRequireDefault(_docLoaders);
 
-var _notifications = __webpack_require__(32);
+var _notifications = __webpack_require__(21);
 
 var _notifications2 = _interopRequireDefault(_notifications);
 
-var _sharedDocs = __webpack_require__(33);
+var _sharedDocs = __webpack_require__(22);
 
 var _sharedDocs2 = _interopRequireDefault(_sharedDocs);
 
@@ -588,7 +522,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 23 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -620,7 +554,7 @@ exports.default = function (state, action, config) {
 };
 
 /***/ }),
-/* 24 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -630,9 +564,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _dissoc = __webpack_require__(4);
+var _ramda = __webpack_require__(0);
 
-var _dissoc2 = _interopRequireDefault(_dissoc);
+var _ramda2 = _interopRequireDefault(_ramda);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -667,7 +601,7 @@ exports.default = function (state, action, config) {
       });
     case 'GO_BACK':
       return state.previous ? Object.assign({}, state.previous, {
-        backFrom: (0, _dissoc2.default)('previous', state)
+        backFrom: _ramda2.default.dissoc('previous', state)
       }) : state;
     case 'SKIP_LOGIN':
     case 'LOGIN':
@@ -684,7 +618,7 @@ exports.default = function (state, action, config) {
 };
 
 /***/ }),
-/* 25 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -694,21 +628,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _dissoc = __webpack_require__(4);
+var _ramda = __webpack_require__(0);
 
-var _dissoc2 = _interopRequireDefault(_dissoc);
-
-var _assoc = __webpack_require__(26);
-
-var _assoc2 = _interopRequireDefault(_assoc);
-
-var _reduceBy = __webpack_require__(27);
-
-var _reduceBy2 = _interopRequireDefault(_reduceBy);
+var _ramda2 = _interopRequireDefault(_ramda);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var indexBy = (0, _reduceBy2.default)(function (acc, elem) {
+var indexBy = _ramda2.default.reduceBy(function (acc, elem) {
   return elem;
 }, null);
 
@@ -726,9 +652,9 @@ exports.default = function () {
       return Object.assign({}, state, newEvents);
     case 'ADD_EVENT':
     case 'UPDATE_EVENT':
-      return (0, _assoc2.default)(action.doc._id, action.doc, state);
+      return _ramda2.default.assoc(action.doc._id, action.doc, state);
     case 'REMOVE_EVENT':
-      return (0, _dissoc2.default)(action.doc._id, state);
+      return _ramda2.default.dissoc(action.doc._id, state);
     case 'LOGIN':
     case 'LOGOUT':
       return defaultState;
@@ -738,19 +664,7 @@ exports.default = function () {
 };
 
 /***/ }),
-/* 26 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_26__;
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_27__;
-
-/***/ }),
-/* 28 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -760,13 +674,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _flatten = __webpack_require__(5);
+var _ramda = __webpack_require__(0);
 
-var _flatten2 = _interopRequireDefault(_flatten);
-
-var _merge = __webpack_require__(2);
-
-var _merge2 = _interopRequireDefault(_merge);
+var _ramda2 = _interopRequireDefault(_ramda);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -788,7 +698,7 @@ exports.default = function () {
         return !state[doc._id] || state[doc._id]._rev !== doc._rev;
       });
       return modifiedDocs.reduce(function (state, doc) {
-        return (0, _merge2.default)(state, _defineProperty({}, doc._id, doc)); //{...state, [doc._id]: doc};
+        return _ramda2.default.merge(state, _defineProperty({}, doc._id, doc)); //{...state, [doc._id]: doc};
       }, state);
     default:
       if (!config || !config.actionHandlers || !config.getRelevantDocsIds) {
@@ -797,7 +707,7 @@ exports.default = function () {
       var actionHandlers = config.actionHandlers,
           getRelevantDocsIds = config.getRelevantDocsIds;
 
-      var actionHandlersKeys = (0, _flatten2.default)(Object.values(actionHandlers).map(function (hs) {
+      var actionHandlersKeys = _ramda2.default.flatten(Object.values(actionHandlers).map(function (hs) {
         return Object.keys(hs);
       }));
       if (actionHandlersKeys.includes(action.type)) {
@@ -824,7 +734,7 @@ exports.default = function () {
         });
         if (updatedDocs.length > 0) {
           return updatedDocs.reduce(function (state, doc) {
-            return (0, _merge2.default)(state, _defineProperty({}, doc._id, doc)); //{...state, [doc._id]: doc};
+            return _ramda2.default.merge(state, _defineProperty({}, doc._id, doc)); //{...state, [doc._id]: doc};
           }, state);
         } else {
           return state;
@@ -836,7 +746,7 @@ exports.default = function () {
 };
 
 /***/ }),
-/* 29 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -867,7 +777,7 @@ exports.default = function () {
 };
 
 /***/ }),
-/* 30 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -877,6 +787,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _ramda = __webpack_require__(0);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var defaultState = {
   currentDialog: undefined
@@ -903,7 +818,7 @@ exports.default = function () {
 };
 
 /***/ }),
-/* 31 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -913,9 +828,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _dissoc = __webpack_require__(4);
+var _ramda = __webpack_require__(0);
 
-var _dissoc2 = _interopRequireDefault(_dissoc);
+var _ramda2 = _interopRequireDefault(_ramda);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -935,7 +850,7 @@ exports.default = function () {
         endReached: false
       }));
     case 'REMOVE_DOCS_LOADER':
-      return (0, _dissoc2.default)(action.loaderName, state);
+      return _ramda2.default.dissoc(action.loaderName, state);
     case 'LOAD_DOCS':
       if (!action.loaderName || !state[action.loaderName]) {
         return state;
@@ -959,7 +874,7 @@ exports.default = function () {
 };
 
 /***/ }),
-/* 32 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -969,21 +884,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _omit = __webpack_require__(6);
+var _ramda = __webpack_require__(0);
 
-var _omit2 = _interopRequireDefault(_omit);
-
-var _prop = __webpack_require__(0);
-
-var _prop2 = _interopRequireDefault(_prop);
-
-var _indexBy = __webpack_require__(10);
-
-var _indexBy2 = _interopRequireDefault(_indexBy);
-
-var _merge = __webpack_require__(2);
-
-var _merge2 = _interopRequireDefault(_merge);
+var _ramda2 = _interopRequireDefault(_ramda);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1000,19 +903,19 @@ exports.default = function () {
       var updatedNotifications = action.notifications.filter(function (n) {
         return !state[n._id] || state[n._id]._rev !== n._rev;
       });
-      return (0, _merge2.default)(state, (0, _indexBy2.default)((0, _prop2.default)('_id'), updatedNotifications));
+      return _ramda2.default.merge(state, _ramda2.default.indexBy(_ramda2.default.prop('_id'), updatedNotifications));
     case 'ADD_NOTIFICATION':
     case 'UPDATE_NOTIFICATION':
-      return (0, _merge2.default)(state, _defineProperty({}, action.doc._id, action.doc));
+      return _ramda2.default.merge(state, _defineProperty({}, action.doc._id, action.doc));
     case 'REMOVE_NOTIFICATION':
-      return (0, _omit2.default)([action.doc._id], state);
+      return _ramda2.default.omit([action.doc._id], state);
     default:
       return state;
   }
 };
 
 /***/ }),
-/* 33 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1022,21 +925,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _omit = __webpack_require__(6);
+var _ramda = __webpack_require__(0);
 
-var _omit2 = _interopRequireDefault(_omit);
-
-var _prop = __webpack_require__(0);
-
-var _prop2 = _interopRequireDefault(_prop);
-
-var _indexBy = __webpack_require__(10);
-
-var _indexBy2 = _interopRequireDefault(_indexBy);
-
-var _merge = __webpack_require__(2);
-
-var _merge2 = _interopRequireDefault(_merge);
+var _ramda2 = _interopRequireDefault(_ramda);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1053,18 +944,18 @@ exports.default = function () {
       var updatedDocs = action.docs.filter(function (n) {
         return !state[n._id] || state[n._id]._rev !== n._rev;
       });
-      return (0, _merge2.default)(state, (0, _indexBy2.default)((0, _prop2.default)('_id'), updatedDocs));
+      return _ramda2.default.merge(state, _ramda2.default.indexBy(_ramda2.default.prop('_id'), updatedDocs));
     case 'SET_SHARED_DOC':
-      return (0, _merge2.default)(state, _defineProperty({}, action.doc._id, action.doc));
+      return _ramda2.default.merge(state, _defineProperty({}, action.doc._id, action.doc));
     case 'REMOVE_SHARED_DOC':
-      return (0, _omit2.default)([action.doc._id], state);
+      return _ramda2.default.omit([action.doc._id], state);
     default:
       return state;
   }
 };
 
 /***/ }),
-/* 34 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1074,27 +965,27 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _process_local_events_middleware = __webpack_require__(35);
+var _process_local_events_middleware = __webpack_require__(24);
 
 var _process_local_events_middleware2 = _interopRequireDefault(_process_local_events_middleware);
 
-var _local_cache_middleware = __webpack_require__(36);
+var _local_cache_middleware = __webpack_require__(25);
 
 var _local_cache_middleware2 = _interopRequireDefault(_local_cache_middleware);
 
-var _event_change_handler_middleware = __webpack_require__(38);
+var _event_change_handler_middleware = __webpack_require__(26);
 
 var _event_change_handler_middleware2 = _interopRequireDefault(_event_change_handler_middleware);
 
-var _click_notification_middleware = __webpack_require__(39);
+var _click_notification_middleware = __webpack_require__(27);
 
 var _click_notification_middleware2 = _interopRequireDefault(_click_notification_middleware);
 
-var _sync_middleware = __webpack_require__(40);
+var _sync_middleware = __webpack_require__(28);
 
 var _sync_middleware2 = _interopRequireDefault(_sync_middleware);
 
-var _event_sourcing_middleware = __webpack_require__(41);
+var _event_sourcing_middleware = __webpack_require__(29);
 
 var _event_sourcing_middleware2 = _interopRequireDefault(_event_sourcing_middleware);
 
@@ -1103,7 +994,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = [_process_local_events_middleware2.default, _local_cache_middleware2.default, _event_sourcing_middleware2.default, _sync_middleware2.default, _click_notification_middleware2.default, _event_change_handler_middleware2.default];
 
 /***/ }),
-/* 35 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1113,17 +1004,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _prop = __webpack_require__(0);
+var _ramda = __webpack_require__(0);
 
-var _prop2 = _interopRequireDefault(_prop);
-
-var _values = __webpack_require__(1);
-
-var _values2 = _interopRequireDefault(_values);
-
-var _sort = __webpack_require__(7);
-
-var _sort2 = _interopRequireDefault(_sort);
+var _ramda2 = _interopRequireDefault(_ramda);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1259,9 +1142,9 @@ exports.default = function (store, _ref2) {
                   break;
                 }
 
-                localOnlyEvents = (0, _sort2.default)(function (a1, a2) {
+                localOnlyEvents = _ramda2.default.sort(function (a1, a2) {
                   return a1.createdAt - a2.createdAt;
-                }, (0, _values2.default)(store.getState().events).filter((0, _prop2.default)('localOnly')));
+                }, _ramda2.default.values(store.getState().events).filter(_ramda2.default.prop('localOnly')));
 
                 if (!(localOnlyEvents.length < 1)) {
                   _context2.next = 7;
@@ -1296,7 +1179,7 @@ exports.default = function (store, _ref2) {
 };
 
 /***/ }),
-/* 36 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1306,13 +1189,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _takeLast = __webpack_require__(37);
+var _ramda = __webpack_require__(0);
 
-var _takeLast2 = _interopRequireDefault(_takeLast);
-
-var _sort = __webpack_require__(7);
-
-var _sort2 = _interopRequireDefault(_sort);
+var _ramda2 = _interopRequireDefault(_ramda);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1334,7 +1213,7 @@ var removeOldDocs = function () {
             docs = items.filter(function (item) {
               return item && cacheDocTypes.includes(item.type);
             });
-            sortedDocs = (0, _sort2.default)(function (d1, d2) {
+            sortedDocs = _ramda2.default.sort(function (d1, d2) {
               return d2.fetchedAt - d1.fetchedAt;
             }, docs.filter(function (d) {
               return !(keepInCache(d, state) || d._id === state.currentProfile._id);
@@ -1345,7 +1224,7 @@ var removeOldDocs = function () {
               break;
             }
 
-            toBeRemovedDocs = (0, _takeLast2.default)(sortedDocs.length - cacheLimit, sortedDocs);
+            toBeRemovedDocs = _ramda2.default.takeLast(sortedDocs.length - cacheLimit, sortedDocs);
             _iteratorNormalCompletion = true;
             _didIteratorError = false;
             _iteratorError = undefined;
@@ -1536,13 +1415,7 @@ exports.default = function (store, _ref2) {
 };
 
 /***/ }),
-/* 37 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_37__;
-
-/***/ }),
-/* 38 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1551,6 +1424,12 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_37__;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _ramda = __webpack_require__(0);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = function (store, _ref) {
   var actionCreators = _ref.actionCreators;
@@ -1625,7 +1504,7 @@ exports.default = function (store, _ref) {
 };
 
 /***/ }),
-/* 39 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1657,7 +1536,7 @@ exports.default = function (store, _ref) {
 };
 
 /***/ }),
-/* 40 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1667,21 +1546,17 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _merge = __webpack_require__(2);
-
-var _merge2 = _interopRequireDefault(_merge);
-
-var _omit = __webpack_require__(6);
-
-var _omit2 = _interopRequireDefault(_omit);
-
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _pouchdb = __webpack_require__(3);
+var _ramda = __webpack_require__(0);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+var _pouchdb = __webpack_require__(1);
 
 var _pouchdb2 = _interopRequireDefault(_pouchdb);
 
-var _pouchdbFind = __webpack_require__(11);
+var _pouchdbFind = __webpack_require__(3);
 
 var _pouchdbFind2 = _interopRequireDefault(_pouchdbFind);
 
@@ -1889,7 +1764,7 @@ exports.default = function (store, _ref2) {
                     docs.forEach(function (doc) {
                       if (doc.draft) {
                         //db.put(R.omit(['draft'], doc));
-                        bulk.push((0, _omit2.default)(['draft'], doc));
+                        bulk.push(_ramda2.default.omit(['draft'], doc));
                       }
                     });
                   }
@@ -1900,7 +1775,7 @@ exports.default = function (store, _ref2) {
                     docs.forEach(function (doc) {
                       if (doc.draft) {
                         //db.put(R.omit(['draft'], doc));
-                        bulk.push((0, _omit2.default)(['draft'], doc));
+                        bulk.push(_ramda2.default.omit(['draft'], doc));
                       }
                     });
                   }
@@ -1910,7 +1785,7 @@ exports.default = function (store, _ref2) {
                     var docs = removeAction.getDocs(state, action);
                     docs.forEach(function (doc) {
                       //db.remove(doc)
-                      bulk.push((0, _merge2.default)(doc, {
+                      bulk.push(_ramda2.default.merge(doc, {
                         _deleted: true
                       }));
                     });
@@ -1969,7 +1844,7 @@ exports.default = function (store, _ref2) {
 };
 
 /***/ }),
-/* 41 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1979,23 +1854,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _flatten = __webpack_require__(5);
-
-var _flatten2 = _interopRequireDefault(_flatten);
-
-var _prop = __webpack_require__(0);
-
-var _prop2 = _interopRequireDefault(_prop);
-
-var _values = __webpack_require__(1);
-
-var _values2 = _interopRequireDefault(_values);
-
-var _uuid = __webpack_require__(42);
+var _uuid = __webpack_require__(30);
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
-var _selectors = __webpack_require__(12);
+var _ramda = __webpack_require__(0);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+var _selectors = __webpack_require__(4);
 
 var _selectors2 = _interopRequireDefault(_selectors);
 
@@ -2014,9 +1881,9 @@ exports.default = function (store, config) {
       deviceInfo = config.deviceInfo;
 
   var createEvent = function createEvent(action, state) {
-    var eventsList = (0, _values2.default)(state.events);
-    var localOnlyEvents = eventsList.filter((0, _prop2.default)('localOnly'));
-    var localProcessingDocumentsIds = (0, _flatten2.default)(localOnlyEvents.map(function (event) {
+    var eventsList = _ramda2.default.values(state.events);
+    var localOnlyEvents = eventsList.filter(_ramda2.default.prop('localOnly'));
+    var localProcessingDocumentsIds = _ramda2.default.flatten(localOnlyEvents.map(function (event) {
       return event.relevantDocsIds;
     }));
     var relevantDocsIds = getRelevantDocsIds(action);
@@ -2092,13 +1959,13 @@ var updateEventsToSetAppliedOnClient = function updateEventsToSetAppliedOnClient
 };
 
 /***/ }),
-/* 42 */
+/* 30 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_42__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_30__;
 
 /***/ }),
-/* 43 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2109,31 +1976,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.eventsByRelevantDocSelector = undefined;
 
-var _path = __webpack_require__(44);
+var _reselect = __webpack_require__(32);
 
-var _path2 = _interopRequireDefault(_path);
+var _ramda = __webpack_require__(0);
 
-var _map = __webpack_require__(9);
-
-var _map2 = _interopRequireDefault(_map);
-
-var _groupBy = __webpack_require__(45);
-
-var _groupBy2 = _interopRequireDefault(_groupBy);
-
-var _flatten = __webpack_require__(5);
-
-var _flatten2 = _interopRequireDefault(_flatten);
-
-var _sort = __webpack_require__(7);
-
-var _sort2 = _interopRequireDefault(_sort);
-
-var _values = __webpack_require__(1);
-
-var _values2 = _interopRequireDefault(_values);
-
-var _reselect = __webpack_require__(46);
+var _ramda2 = _interopRequireDefault(_ramda);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2142,56 +1989,44 @@ var eventsSelector = function eventsSelector(state) {
 };
 
 var interestingEventsSelector = (0, _reselect.createSelector)(eventsSelector, function (events) {
-  return (0, _values2.default)(events).filter(function (event) {
+  return _ramda2.default.values(events).filter(function (event) {
     return event.relevantDocsIds !== undefined && event.relevantDocsIds.length > 0;
   });
 });
 
 var sortedEventsSelector = (0, _reselect.createSelector)(interestingEventsSelector, function (events) {
-  return (0, _sort2.default)(function (e1, e2) {
+  return _ramda2.default.sort(function (e1, e2) {
     return e1.createdAt - e2.createdAt;
   }, events);
 });
 
 var eventsByRelevantDocSelector = exports.eventsByRelevantDocSelector = (0, _reselect.createSelector)(sortedEventsSelector, function (events) {
-  var eventsWithDocIds = (0, _flatten2.default)(events.map(function (event) {
+  var eventsWithDocIds = _ramda2.default.flatten(events.map(function (event) {
     return event.relevantDocsIds.map(function (docId) {
       return Object.assign({}, event, {
         docId: docId
       });
     });
   }));
-  var eventsGroupedByDocId = (0, _groupBy2.default)(function (event) {
+  var eventsGroupedByDocId = _ramda2.default.groupBy(function (event) {
     return event.docId;
   }, eventsWithDocIds);
-  return (0, _map2.default)(function (events) {
+  return _ramda2.default.map(function (events) {
     return events.filter(function (event) {
-      var appliedOnClientRev = (0, _path2.default)(['appliedOnClient', event.docId], event);
+      var appliedOnClientRev = _ramda2.default.path(['appliedOnClient', event.docId], event);
       return appliedOnClientRev === undefined;
     });
   }, eventsGroupedByDocId);
 });
 
 /***/ }),
-/* 44 */
+/* 32 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_44__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_32__;
 
 /***/ }),
-/* 45 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_45__;
-
-/***/ }),
-/* 46 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_46__;
-
-/***/ }),
-/* 47 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2201,19 +2036,19 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _history = __webpack_require__(48);
+var _history = __webpack_require__(34);
 
 var historyActions = _interopRequireWildcard(_history);
 
-var _dialog = __webpack_require__(49);
+var _dialog = __webpack_require__(35);
 
 var dialogActions = _interopRequireWildcard(_dialog);
 
-var _notifications = __webpack_require__(50);
+var _notifications = __webpack_require__(36);
 
 var notificationActions = _interopRequireWildcard(_notifications);
 
-var _documents = __webpack_require__(51);
+var _documents = __webpack_require__(37);
 
 var documentsActions = _interopRequireWildcard(_documents);
 
@@ -2222,7 +2057,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 exports.default = Object.assign({}, documentsActions, historyActions, dialogActions, notificationActions);
 
 /***/ }),
-/* 48 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2271,7 +2106,7 @@ var goTo = exports.goTo = function goTo(path) {
 };
 
 /***/ }),
-/* 49 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2294,7 +2129,7 @@ var closeDialog = exports.closeDialog = function closeDialog() {
 };
 
 /***/ }),
-/* 50 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2319,7 +2154,7 @@ var clickExternalNotification = exports.clickExternalNotification = function cli
 };
 
 /***/ }),
-/* 51 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2330,11 +2165,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.refreshLoader = exports.loadMoreDocs = exports.createDocLoader = exports.fetchDoc = exports.loadDocs = undefined;
 
-var _pouchdb = __webpack_require__(3);
+var _pouchdb = __webpack_require__(1);
 
 var _pouchdb2 = _interopRequireDefault(_pouchdb);
 
-var _pouchdbFind = __webpack_require__(11);
+var _pouchdbFind = __webpack_require__(3);
 
 var _pouchdbFind2 = _interopRequireDefault(_pouchdbFind);
 
@@ -2437,7 +2272,7 @@ var refreshLoader = exports.refreshLoader = function refreshLoader(loaderName, _
 };
 
 /***/ }),
-/* 52 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

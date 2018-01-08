@@ -30,7 +30,9 @@
   "dependencies": {
     "moment": "^2.17.1",
     "ramda": "^0.24.0",
+    "redux-devtools-extension": "^2.13.2",
     "redux-thunk": "^2.1.0",
+    "regenerator-runtime": "^0.11.1",
     "reselect": "^3.0.1",
     "reselect-map": "^1.0.3",
     "util": "^0.10.3",
@@ -54,9 +56,7 @@
     "react": "^15.6.1",
     "react-redux": "^5.0.5",
     "redux": "^3.7.2",
-    "redux-devtools-extension": "^2.13.2",
     "redux-testkit": "^1.0.6",
-    "regenerator-runtime": "^0.11.0",
     "webpack": "^3.6.0"
   }
 }

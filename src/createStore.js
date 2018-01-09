@@ -92,19 +92,15 @@ export default (appConfig, preloadedState) => {
   };
 
   if (config.ssr) {
-    const initialActions = config.getInitialActions(
-      AppStore.getState,
-      allActionCreators
-    );
+    const initialActions =
+      config.getInitialActions(AppStore.getState, allActionCreators) || [];
     initialActions.forEach(AppStore.dispatch);
     return AppStore;
   }
 
   setTimeout(() => {
-    const initialActions = config.getInitialActions(
-      AppStore.getState,
-      allActionCreators
-    );
+    const initialActions =
+      config.getInitialActions(AppStore.getState, allActionCreators) || [];
     initialActions.forEach(AppStore.dispatch);
   }, 500);
 

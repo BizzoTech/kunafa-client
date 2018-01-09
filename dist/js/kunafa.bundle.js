@@ -356,13 +356,13 @@ exports.default = function (appConfig, preloadedState) {
   });
 
   if (config.ssr) {
-    var initialActions = config.getInitialActions(AppStore.getState, allActionCreators);
+    var initialActions = config.getInitialActions(AppStore.getState, allActionCreators) || [];
     initialActions.forEach(AppStore.dispatch);
     return AppStore;
   }
 
   setTimeout(function () {
-    var initialActions = config.getInitialActions(AppStore.getState, allActionCreators);
+    var initialActions = config.getInitialActions(AppStore.getState, allActionCreators) || [];
     initialActions.forEach(AppStore.dispatch);
   }, 500);
 

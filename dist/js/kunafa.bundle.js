@@ -180,10 +180,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var connect = function connect(mapStateToProps, mapDispatchToProps) {
   return function (component) {
-
     var Wrapped = (0, _reactRedux.connect)(mapStateToProps, function (dispatch, ownProps) {
       var pkgActions = (0, _redux.bindActionCreators)(ownProps.actions, dispatch);
-      if (typeof mapDispatchToProps === 'function') {
+      if (typeof mapDispatchToProps === "function") {
         var userActions = mapDispatchToProps(dispatch, ownProps);
         return Object.assign({}, pkgActions, userActions);
       }
@@ -200,7 +199,7 @@ var connect = function connect(mapStateToProps, mapDispatchToProps) {
       }
 
       _createClass(Wrapper, [{
-        key: 'render',
+        key: "render",
         value: function render() {
           var actions = this.context.store.actions;
           var selectors = this.context.store.selectors;
@@ -291,17 +290,16 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 var R = __webpack_require__(0);
 
 exports.default = function (appConfig, preloadedState) {
-
   var syncPaths = R.append({
     name: "events",
     filter: function filter(doc) {
       return doc.type == "EVENT"; // & !doc.appliedOnClient;
     },
     actions: {
-      remove: 'REMOVE_EVENT',
-      update: 'UPDATE_EVENT',
-      insert: 'ADD_EVENT',
-      load: 'LOAD_EVENTS'
+      remove: "REMOVE_EVENT",
+      update: "UPDATE_EVENT",
+      insert: "ADD_EVENT",
+      load: "LOAD_EVENTS"
     }
   }, appConfig.syncPaths || []);
 
@@ -352,7 +350,10 @@ exports.default = function (appConfig, preloadedState) {
     store = (0, _redux.createStore)(AppReducer, preloadedState, AppMiddleware);
   }
 
-  var AppStore = Object.assign({}, store, { actions: allActionCreators, selectors: allSelectors });
+  var AppStore = Object.assign({}, store, {
+    actions: allActionCreators,
+    selectors: allSelectors
+  });
 
   if (config.ssr) {
     var initialActions = config.getInitialActions(AppStore.getState, allActionCreators);
@@ -371,7 +372,7 @@ exports.default = function (appConfig, preloadedState) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            hasLocalEvents = R.values(AppStore.getState().events).some(R.prop('localOnly'));
+            hasLocalEvents = R.values(AppStore.getState().events).some(R.prop("localOnly"));
             isProcessing = AppStore.getState().processing_local.isProcessing;
             _context.next = 4;
             return config.isConnected();
@@ -381,12 +382,12 @@ exports.default = function (appConfig, preloadedState) {
 
             if (hasLocalEvents && !isProcessing && isConnected) {
               AppStore.dispatch({
-                type: 'PROCESS_LOCAL_ONLY'
+                type: "PROCESS_LOCAL_ONLY"
               });
             }
 
           case 6:
-          case 'end':
+          case "end":
             return _context.stop();
         }
       }
@@ -401,15 +402,18 @@ exports.default = function (appConfig, preloadedState) {
         switch (_context2.prev = _context2.next) {
           case 0:
             _context2.next = 2;
-            return localSharedDB.allDocs({ include_docs: true, update_seq: true });
+            return localSharedDB.allDocs({
+              include_docs: true,
+              update_seq: true
+            });
 
           case 2:
             sharedDocs = _context2.sent;
 
             store.dispatch({
-              type: 'LOAD_SHARED_DOCS',
+              type: "LOAD_SHARED_DOCS",
               docs: sharedDocs.rows.filter(function (r) {
-                return !r.id.startsWith('_design');
+                return !r.id.startsWith("_design");
               }).map(function (r) {
                 return r.doc;
               })
@@ -421,22 +425,22 @@ exports.default = function (appConfig, preloadedState) {
               include_docs: true
             });
 
-            changes.on('change', function (change) {
+            changes.on("change", function (change) {
               if (change.doc._deleted) {
                 store.dispatch({
-                  type: 'REMOVE_SHARED_DOC',
+                  type: "REMOVE_SHARED_DOC",
                   doc: change.doc
                 });
               } else {
                 store.dispatch({
-                  type: 'SET_SHARED_DOC',
+                  type: "SET_SHARED_DOC",
                   doc: change.doc
                 });
               }
             });
 
           case 6:
-          case 'end':
+          case "end":
             return _context2.stop();
         }
       }
@@ -538,11 +542,11 @@ exports.default = function (state, action, config) {
     return defaultState;
   }
   switch (action.type) {
-    case 'LOGIN':
+    case "LOGIN":
       return Object.assign({}, state, {
         _id: action.profileId
       });
-    case 'LOGOUT':
+    case "LOGOUT":
       return Object.assign({}, state, {
         _id: undefined
       });
@@ -567,7 +571,7 @@ var startWithHome = {
   path: [""]
 };
 var startWithLogin = {
-  path: ['login']
+  path: ["login"]
 };
 
 exports.default = function (state, action, config) {
@@ -576,34 +580,34 @@ exports.default = function (state, action, config) {
     return defaultState;
   }
   switch (action.type) {
-    case 'RESET_HISTORY':
+    case "RESET_HISTORY":
       return startWithHome;
-    case 'GO_TO':
+    case "GO_TO":
       return Object.assign({}, action.route, {
         previous: startWithHome
       });
-    case 'NAVIGATE_TO':
+    case "NAVIGATE_TO":
       return Object.assign({}, action.route, {
         previous: state
       });
-    case 'TRANSITE_TO':
+    case "TRANSITE_TO":
       return state.previous ? Object.assign({}, action.route, {
         previous: state.previous
       }) : Object.assign({}, action.route, {
         previous: startWithHome
       });
-    case 'GO_BACK':
+    case "GO_BACK":
       return state.previous ? Object.assign({}, state.previous, {
-        backFrom: R.dissoc('previous', state)
+        backFrom: R.dissoc("previous", state)
       }) : state;
-    case 'SKIP_LOGIN':
-    case 'LOGIN':
+    case "SKIP_LOGIN":
+    case "LOGIN":
       if (state.path.length && state.path[0] === "login") {
         return state.previous ? state.previous : startWithHome;
       } else {
         return state;
       }
-    case 'LOGOUT':
+    case "LOGOUT":
       return startWithLogin;
     default:
       return state;
@@ -633,18 +637,18 @@ exports.default = function () {
   var action = arguments[1];
 
   switch (action.type) {
-    case 'LOAD_EVENTS':
+    case "LOAD_EVENTS":
       var newEvents = indexBy(function (e) {
         return e._id;
       }, action.events);
       return Object.assign({}, state, newEvents);
-    case 'ADD_EVENT':
-    case 'UPDATE_EVENT':
+    case "ADD_EVENT":
+    case "UPDATE_EVENT":
       return R.assoc(action.doc._id, action.doc, state);
-    case 'REMOVE_EVENT':
+    case "REMOVE_EVENT":
       return R.dissoc(action.doc._id, state);
-    case 'LOGIN':
-    case 'LOGOUT':
+    case "LOGIN":
+    case "LOGOUT":
       return defaultState;
     default:
       return state;
@@ -676,8 +680,8 @@ exports.default = function () {
   var config = arguments[2];
 
   switch (action.type) {
-    case 'LOAD_DOCS':
-    case 'LOAD_DOCS_FROM_CACHE':
+    case "LOAD_DOCS":
+    case "LOAD_DOCS_FROM_CACHE":
       var modifiedDocs = action.docs.filter(function (doc) {
         return !state[doc._id] || state[doc._id]._rev !== doc._rev;
       });
@@ -748,12 +752,12 @@ exports.default = function () {
   var action = arguments[1];
 
   switch (action.type) {
-    case 'START_PROCESSING_LOCAL':
+    case "START_PROCESSING_LOCAL":
       return {
         isProcessing: true,
         progress: action.progress
       };
-    case 'END_PROCESSING_LOCAL':
+    case "END_PROCESSING_LOCAL":
       return defaultState;
     default:
       return state;
@@ -781,15 +785,15 @@ exports.default = function () {
   var action = arguments[1];
 
   switch (action.type) {
-    case 'OPEN_DIALOG':
+    case "OPEN_DIALOG":
       return action.dialog;
-    case 'CLOSE_DIALOG':
-    case 'RESET_HISTORY':
-    case 'GO_TO':
-    case 'NAVIGATE_TO':
-    case 'TRANSITE_TO':
-    case 'GO_BACK':
-    case 'START_LOADING':
+    case "CLOSE_DIALOG":
+    case "RESET_HISTORY":
+    case "GO_TO":
+    case "NAVIGATE_TO":
+    case "TRANSITE_TO":
+    case "GO_BACK":
+    case "START_LOADING":
       return defaultState;
     default:
       return state;
@@ -818,15 +822,15 @@ exports.default = function () {
   var action = arguments[1];
 
   switch (action.type) {
-    case 'CREATE_DOCS_LOADER':
+    case "CREATE_DOCS_LOADER":
       return Object.assign({}, state, _defineProperty({}, action.loaderName, {
         query: action.query,
         loaded: 0,
         endReached: false
       }));
-    case 'REMOVE_DOCS_LOADER':
+    case "REMOVE_DOCS_LOADER":
       return R.dissoc(action.loaderName, state);
-    case 'LOAD_DOCS':
+    case "LOAD_DOCS":
       if (!action.loaderName || !state[action.loaderName]) {
         return state;
       }
@@ -835,7 +839,7 @@ exports.default = function () {
         loaded: loader.loaded + action.docs.length,
         endReached: action.docs.length < (loader.query.limit || 25)
       })));
-    case 'REFRESH_LOADER':
+    case "REFRESH_LOADER":
       if (!action.loaderName || !state[action.loaderName]) {
         return state;
       }
@@ -870,15 +874,15 @@ exports.default = function () {
   var action = arguments[1];
 
   switch (action.type) {
-    case 'LOAD_NOTIFICATIONS':
+    case "LOAD_NOTIFICATIONS":
       var updatedNotifications = action.notifications.filter(function (n) {
         return !state[n._id] || state[n._id]._rev !== n._rev;
       });
-      return R.merge(state, R.indexBy(R.prop('_id'), updatedNotifications));
-    case 'ADD_NOTIFICATION':
-    case 'UPDATE_NOTIFICATION':
+      return R.merge(state, R.indexBy(R.prop("_id"), updatedNotifications));
+    case "ADD_NOTIFICATION":
+    case "UPDATE_NOTIFICATION":
       return R.merge(state, _defineProperty({}, action.doc._id, action.doc));
-    case 'REMOVE_NOTIFICATION':
+    case "REMOVE_NOTIFICATION":
       return R.omit([action.doc._id], state);
     default:
       return state;
@@ -907,14 +911,14 @@ exports.default = function () {
   var action = arguments[1];
 
   switch (action.type) {
-    case 'LOAD_SHARED_DOCS':
+    case "LOAD_SHARED_DOCS":
       var updatedDocs = action.docs.filter(function (n) {
         return !state[n._id] || state[n._id]._rev !== n._rev;
       });
-      return R.merge(state, R.indexBy(R.prop('_id'), updatedDocs));
-    case 'SET_SHARED_DOC':
+      return R.merge(state, R.indexBy(R.prop("_id"), updatedDocs));
+    case "SET_SHARED_DOC":
       return R.merge(state, _defineProperty({}, action.doc._id, action.doc));
-    case 'REMOVE_SHARED_DOC':
+    case "REMOVE_SHARED_DOC":
       return R.omit([action.doc._id], state);
     default:
       return state;
@@ -983,7 +987,7 @@ var processEvents = function () {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            next({ type: 'START_PROCESSING_LOCAL' });
+            next({ type: "START_PROCESSING_LOCAL" });
             _context.prev = 1;
             _iteratorNormalCompletion = true;
             _didIteratorError = false;
@@ -1000,12 +1004,12 @@ var processEvents = function () {
             event = _step.value;
             _context.next = 11;
             return processLocalEvent(event, function (progress) {
-              next({ type: 'START_PROCESSING_LOCAL', progress: progress });
+              next({ type: "START_PROCESSING_LOCAL", progress: progress });
             });
 
           case 11:
             next({
-              type: 'UPDATE_EVENT',
+              type: "UPDATE_EVENT",
               doc: Object.assign({}, event, {
                 draft: "true",
                 localOnly: undefined
@@ -1023,7 +1027,7 @@ var processEvents = function () {
 
           case 17:
             _context.prev = 17;
-            _context.t0 = _context['catch'](5);
+            _context.t0 = _context["catch"](5);
             _didIteratorError = true;
             _iteratorError = _context.t0;
 
@@ -1057,18 +1061,18 @@ var processEvents = function () {
 
           case 31:
             _context.prev = 31;
-            _context.t1 = _context['catch'](1);
+            _context.t1 = _context["catch"](1);
 
             console.log(_context.t1);
 
           case 34:
             _context.prev = 34;
 
-            next({ type: 'END_PROCESSING_LOCAL' });
+            next({ type: "END_PROCESSING_LOCAL" });
             return _context.finish(34);
 
           case 37:
-          case 'end':
+          case "end":
             return _context.stop();
         }
       }
@@ -1091,7 +1095,7 @@ exports.default = function (store, _ref2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                if (!(action.type === 'PROCESS_LOCAL_ONLY')) {
+                if (!(action.type === "PROCESS_LOCAL_ONLY")) {
                   _context2.next = 10;
                   break;
                 }
@@ -1107,27 +1111,27 @@ exports.default = function (store, _ref2) {
 
                 localOnlyEvents = R.sort(function (a1, a2) {
                   return a1.createdAt - a2.createdAt;
-                }, R.values(store.getState().events).filter(R.prop('localOnly')));
+                }, R.values(store.getState().events).filter(R.prop("localOnly")));
 
                 if (!(localOnlyEvents.length < 1)) {
                   _context2.next = 7;
                   break;
                 }
 
-                return _context2.abrupt('return');
+                return _context2.abrupt("return");
 
               case 7:
-                return _context2.abrupt('return', processEvents(processLocalEvent, localOnlyEvents, next));
+                return _context2.abrupt("return", processEvents(processLocalEvent, localOnlyEvents, next));
 
               case 8:
                 _context2.next = 11;
                 break;
 
               case 10:
-                return _context2.abrupt('return', next(action));
+                return _context2.abrupt("return", next(action));
 
               case 11:
-              case 'end':
+              case "end":
                 return _context2.stop();
             }
           }
@@ -1211,7 +1215,7 @@ var removeOldDocs = function () {
 
           case 21:
             _context.prev = 21;
-            _context.t0 = _context['catch'](10);
+            _context.t0 = _context["catch"](10);
             _didIteratorError = true;
             _iteratorError = _context.t0;
 
@@ -1240,7 +1244,7 @@ var removeOldDocs = function () {
             return _context.finish(25);
 
           case 33:
-          case 'end':
+          case "end":
             return _context.stop();
         }
       }
@@ -1271,14 +1275,14 @@ exports.default = function (store, _ref2) {
               items = _context2.sent;
 
               next({
-                type: 'LOAD_DOCS_FROM_CACHE',
+                type: "LOAD_DOCS_FROM_CACHE",
                 docs: items.filter(function (item) {
                   return item && cacheDocTypes.includes(item.type);
                 })
               });
 
             case 4:
-            case 'end':
+            case "end":
               return _context2.stop();
           }
         }
@@ -1295,7 +1299,7 @@ exports.default = function (store, _ref2) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                if (!(action.type === 'LOAD_DOCS')) {
+                if (!(action.type === "LOAD_DOCS")) {
                   _context3.next = 28;
                   break;
                 }
@@ -1327,7 +1331,7 @@ exports.default = function (store, _ref2) {
 
               case 15:
                 _context3.prev = 15;
-                _context3.t0 = _context3['catch'](4);
+                _context3.t0 = _context3["catch"](4);
                 _didIteratorError2 = true;
                 _iteratorError2 = _context3.t0;
 
@@ -1361,7 +1365,7 @@ exports.default = function (store, _ref2) {
                 }
 
               case 28:
-              case 'end':
+              case "end":
                 return _context3.stop();
             }
           }
@@ -1389,10 +1393,9 @@ exports.default = function (store, _ref) {
   var actionCreators = _ref.actionCreators;
   return function (next) {
     return function (action) {
-
       var result = next(action);
 
-      if (action.type === 'LOAD_EVENTS') {
+      if (action.type === "LOAD_EVENTS") {
         var _iteratorNormalCompletion = true;
         var _didIteratorError = false;
         var _iteratorError = undefined;
@@ -1421,7 +1424,7 @@ exports.default = function (store, _ref) {
         }
       }
 
-      if (action.type === 'UPDATE_EVENT' || action.type === "ADD_EVENT") {
+      if (action.type === "UPDATE_EVENT" || action.type === "ADD_EVENT") {
         if (!action.doc.draft && action.doc.appliedOn) {
           var _iteratorNormalCompletion2 = true;
           var _didIteratorError2 = false;
@@ -1472,13 +1475,13 @@ exports.default = function (store, _ref) {
   var getNotificationRoute = _ref.getNotificationRoute;
   return function (next) {
     return function (action) {
-      if (action.type === 'CLICK_NOTIFICATION') {
+      if (action.type === "CLICK_NOTIFICATION") {
         if (action.notification) {
           var notification = action.notification;
           var route = getNotificationRoute(notification);
           if (route) {
             next({
-              type: action.external ? 'GO_TO' : 'NAVIGATE_TO',
+              type: action.external ? "GO_TO" : "NAVIGATE_TO",
               route: route
             });
           }
@@ -1525,7 +1528,7 @@ var getDefaultAction = function getDefaultAction(act) {
   if (Array.isArray(action)) {
     action = action[0];
   }
-  if (typeof action === 'string') {
+  if (typeof action === "string") {
     return action;
   } else {
     return action.type;
@@ -1561,10 +1564,10 @@ var initialLoad = function () {
                 }).filter(path.filter)));
               }
             });
-            return _context.abrupt('return', result);
+            return _context.abrupt("return", result);
 
           case 5:
-          case 'end':
+          case "end":
             return _context.stop();
         }
       }
@@ -1584,7 +1587,7 @@ var syncChanges = function syncChanges(db, syncPaths, store, dispatch) {
     live: true,
     include_docs: true
   });
-  changes.on('change', function (change) {
+  changes.on("change", function (change) {
     syncPaths.forEach(function (path) {
       if (path.filter && !path.filter(change.doc)) {
         return;
@@ -1630,13 +1633,13 @@ var getActionsFromPaths = function getActionsFromPaths(syncPaths) {
   };
   var mergeAction = function mergeAction(actName) {
     return function (action) {
-      if (typeof action === 'string') {
+      if (typeof action === "string") {
         mergedActions[actName].push({
           type: action,
           getDocs: getDocs
         });
       }
-      if ((typeof action === 'undefined' ? 'undefined' : _typeof(action)) === 'object') {
+      if ((typeof action === "undefined" ? "undefined" : _typeof(action)) === "object") {
         mergedActions[actName].push({
           type: action.type,
           getDocs: action.getDocs || getDocs
@@ -1690,7 +1693,7 @@ exports.default = function (store, _ref2) {
               changes = syncChanges(db, syncPaths, store, next, result.update_seq);
 
             case 4:
-            case 'end':
+            case "end":
               return _context2.stop();
           }
         }
@@ -1716,7 +1719,7 @@ exports.default = function (store, _ref2) {
                     docs.forEach(function (doc) {
                       if (doc.draft) {
                         //db.put(R.omit(['draft'], doc));
-                        bulk.push(R.omit(['draft'], doc));
+                        bulk.push(R.omit(["draft"], doc));
                       }
                     });
                   }
@@ -1727,7 +1730,7 @@ exports.default = function (store, _ref2) {
                     docs.forEach(function (doc) {
                       if (doc.draft) {
                         //db.put(R.omit(['draft'], doc));
-                        bulk.push(R.omit(['draft'], doc));
+                        bulk.push(R.omit(["draft"], doc));
                       }
                     });
                   }
@@ -1759,7 +1762,7 @@ exports.default = function (store, _ref2) {
               case 9:
                 next(action);
 
-                if (!(action.type === 'LOGIN' || action.type === 'LOGOUT')) {
+                if (!(action.type === "LOGIN" || action.type === "LOGOUT")) {
                   _context3.next = 19;
                   break;
                 }
@@ -1781,7 +1784,7 @@ exports.default = function (store, _ref2) {
                 changes = syncChanges(db, syncPaths, store, next, result.update_seq);
 
               case 19:
-              case 'end':
+              case "end":
                 return _context3.stop();
             }
           }
@@ -1832,7 +1835,7 @@ exports.default = function (store, config) {
 
   var createEvent = function createEvent(action, state) {
     var eventsList = R.values(state.events);
-    var localOnlyEvents = eventsList.filter(R.prop('localOnly'));
+    var localOnlyEvents = eventsList.filter(R.prop("localOnly"));
     var localProcessingDocumentsIds = R.flatten(localOnlyEvents.map(function (event) {
       return event.relevantDocsIds;
     }));
@@ -1842,7 +1845,7 @@ exports.default = function (store, config) {
     });
 
     var localOnly = needLocalProcessing.includes(action.type) || shouldWaitForOtherAction;
-    var _id = state.currentProfile._id ? state.currentProfile._id + '-' + Date.now() + '-' + action.type : 'anonymous-' + deviceInfo.device_unique_id + '-' + Date.now() + '-' + action.type;
+    var _id = state.currentProfile._id ? state.currentProfile._id + "-" + Date.now() + "-" + action.type : "anonymous-" + deviceInfo.device_unique_id + "-" + Date.now() + "-" + action.type;
     return {
       _id: _id,
       type: "EVENT",
@@ -1861,11 +1864,10 @@ exports.default = function (store, config) {
 
   return function (next) {
     return function (action) {
-
-      if (!localOnlyActions.includes(action.type) && action.type !== 'ADD_PROFILE') {
+      if (!localOnlyActions.includes(action.type) && action.type !== "ADD_PROFILE") {
         setTimeout(function () {
           next({
-            type: 'ADD_EVENT',
+            type: "ADD_EVENT",
             doc: createEvent(action, store.getState())
           });
         }, 0);
@@ -1873,7 +1875,7 @@ exports.default = function (store, config) {
 
       var result = next(action);
 
-      if (action.type === 'LOAD_DOCS' || action.type === 'LOAD_DOCS_FROM_CACHE') {
+      if (action.type === "LOAD_DOCS" || action.type === "LOAD_DOCS_FROM_CACHE") {
         setTimeout(function () {
           var eventsByRelevantDoc = eventsByRelevantDocSelector(store.getState());
           action.docs.forEach(function (doc) {
@@ -1895,7 +1897,7 @@ var updateEventsToSetAppliedOnClient = function updateEventsToSetAppliedOnClient
       event.appliedOnClient = event.appliedOnClient || {};
       if (!event.appliedOnClient[doc._id]) {
         next({
-          type: 'UPDATE_EVENT',
+          type: "UPDATE_EVENT",
           doc: Object.assign({}, event, {
             draft: true,
             appliedOnClient: Object.assign({}, event.appliedOnClient, _defineProperty({}, doc._id, doc._rev))
@@ -1959,7 +1961,7 @@ var eventsByRelevantDocSelector = exports.eventsByRelevantDocSelector = (0, _res
   }, eventsWithDocIds);
   return R.map(function (events) {
     return events.filter(function (event) {
-      var appliedOnClientRev = R.path(['appliedOnClient', event.docId], event);
+      var appliedOnClientRev = R.path(["appliedOnClient", event.docId], event);
       return appliedOnClientRev === undefined;
     });
   }, eventsGroupedByDocId);
@@ -2014,13 +2016,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 var resetHistory = exports.resetHistory = function resetHistory() {
   return {
-    type: 'RESET_HISTORY'
+    type: "RESET_HISTORY"
   };
 };
 
 var navigateTo = exports.navigateTo = function navigateTo(path) {
   return {
-    type: 'NAVIGATE_TO',
+    type: "NAVIGATE_TO",
     route: {
       path: path
     }
@@ -2029,7 +2031,7 @@ var navigateTo = exports.navigateTo = function navigateTo(path) {
 
 var transiteTo = exports.transiteTo = function transiteTo(path) {
   return {
-    type: 'TRANSITE_TO',
+    type: "TRANSITE_TO",
     route: {
       path: path
     }
@@ -2038,13 +2040,13 @@ var transiteTo = exports.transiteTo = function transiteTo(path) {
 
 var goBack = exports.goBack = function goBack() {
   return {
-    type: 'GO_BACK'
+    type: "GO_BACK"
   };
 };
 
 var goTo = exports.goTo = function goTo(path) {
   return {
-    type: 'GO_TO',
+    type: "GO_TO",
     route: {
       path: path
     }
@@ -2063,14 +2065,14 @@ Object.defineProperty(exports, "__esModule", {
 });
 var openDialog = exports.openDialog = function openDialog(dialog) {
   return {
-    type: 'OPEN_DIALOG',
+    type: "OPEN_DIALOG",
     dialog: dialog
   };
 };
 
 var closeDialog = exports.closeDialog = function closeDialog() {
   return {
-    type: 'CLOSE_DIALOG'
+    type: "CLOSE_DIALOG"
   };
 };
 
@@ -2086,14 +2088,14 @@ Object.defineProperty(exports, "__esModule", {
 });
 var clickNotification = exports.clickNotification = function clickNotification(notification) {
   return {
-    type: 'CLICK_NOTIFICATION',
+    type: "CLICK_NOTIFICATION",
     notification: notification
   };
 };
 
 var clickExternalNotification = exports.clickExternalNotification = function clickExternalNotification(notification) {
   return {
-    type: 'CLICK_NOTIFICATION',
+    type: "CLICK_NOTIFICATION",
     notification: notification,
     external: true
   };
@@ -2130,8 +2132,8 @@ var loadDocs = exports.loadDocs = function loadDocs(query, loaderName, config) {
     if (publicDb === null) {
       var host = config.HOST;
       var ssl = config.SSL || "off";
-      var protocol = ssl === "on" ? 'https' : 'http';
-      publicDb = new _pouchdb2.default(protocol + '://' + host + '/public', {
+      var protocol = ssl === "on" ? "https" : "http";
+      publicDb = new _pouchdb2.default(protocol + "://" + host + "/public", {
         ajax: {
           timeout: 60000
         }
@@ -2146,7 +2148,7 @@ var loadDocs = exports.loadDocs = function loadDocs(query, loaderName, config) {
     }).then(function (docs) {
       if (docs && docs.length > 0) {
         dispatch({
-          type: 'LOAD_DOCS',
+          type: "LOAD_DOCS",
           docs: docs,
           loaderName: loaderName
         });
@@ -2180,7 +2182,7 @@ var fetchDoc = exports.fetchDoc = function fetchDoc(doc, _ref) {
 
 var createDocLoader = exports.createDocLoader = function createDocLoader(loaderName, query) {
   return {
-    type: 'CREATE_DOCS_LOADER',
+    type: "CREATE_DOCS_LOADER",
     loaderName: loaderName,
     query: query
   };
@@ -2210,7 +2212,7 @@ var refreshLoader = exports.refreshLoader = function refreshLoader(loaderName, _
   var actionCreators = _ref3.actionCreators;
   return function (dispatch) {
     dispatch({
-      type: 'REFRESH_LOADER',
+      type: "REFRESH_LOADER",
       loaderName: loaderName
     });
     dispatch(actionCreators.loadMoreDocs(loaderName));
@@ -2258,27 +2260,27 @@ var defaultConfig = {
   },
   getDeepLinkRoute: function getDeepLinkRoute(url) {
     return {
-      name: 'HOME'
+      name: "HOME"
     };
   },
   getNotificationRoute: function getNotificationRoute(notification) {
     return {
-      name: 'HOME'
+      name: "HOME"
     };
   },
   getInitialActions: function getInitialActions() {},
   renderDialogContent: function renderDialogContent() {},
   statusBarColor: function statusBarColor(getState) {
-    return '#000000';
+    return "#000000";
   },
   progressBarColor: function progressBarColor(getState) {
-    return '#000000';
+    return "#000000";
   },
   isConnected: function isConnected() {
     return false;
   },
   deviceInfo: {
-    device_unique_id: 'default'
+    device_unique_id: "default"
   },
   cacheStore: {
     keys: function keys() {
@@ -2299,10 +2301,10 @@ var defaultConfig = {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt('return', []);
+                return _context.abrupt("return", []);
 
               case 1:
-              case 'end':
+              case "end":
                 return _context.stop();
             }
           }

@@ -1,5 +1,5 @@
-import * as eventsSelectors from './events';
+import * as eventsSelectors from "./events";
 
 export default {
   ...eventsSelectors
-}
+};

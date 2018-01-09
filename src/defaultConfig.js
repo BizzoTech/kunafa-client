@@ -22,34 +22,33 @@ const defaultConfig = {
   keepInCache: (doc, state) => {
     return false;
   },
-  getDeepLinkRoute: (url) => {
+  getDeepLinkRoute: url => {
     return {
-      name: 'HOME'
-    }
+      name: "HOME"
+    };
   },
-  getNotificationRoute: (notification) => {
+  getNotificationRoute: notification => {
     return {
-      name: 'HOME'
-    }
+      name: "HOME"
+    };
   },
   getInitialActions: () => {},
   renderDialogContent: () => {},
-  statusBarColor: getState => '#000000',
-  progressBarColor: getState => '#000000',
+  statusBarColor: getState => "#000000",
+  progressBarColor: getState => "#000000",
   isConnected: () => false,
   deviceInfo: {
-    device_unique_id: 'default'
+    device_unique_id: "default"
   },
   cacheStore: {
     keys: () => [],
     get: () => undefined,
     save: () => undefined,
     delete: () => undefined,
-    getAll: async() => {
+    getAll: async () => {
       return [];
     }
   }
-}
-
+};
 
 export default defaultConfig;

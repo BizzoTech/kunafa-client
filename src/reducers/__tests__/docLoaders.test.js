@@ -1,23 +1,22 @@
-import docLoaders from '../docLoaders';
-import { Reducer } from 'redux-testkit';
+import docLoaders from "../docLoaders";
+import { Reducer } from "redux-testkit";
 
 const defaultState = {};
 
 describe("DocLoaders reducer", () => {
-
-  it('should have initial state', () => {
+  it("should have initial state", () => {
     expect(docLoaders(undefined, {})).toEqual(defaultState);
   });
 
-  it('should handle CREATE_DOCS_LOADER', () => {
+  it("should handle CREATE_DOCS_LOADER", () => {
     const state = defaultState;
     const action = {
-      type: 'CREATE_DOCS_LOADER',
-      loaderName: 'TestLoader',
+      type: "CREATE_DOCS_LOADER",
+      loaderName: "TestLoader",
       query: {
         testProp: 123
       }
-    }
+    };
     const result = {
       TestLoader: {
         query: {
@@ -26,11 +25,14 @@ describe("DocLoaders reducer", () => {
         loaded: 0,
         endReached: false
       }
-    }
-    Reducer(docLoaders).withState(state).expect(action).toReturnState(result);
+    };
+    Reducer(docLoaders)
+      .withState(state)
+      .expect(action)
+      .toReturnState(result);
   });
 
-  it('should handle REMOVE_DOCS_LOADER', () => {
+  it("should handle REMOVE_DOCS_LOADER", () => {
     const state = {
       TestLoader1: {
         query: {
@@ -48,9 +50,9 @@ describe("DocLoaders reducer", () => {
       }
     };
     const action = {
-      type: 'REMOVE_DOCS_LOADER',
-      loaderName: 'TestLoader1'
-    }
+      type: "REMOVE_DOCS_LOADER",
+      loaderName: "TestLoader1"
+    };
     const result = {
       TestLoader2: {
         query: {
@@ -60,10 +62,13 @@ describe("DocLoaders reducer", () => {
         endReached: false
       }
     };
-    Reducer(docLoaders).withState(state).expect(action).toReturnState(result);
+    Reducer(docLoaders)
+      .withState(state)
+      .expect(action)
+      .toReturnState(result);
   });
 
-  it('LOAD_DOCS should update relevant docLoader', () => {
+  it("LOAD_DOCS should update relevant docLoader", () => {
     const state = {
       TestLoader1: {
         query: {
@@ -81,10 +86,10 @@ describe("DocLoaders reducer", () => {
       }
     };
     const action = {
-      type: 'LOAD_DOCS',
-      loaderName: 'TestLoader1',
-      docs: ['doc1', 'doc2']
-    }
+      type: "LOAD_DOCS",
+      loaderName: "TestLoader1",
+      docs: ["doc1", "doc2"]
+    };
     const result = {
       TestLoader1: {
         query: {
@@ -101,10 +106,13 @@ describe("DocLoaders reducer", () => {
         endReached: false
       }
     };
-    Reducer(docLoaders).withState(state).expect(action).toReturnState(result);
+    Reducer(docLoaders)
+      .withState(state)
+      .expect(action)
+      .toReturnState(result);
   });
 
-  it('LOAD_DOCS should only update relevant docLoader', () => {
+  it("LOAD_DOCS should only update relevant docLoader", () => {
     const state = {
       TestLoader1: {
         query: {
@@ -122,14 +130,17 @@ describe("DocLoaders reducer", () => {
       }
     };
     const action = {
-      type: 'LOAD_DOCS',
-      docs: ['doc1', 'doc2']
-    }
+      type: "LOAD_DOCS",
+      docs: ["doc1", "doc2"]
+    };
     const result = state;
-    Reducer(docLoaders).withState(state).expect(action).toReturnState(result);
+    Reducer(docLoaders)
+      .withState(state)
+      .expect(action)
+      .toReturnState(result);
   });
 
-  it('should handle REFRESH_LOADER', () => {
+  it("should handle REFRESH_LOADER", () => {
     const state = {
       TestLoader1: {
         query: {
@@ -147,9 +158,9 @@ describe("DocLoaders reducer", () => {
       }
     };
     const action = {
-      type: 'REFRESH_LOADER',
-      loaderName: 'TestLoader1'
-    }
+      type: "REFRESH_LOADER",
+      loaderName: "TestLoader1"
+    };
     const result = {
       TestLoader1: {
         query: {
@@ -166,10 +177,13 @@ describe("DocLoaders reducer", () => {
         endReached: false
       }
     };
-    Reducer(docLoaders).withState(state).expect(action).toReturnState(result);
+    Reducer(docLoaders)
+      .withState(state)
+      .expect(action)
+      .toReturnState(result);
   });
 
-  it('should not REFRESH_LOADER if not found', () => {
+  it("should not REFRESH_LOADER if not found", () => {
     const state = {
       TestLoader1: {
         query: {
@@ -187,11 +201,13 @@ describe("DocLoaders reducer", () => {
       }
     };
     const action = {
-      type: 'REFRESH_LOADER',
-      loaderName: 'TestLoader3'
-    }
+      type: "REFRESH_LOADER",
+      loaderName: "TestLoader3"
+    };
     const result = state;
-    Reducer(docLoaders).withState(state).expect(action).toReturnState(result);
+    Reducer(docLoaders)
+      .withState(state)
+      .expect(action)
+      .toReturnState(result);
   });
-
 });

@@ -12,7 +12,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "analyze": "webpack --json | webpack-bundle-size-analyzer"
+    "analyze": "webpack --json | webpack-bundle-size-analyzer",
+    "prettier": "prettier --write \"src/**/*.js\""
   },
   "jest": {
     "coverageDirectory": "./coverage/",
@@ -57,6 +58,7 @@
     "babel-preset-react": "^6.24.1",
     "coveralls": "^3.0.0",
     "jest": "^22.0.4",
+    "prettier": "1.9.2",
     "react": "^16.2.0",
     "redux-testkit": "^1.0.6",
     "webpack": "^3.6.0"

@@ -1,14 +1,14 @@
-export const clickNotification = (notification) => {
+export const clickNotification = notification => {
   return {
-    type: 'CLICK_NOTIFICATION',
+    type: "CLICK_NOTIFICATION",
     notification
-  }
-}
+  };
+};
 
-export const clickExternalNotification = (notification) => {
+export const clickExternalNotification = notification => {
   return {
-    type: 'CLICK_NOTIFICATION',
+    type: "CLICK_NOTIFICATION",
     notification,
     external: true
-  }
-}
+  };
+};

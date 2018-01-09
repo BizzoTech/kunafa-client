@@ -1,10 +1,9 @@
-import {resetHistory, navigateTo, transiteTo, goBack, goTo} from '../history';
+import { resetHistory, navigateTo, transiteTo, goBack, goTo } from "../history";
 
-describe('History action creators test', () => {
-
-  it('resetHistory should return RESET_HISTORY action', () => {
+describe("History action creators test", () => {
+  it("resetHistory should return RESET_HISTORY action", () => {
     expect(resetHistory()).toEqual({
-      type: 'RESET_HISTORY'
+      type: "RESET_HISTORY"
     });
   });
 
@@ -55,5 +54,4 @@ describe('History action creators test', () => {
   //     type: 'GO_BACK'
   //   });
   // });
-
 });

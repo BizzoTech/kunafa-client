@@ -1,6 +1,6 @@
-const R = require('ramda');
-import PouchDB from 'pouchdb';
-import PouchdbFind from 'pouchdb-find';
+const R = require("ramda");
+import PouchDB from "pouchdb";
+import PouchdbFind from "pouchdb-find";
 PouchDB.plugin(PouchdbFind);
 
 const getDefaultAction = act => {
@@ -8,12 +8,12 @@ const getDefaultAction = act => {
   if (Array.isArray(action)) {
     action = action[0];
   }
-  if (typeof action === 'string') {
+  if (typeof action === "string") {
     return action;
   } else {
     return action.type;
   }
-}
+};
 
 const getDocs = (state, action) => [action.doc];
 
@@ -27,11 +27,11 @@ const initialLoad = async (db, syncPaths, dispatch) => {
       dispatch({
         type: path.actions.load,
         [path.name]: result.rows.map(r => r.doc).filter(path.filter)
-      })
+      });
     }
   });
   return result;
-}
+};
 
 const syncChanges = (db, syncPaths, store, dispatch, update_seq = "now") => {
   const changes = db.changes({
@@ -39,9 +39,9 @@ const syncChanges = (db, syncPaths, store, dispatch, update_seq = "now") => {
     live: true,
     include_docs: true
   });
-  changes.on('change', change => {
-    syncPaths.forEach((path) => {
-      if (path.filter && !(path.filter(change.doc))) {
+  changes.on("change", change => {
+    syncPaths.forEach(path => {
+      if (path.filter && !path.filter(change.doc)) {
         return;
       }
       //console.log(change)
@@ -72,12 +72,10 @@ const syncChanges = (db, syncPaths, store, dispatch, update_seq = "now") => {
         }, 0);
         return;
       }
-
     });
   });
   return changes;
-}
-
+};
 
 const getActionsFromPaths = syncPaths => {
   const mergedActions = {
@@ -86,19 +84,19 @@ const getActionsFromPaths = syncPaths => {
     remove: []
   };
   const mergeAction = actName => action => {
-    if (typeof action === 'string') {
+    if (typeof action === "string") {
       mergedActions[actName].push({
         type: action,
         getDocs
       });
     }
-    if (typeof action === 'object') {
+    if (typeof action === "object") {
       mergedActions[actName].push({
         type: action.type,
         getDocs: action.getDocs || getDocs
       });
     }
-  }
+  };
   syncPaths.forEach(path => {
     if (Array.isArray(path.actions.insert)) {
       path.actions.insert.forEach(mergeAction("insert"));
@@ -119,7 +117,7 @@ const getActionsFromPaths = syncPaths => {
     }
   });
   return mergedActions;
-}
+};
 
 export default (store, { getLocalDbUrl, syncPaths }) => next => {
   const profileId = store.getState().currentProfile._id;
@@ -132,10 +130,9 @@ export default (store, { getLocalDbUrl, syncPaths }) => next => {
     changes = syncChanges(db, syncPaths, store, next, result.update_seq);
   }, 0);
 
-  
   const mergedActions = getActionsFromPaths(syncPaths);
 
-  return async (action) => {
+  return async action => {
     const bulk = [];
     const state = store.getState();
     mergedActions.insert.forEach(insertAction => {
@@ -144,9 +141,9 @@ export default (store, { getLocalDbUrl, syncPaths }) => next => {
         docs.forEach(doc => {
           if (doc.draft) {
             //db.put(R.omit(['draft'], doc));
-            bulk.push(R.omit(['draft'], doc));
+            bulk.push(R.omit(["draft"], doc));
           }
-        })
+        });
       }
     });
     mergedActions.update.forEach(updateAction => {
@@ -155,9 +152,9 @@ export default (store, { getLocalDbUrl, syncPaths }) => next => {
         docs.forEach(doc => {
           if (doc.draft) {
             //db.put(R.omit(['draft'], doc));
-            bulk.push(R.omit(['draft'], doc));
+            bulk.push(R.omit(["draft"], doc));
           }
-        })
+        });
       }
     });
     mergedActions.remove.forEach(removeAction => {
@@ -165,10 +162,12 @@ export default (store, { getLocalDbUrl, syncPaths }) => next => {
         const docs = removeAction.getDocs(state, action);
         docs.forEach(doc => {
           //db.remove(doc)
-          bulk.push(R.merge(doc, {
-            _deleted: true
-          }));
-        })
+          bulk.push(
+            R.merge(doc, {
+              _deleted: true
+            })
+          );
+        });
         next(action);
       }
     });
@@ -180,17 +179,17 @@ export default (store, { getLocalDbUrl, syncPaths }) => next => {
     } else {
       next(action);
 
-      if (action.type === 'LOGIN' || action.type === 'LOGOUT') {
+      if (action.type === "LOGIN" || action.type === "LOGOUT") {
         changes.cancel();
         const profileId = store.getState().currentProfile._id;
         const localDbUrl = getLocalDbUrl(profileId);
         db = new PouchDB(localDbUrl);
-        
+
         //Initial Load docs to improve render performance by tracking new changes only
         const result = await initialLoad(db, syncPaths, next);
 
         changes = syncChanges(db, syncPaths, store, next, result.update_seq);
       }
     }
-  }
-}
+  };
+};

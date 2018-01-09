@@ -1,4 +1,4 @@
-import connect from './connect';
-import createStore from './createStore';
+import connect from "./connect";
+import createStore from "./createStore";
 
-export {connect, createStore};
+export { connect, createStore };

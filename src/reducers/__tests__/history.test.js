@@ -1,15 +1,15 @@
-import history from '../history';
-import { Reducer } from 'redux-testkit';
+import history from "../history";
+import { Reducer } from "redux-testkit";
 
 const startWithHome = {
   path: [""]
 };
 const startWithLogin = {
-  path: ['login']
+  path: ["login"]
 };
 
-describe('History reducer', () => {
-  it('should start with login if no profileId provided', () => {
+describe("History reducer", () => {
+  it("should start with login if no profileId provided", () => {
     expect(history(undefined, {})).toEqual(startWithLogin);
   });
 
@@ -221,4 +221,4 @@ describe('History reducer', () => {
   //   const result = startWithLogin;
   //   Reducer(history).withState(state).expect(action).toReturnState(result);
   // });
-})
+});

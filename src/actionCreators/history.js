@@ -1,38 +1,38 @@
 export const resetHistory = () => {
   return {
-    type: 'RESET_HISTORY'
-  }
-}
+    type: "RESET_HISTORY"
+  };
+};
 
 export const navigateTo = path => {
   return {
-    type: 'NAVIGATE_TO',
+    type: "NAVIGATE_TO",
     route: {
       path
     }
-  }
-}
+  };
+};
 
 export const transiteTo = path => {
   return {
-    type: 'TRANSITE_TO',
+    type: "TRANSITE_TO",
     route: {
       path
     }
-  }
-}
+  };
+};
 
 export const goBack = () => {
   return {
-    type: 'GO_BACK'
-  }
-}
+    type: "GO_BACK"
+  };
+};
 
 export const goTo = path => {
   return {
-    type: 'GO_TO',
+    type: "GO_TO",
     route: {
       path
     }
-  }
-}
+  };
+};

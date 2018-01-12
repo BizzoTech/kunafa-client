@@ -26,7 +26,7 @@ export default (state = defaultState, action, config) => {
         const relevantDocsIds = getRelevantDocsIds(action);
         const relevantDocsToAdd = relevantDocsIds
           .filter(docId => {
-            return action.doc._id === docId && !action.doc._rev;
+            return action.doc._id === docId && !state[docId];
           })
           .map(docId => {
             return {
@@ -35,7 +35,7 @@ export default (state = defaultState, action, config) => {
           });
         const relevantDocsToUpdate = relevantDocsIds
           .filter(docId => {
-            return action.doc._id !== docId || action.doc._rev;
+            return action.doc._id !== docId || state[docId];
           })
           .map(docId => state[docId])
           .filter(d => d);

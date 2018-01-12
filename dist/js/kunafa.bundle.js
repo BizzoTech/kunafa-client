@@ -701,14 +701,14 @@ exports.default = function () {
       if (actionHandlersKeys.includes(action.type)) {
         var relevantDocsIds = getRelevantDocsIds(action);
         var relevantDocsToAdd = relevantDocsIds.filter(function (docId) {
-          return action.doc._id === docId && !action.doc._rev;
+          return action.doc._id === docId && !state[docId];
         }).map(function (docId) {
           return {
             type: action.doc.type
           };
         });
         var relevantDocsToUpdate = relevantDocsIds.filter(function (docId) {
-          return action.doc._id !== docId || action.doc._rev;
+          return action.doc._id !== docId || state[docId];
         }).map(function (docId) {
           return state[docId];
         }).filter(function (d) {

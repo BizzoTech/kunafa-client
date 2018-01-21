@@ -12,7 +12,11 @@ const removeOldDocs = async (
   const sortedDocs = R.sort(
     (d1, d2) => d2.fetchedAt - d1.fetchedAt,
     docs.filter(
-      d => !(keepInCache(d, state) || d._id === state.currentProfile._id)
+      d =>
+        !(
+          keepInCache(d, state) ||
+          d._id === R.path(["currentProfile", "_id"], state)
+        )
     )
   );
   if (sortedDocs.length > cacheLimit) {
@@ -43,7 +47,9 @@ export default (
 
     setTimeout(async () => {
       if (action.type === "LOAD_DOCS") {
-        for (const doc of action.docs) {
+        for (const doc of action.docs.filter(
+          doc => doc && cacheDocTypes.includes(doc.type)
+        )) {
           await cacheStore.save(doc._id, doc);
         }
         if (action.docs.length > 1) {

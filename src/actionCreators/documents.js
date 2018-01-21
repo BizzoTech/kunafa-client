@@ -4,7 +4,7 @@ PouchDB.plugin(PouchdbFind);
 
 let publicDb = null;
 
-export const loadDocs = (query, loaderName, config) => dispatch => {
+const getDbInstance = config => {
   if (publicDb === null) {
     const host = config.HOST;
     const ssl = config.SSL || "off";
@@ -15,28 +15,33 @@ export const loadDocs = (query, loaderName, config) => dispatch => {
       }
     });
   }
-  return publicDb
-    .find(query)
-    .then(result => {
-      return result.docs.map(doc => {
-        return {
-          ...doc,
-          fetchedAt: Date.now()
-        };
+  return publicDb;
+};
+
+export const loadDocs = (query, loaderName, config) => async dispatch => {
+  try {
+    const publicDb = config.getDbInstance
+      ? config.getDbInstance()
+      : getDbInstance(config);
+    const result = await publicDb.find(query);
+    const docs = result
+      ? result.docs.map(doc => {
+          return {
+            ...doc,
+            fetchedAt: Date.now()
+          };
+        })
+      : [];
+    if (docs && docs.length > 0) {
+      dispatch({
+        type: "LOAD_DOCS",
+        docs,
+        loaderName
       });
-    })
-    .then(docs => {
-      if (docs && docs.length > 0) {
-        dispatch({
-          type: "LOAD_DOCS",
-          docs,
-          loaderName
-        });
-      }
-    })
-    .catch(e => {
-      console.log(e);
-    });
+    }
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 const TTL = 5 * 60 * 1000; //5 minuts

@@ -7,6 +7,26 @@ import {
 } from "../documents";
 
 describe("Documents action creators tests", () => {
+  it("loadDocs should query publicdb", async () => {
+    const result = {
+      docs: [
+        {
+          _id: "doc_1"
+        }
+      ]
+    };
+    const publicdb = {
+      find: jest.fn(() => result)
+    };
+    const getDbInstance = () => publicdb;
+    const query = "QUERY";
+    const dispatch = jest.fn();
+    await loadDocs(query, "LOADER_NAME", { getDbInstance })(dispatch);
+    expect(publicdb.find).toHaveBeenCalledTimes(1);
+    expect(publicdb.find).toBeCalledWith(query);
+    expect(dispatch).toHaveBeenCalledTimes(1);
+  });
+
   it("fetchDoc shouldn't fetch undefined docs ", async () => {
     const dispatch = jest.fn();
     await fetchDoc(undefined, {})(dispatch);

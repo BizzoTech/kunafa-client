@@ -7,7 +7,7 @@
 		exports["kunafa"] = factory(require("ramda"), require("pouchdb"), require("redux"), require("pouchdb-find"), require("react"), require("react-redux"), require("prop-types"), require("redux-thunk"), require("redux-devtools-extension"), require("uuid"), require("reselect"));
 	else
 		root["kunafa"] = factory(root["ramda"], root["pouchdb"], root["redux"], root["pouchdb-find"], root["react"], root["react-redux"], root["prop-types"], root["redux-thunk"], root["redux-devtools-extension"], root["uuid"], root["reselect"]);
-})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_7__, __WEBPACK_EXTERNAL_MODULE_8__, __WEBPACK_EXTERNAL_MODULE_9__, __WEBPACK_EXTERNAL_MODULE_11__, __WEBPACK_EXTERNAL_MODULE_12__, __WEBPACK_EXTERNAL_MODULE_30__, __WEBPACK_EXTERNAL_MODULE_32__) {
+})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_7__, __WEBPACK_EXTERNAL_MODULE_8__, __WEBPACK_EXTERNAL_MODULE_9__, __WEBPACK_EXTERNAL_MODULE_11__, __WEBPACK_EXTERNAL_MODULE_12__, __WEBPACK_EXTERNAL_MODULE_34__, __WEBPACK_EXTERNAL_MODULE_36__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -108,7 +108,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _events = __webpack_require__(31);
+var _events = __webpack_require__(35);
 
 var eventsSelectors = _interopRequireWildcard(_events);
 
@@ -273,11 +273,11 @@ var _selectors = __webpack_require__(4);
 
 var _selectors2 = _interopRequireDefault(_selectors);
 
-var _actionCreators = __webpack_require__(33);
+var _actionCreators = __webpack_require__(37);
 
 var _actionCreators2 = _interopRequireDefault(_actionCreators);
 
-var _defaultConfig = __webpack_require__(38);
+var _defaultConfig = __webpack_require__(42);
 
 var _defaultConfig2 = _interopRequireDefault(_defaultConfig);
 
@@ -956,7 +956,7 @@ var _sync_middleware = __webpack_require__(28);
 
 var _sync_middleware2 = _interopRequireDefault(_sync_middleware);
 
-var _event_sourcing_middleware = __webpack_require__(29);
+var _event_sourcing_middleware = __webpack_require__(33);
 
 var _event_sourcing_middleware2 = _interopRequireDefault(_event_sourcing_middleware);
 
@@ -1179,7 +1179,7 @@ var removeOldDocs = function () {
             sortedDocs = R.sort(function (d1, d2) {
               return d2.fetchedAt - d1.fetchedAt;
             }, docs.filter(function (d) {
-              return !(keepInCache(d, state) || d._id === state.currentProfile._id);
+              return !(keepInCache(d, state) || d._id === R.path(["currentProfile", "_id"], state));
             }));
 
             if (!(sortedDocs.length > cacheLimit)) {
@@ -1308,7 +1308,9 @@ exports.default = function (store, _ref2) {
                 _didIteratorError2 = false;
                 _iteratorError2 = undefined;
                 _context3.prev = 4;
-                _iterator2 = action.docs[Symbol.iterator]();
+                _iterator2 = action.docs.filter(function (doc) {
+                  return doc && cacheDocTypes.includes(doc.type);
+                })[Symbol.iterator]();
 
               case 6:
                 if (_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done) {
@@ -1503,8 +1505,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 var _pouchdb = __webpack_require__(1);
 
 var _pouchdb2 = _interopRequireDefault(_pouchdb);
@@ -1513,9 +1513,23 @@ var _pouchdbFind = __webpack_require__(3);
 
 var _pouchdbFind2 = _interopRequireDefault(_pouchdbFind);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _getDefaultAction = __webpack_require__(29);
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+var _getDefaultAction2 = _interopRequireDefault(_getDefaultAction);
+
+var _initialLoad = __webpack_require__(30);
+
+var _initialLoad2 = _interopRequireDefault(_initialLoad);
+
+var _syncChanges = __webpack_require__(31);
+
+var _syncChanges2 = _interopRequireDefault(_syncChanges);
+
+var _getActionsFromPaths = __webpack_require__(32);
+
+var _getActionsFromPaths2 = _interopRequireDefault(_getActionsFromPaths);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
@@ -1523,6 +1537,145 @@ var R = __webpack_require__(0);
 
 _pouchdb2.default.plugin(_pouchdbFind2.default);
 
+exports.default = function (store, _ref) {
+  var getLocalDbUrl = _ref.getLocalDbUrl,
+      syncPaths = _ref.syncPaths;
+  return function (next) {
+    var profileId = store.getState().currentProfile._id;
+    var localDbUrl = getLocalDbUrl(profileId);
+    var db = new _pouchdb2.default(localDbUrl);
+    var changes = void 0;
+    setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      var result;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return (0, _initialLoad2.default)(db, syncPaths, next);
+
+            case 2:
+              result = _context.sent;
+              //Initial Load docs to improve render performance by tracking new changes only
+
+              changes = (0, _syncChanges2.default)(db, syncPaths, store, next, result.update_seq);
+
+            case 4:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, undefined);
+    })), 0);
+
+    var mergedActions = (0, _getActionsFromPaths2.default)(syncPaths);
+
+    return function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(action) {
+        var bulk, state, _profileId, _localDbUrl, result;
+
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                bulk = [];
+                state = store.getState();
+
+                mergedActions.insert.forEach(function (insertAction) {
+                  if (insertAction.type === action.type) {
+                    var docs = insertAction.getDocs(state, action);
+                    docs.forEach(function (doc) {
+                      if (doc.draft) {
+                        //db.put(R.omit(['draft'], doc));
+                        bulk.push(R.omit(["draft"], doc));
+                      }
+                    });
+                  }
+                });
+                mergedActions.update.forEach(function (updateAction) {
+                  if (updateAction.type === action.type) {
+                    var docs = updateAction.getDocs(state, action);
+                    docs.forEach(function (doc) {
+                      if (doc.draft) {
+                        //db.put(R.omit(['draft'], doc));
+                        bulk.push(R.omit(["draft"], doc));
+                      }
+                    });
+                  }
+                });
+                mergedActions.remove.forEach(function (removeAction) {
+                  if (removeAction.type === action.type) {
+                    var docs = removeAction.getDocs(state, action);
+                    docs.forEach(function (doc) {
+                      //db.remove(doc)
+                      bulk.push(R.merge(doc, {
+                        _deleted: true
+                      }));
+                    });
+                    next(action);
+                  }
+                });
+
+                if (!bulk.length) {
+                  _context2.next = 9;
+                  break;
+                }
+
+                setTimeout(function () {
+                  db.bulkDocs(bulk);
+                }, 0);
+                _context2.next = 19;
+                break;
+
+              case 9:
+                next(action);
+
+                if (!(action.type === "LOGIN" || action.type === "LOGOUT")) {
+                  _context2.next = 19;
+                  break;
+                }
+
+                changes.cancel();
+                _profileId = store.getState().currentProfile._id;
+                _localDbUrl = getLocalDbUrl(_profileId);
+
+                db = new _pouchdb2.default(_localDbUrl);
+
+                //Initial Load docs to improve render performance by tracking new changes only
+                _context2.next = 17;
+                return (0, _initialLoad2.default)(db, syncPaths, next);
+
+              case 17:
+                result = _context2.sent;
+
+
+                changes = (0, _syncChanges2.default)(db, syncPaths, store, next, result.update_seq);
+
+              case 19:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, undefined);
+      }));
+
+      return function (_x) {
+        return _ref3.apply(this, arguments);
+      };
+    }();
+  };
+};
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var getDefaultAction = function getDefaultAction(act) {
   var action = act;
   if (Array.isArray(action)) {
@@ -1535,9 +1688,22 @@ var getDefaultAction = function getDefaultAction(act) {
   }
 };
 
-var getDocs = function getDocs(state, action) {
-  return [action.doc];
-};
+exports.default = getDefaultAction;
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 var initialLoad = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(db, syncPaths, dispatch) {
@@ -1579,6 +1745,18 @@ var initialLoad = function () {
   };
 }();
 
+exports.default = initialLoad;
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var syncChanges = function syncChanges(db, syncPaths, store, dispatch) {
   var update_seq = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : "now";
 
@@ -1625,6 +1803,25 @@ var syncChanges = function syncChanges(db, syncPaths, store, dispatch) {
   return changes;
 };
 
+exports.default = syncChanges;
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var getDocs = exports.getDocs = function getDocs(state, action) {
+  return [action.doc];
+};
+
 var getActionsFromPaths = function getActionsFromPaths(syncPaths) {
   var mergedActions = {
     insert: [],
@@ -1669,137 +1866,10 @@ var getActionsFromPaths = function getActionsFromPaths(syncPaths) {
   return mergedActions;
 };
 
-exports.default = function (store, _ref2) {
-  var getLocalDbUrl = _ref2.getLocalDbUrl,
-      syncPaths = _ref2.syncPaths;
-  return function (next) {
-    var profileId = store.getState().currentProfile._id;
-    var localDbUrl = getLocalDbUrl(profileId);
-    var db = new _pouchdb2.default(localDbUrl);
-    var changes = void 0;
-    setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-      var result;
-      return regeneratorRuntime.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              _context2.next = 2;
-              return initialLoad(db, syncPaths, next);
-
-            case 2:
-              result = _context2.sent;
-              //Initial Load docs to improve render performance by tracking new changes only
-
-              changes = syncChanges(db, syncPaths, store, next, result.update_seq);
-
-            case 4:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2, undefined);
-    })), 0);
-
-    var mergedActions = getActionsFromPaths(syncPaths);
-
-    return function () {
-      var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(action) {
-        var bulk, state, _profileId, _localDbUrl, result;
-
-        return regeneratorRuntime.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                bulk = [];
-                state = store.getState();
-
-                mergedActions.insert.forEach(function (insertAction) {
-                  if (insertAction.type === action.type) {
-                    var docs = insertAction.getDocs(state, action);
-                    docs.forEach(function (doc) {
-                      if (doc.draft) {
-                        //db.put(R.omit(['draft'], doc));
-                        bulk.push(R.omit(["draft"], doc));
-                      }
-                    });
-                  }
-                });
-                mergedActions.update.forEach(function (updateAction) {
-                  if (updateAction.type === action.type) {
-                    var docs = updateAction.getDocs(state, action);
-                    docs.forEach(function (doc) {
-                      if (doc.draft) {
-                        //db.put(R.omit(['draft'], doc));
-                        bulk.push(R.omit(["draft"], doc));
-                      }
-                    });
-                  }
-                });
-                mergedActions.remove.forEach(function (removeAction) {
-                  if (removeAction.type === action.type) {
-                    var docs = removeAction.getDocs(state, action);
-                    docs.forEach(function (doc) {
-                      //db.remove(doc)
-                      bulk.push(R.merge(doc, {
-                        _deleted: true
-                      }));
-                    });
-                    next(action);
-                  }
-                });
-
-                if (!bulk.length) {
-                  _context3.next = 9;
-                  break;
-                }
-
-                setTimeout(function () {
-                  db.bulkDocs(bulk);
-                }, 0);
-                _context3.next = 19;
-                break;
-
-              case 9:
-                next(action);
-
-                if (!(action.type === "LOGIN" || action.type === "LOGOUT")) {
-                  _context3.next = 19;
-                  break;
-                }
-
-                changes.cancel();
-                _profileId = store.getState().currentProfile._id;
-                _localDbUrl = getLocalDbUrl(_profileId);
-
-                db = new _pouchdb2.default(_localDbUrl);
-
-                //Initial Load docs to improve render performance by tracking new changes only
-                _context3.next = 17;
-                return initialLoad(db, syncPaths, next);
-
-              case 17:
-                result = _context3.sent;
-
-
-                changes = syncChanges(db, syncPaths, store, next, result.update_seq);
-
-              case 19:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3, undefined);
-      }));
-
-      return function (_x5) {
-        return _ref4.apply(this, arguments);
-      };
-    }();
-  };
-};
+exports.default = getActionsFromPaths;
 
 /***/ }),
-/* 29 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1809,7 +1879,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _uuid = __webpack_require__(30);
+var _uuid = __webpack_require__(34);
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
@@ -1911,13 +1981,13 @@ var updateEventsToSetAppliedOnClient = function updateEventsToSetAppliedOnClient
 };
 
 /***/ }),
-/* 30 */
+/* 34 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_30__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_34__;
 
 /***/ }),
-/* 31 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1928,7 +1998,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.eventsByRelevantDocSelector = undefined;
 
-var _reselect = __webpack_require__(32);
+var _reselect = __webpack_require__(36);
 
 var R = __webpack_require__(0);
 
@@ -1968,13 +2038,13 @@ var eventsByRelevantDocSelector = exports.eventsByRelevantDocSelector = (0, _res
 });
 
 /***/ }),
-/* 32 */
+/* 36 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_32__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_36__;
 
 /***/ }),
-/* 33 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1984,19 +2054,19 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _history = __webpack_require__(34);
+var _history = __webpack_require__(38);
 
 var historyActions = _interopRequireWildcard(_history);
 
-var _dialog = __webpack_require__(35);
+var _dialog = __webpack_require__(39);
 
 var dialogActions = _interopRequireWildcard(_dialog);
 
-var _notifications = __webpack_require__(36);
+var _notifications = __webpack_require__(40);
 
 var notificationActions = _interopRequireWildcard(_notifications);
 
-var _documents = __webpack_require__(37);
+var _documents = __webpack_require__(41);
 
 var documentsActions = _interopRequireWildcard(_documents);
 
@@ -2005,7 +2075,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 exports.default = Object.assign({}, documentsActions, historyActions, dialogActions, notificationActions);
 
 /***/ }),
-/* 34 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2054,7 +2124,7 @@ var goTo = exports.goTo = function goTo(path) {
 };
 
 /***/ }),
-/* 35 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2077,7 +2147,7 @@ var closeDialog = exports.closeDialog = function closeDialog() {
 };
 
 /***/ }),
-/* 36 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2102,7 +2172,7 @@ var clickExternalNotification = exports.clickExternalNotification = function cli
 };
 
 /***/ }),
-/* 37 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2123,47 +2193,83 @@ var _pouchdbFind2 = _interopRequireDefault(_pouchdbFind);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 _pouchdb2.default.plugin(_pouchdbFind2.default);
 
 var publicDb = null;
 
-var loadDocs = exports.loadDocs = function loadDocs(query, loaderName, config) {
-  return function (dispatch) {
-    if (publicDb === null) {
-      var host = config.HOST;
-      var ssl = config.SSL || "off";
-      var protocol = ssl === "on" ? "https" : "http";
-      publicDb = new _pouchdb2.default(protocol + "://" + host + "/public", {
-        ajax: {
-          timeout: 60000
-        }
-      });
-    }
-    return publicDb.find(query).then(function (result) {
-      return result.docs.map(function (doc) {
-        return Object.assign({}, doc, {
-          fetchedAt: Date.now()
-        });
-      });
-    }).then(function (docs) {
-      if (docs && docs.length > 0) {
-        dispatch({
-          type: "LOAD_DOCS",
-          docs: docs,
-          loaderName: loaderName
-        });
+var getDbInstance = function getDbInstance(config) {
+  if (publicDb === null) {
+    var host = config.HOST;
+    var ssl = config.SSL || "off";
+    var protocol = ssl === "on" ? "https" : "http";
+    publicDb = new _pouchdb2.default(protocol + "://" + host + "/public", {
+      ajax: {
+        timeout: 60000
       }
-    }).catch(function (e) {
-      console.log(e);
     });
-  };
+  }
+  return publicDb;
+};
+
+var loadDocs = exports.loadDocs = function loadDocs(query, loaderName, config) {
+  return function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(dispatch) {
+      var _publicDb, result, docs;
+
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.prev = 0;
+              _publicDb = config.getDbInstance ? config.getDbInstance() : getDbInstance(config);
+              _context.next = 4;
+              return _publicDb.find(query);
+
+            case 4:
+              result = _context.sent;
+              docs = result ? result.docs.map(function (doc) {
+                return Object.assign({}, doc, {
+                  fetchedAt: Date.now()
+                });
+              }) : [];
+
+              if (docs && docs.length > 0) {
+                dispatch({
+                  type: "LOAD_DOCS",
+                  docs: docs,
+                  loaderName: loaderName
+                });
+              }
+              _context.next = 12;
+              break;
+
+            case 9:
+              _context.prev = 9;
+              _context.t0 = _context["catch"](0);
+
+              console.log(_context.t0);
+
+            case 12:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, undefined, [[0, 9]]);
+    }));
+
+    return function (_x) {
+      return _ref.apply(this, arguments);
+    };
+  }();
 };
 
 var TTL = 5 * 60 * 1000; //5 minuts
 //const TTL = 0; // Live Update
 
-var fetchDoc = exports.fetchDoc = function fetchDoc(doc, _ref) {
-  var actionCreators = _ref.actionCreators;
+var fetchDoc = exports.fetchDoc = function fetchDoc(doc, _ref2) {
+  var actionCreators = _ref2.actionCreators;
   return function (dispatch) {
     if (!doc || !doc._id) {
       return Promise.resolve();
@@ -2188,8 +2294,8 @@ var createDocLoader = exports.createDocLoader = function createDocLoader(loaderN
   };
 };
 
-var loadMoreDocs = exports.loadMoreDocs = function loadMoreDocs(loaderName, _ref2) {
-  var actionCreators = _ref2.actionCreators;
+var loadMoreDocs = exports.loadMoreDocs = function loadMoreDocs(loaderName, _ref3) {
+  var actionCreators = _ref3.actionCreators;
   return function (dispatch, getState) {
     var loaderState = getState().docLoaders[loaderName];
     if (loaderState) {
@@ -2208,8 +2314,8 @@ var loadMoreDocs = exports.loadMoreDocs = function loadMoreDocs(loaderName, _ref
   };
 };
 
-var refreshLoader = exports.refreshLoader = function refreshLoader(loaderName, _ref3) {
-  var actionCreators = _ref3.actionCreators;
+var refreshLoader = exports.refreshLoader = function refreshLoader(loaderName, _ref4) {
+  var actionCreators = _ref4.actionCreators;
   return function (dispatch) {
     dispatch({
       type: "REFRESH_LOADER",
@@ -2220,7 +2326,7 @@ var refreshLoader = exports.refreshLoader = function refreshLoader(loaderName, _
 };
 
 /***/ }),
-/* 38 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

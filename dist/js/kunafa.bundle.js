@@ -1513,15 +1513,11 @@ var _pouchdbFind = __webpack_require__(3);
 
 var _pouchdbFind2 = _interopRequireDefault(_pouchdbFind);
 
-var _getDefaultAction = __webpack_require__(29);
-
-var _getDefaultAction2 = _interopRequireDefault(_getDefaultAction);
-
-var _initialLoad = __webpack_require__(30);
+var _initialLoad = __webpack_require__(29);
 
 var _initialLoad2 = _interopRequireDefault(_initialLoad);
 
-var _syncChanges = __webpack_require__(31);
+var _syncChanges = __webpack_require__(30);
 
 var _syncChanges2 = _interopRequireDefault(_syncChanges);
 
@@ -1676,30 +1672,6 @@ exports.default = function (store, _ref) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var getDefaultAction = function getDefaultAction(act) {
-  var action = act;
-  if (Array.isArray(action)) {
-    action = action[0];
-  }
-  if (typeof action === "string") {
-    return action;
-  } else {
-    return action.type;
-  }
-};
-
-exports.default = getDefaultAction;
-
-/***/ }),
-/* 30 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -1748,7 +1720,7 @@ var initialLoad = function () {
 exports.default = initialLoad;
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1757,6 +1729,13 @@ exports.default = initialLoad;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _getDefaultAction = __webpack_require__(31);
+
+var _getDefaultAction2 = _interopRequireDefault(_getDefaultAction);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var syncChanges = function syncChanges(db, syncPaths, store, dispatch) {
   var update_seq = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : "now";
 
@@ -1774,7 +1753,7 @@ var syncChanges = function syncChanges(db, syncPaths, store, dispatch) {
       if (change.doc._deleted) {
         setTimeout(function () {
           dispatch({
-            type: getDefaultAction(path.actions.remove),
+            type: (0, _getDefaultAction2.default)(path.actions.remove),
             doc: change.doc
           });
         }, 0);
@@ -1784,7 +1763,7 @@ var syncChanges = function syncChanges(db, syncPaths, store, dispatch) {
       if (pathState[change.doc._id]) {
         setTimeout(function () {
           dispatch({
-            type: getDefaultAction(path.actions.update),
+            type: (0, _getDefaultAction2.default)(path.actions.update),
             doc: change.doc
           });
         }, 0);
@@ -1792,7 +1771,7 @@ var syncChanges = function syncChanges(db, syncPaths, store, dispatch) {
       } else {
         setTimeout(function () {
           dispatch({
-            type: getDefaultAction(path.actions.insert),
+            type: (0, _getDefaultAction2.default)(path.actions.insert),
             doc: change.doc
           });
         }, 0);
@@ -1804,6 +1783,30 @@ var syncChanges = function syncChanges(db, syncPaths, store, dispatch) {
 };
 
 exports.default = syncChanges;
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var getDefaultAction = function getDefaultAction(act) {
+  var action = act;
+  if (Array.isArray(action)) {
+    action = action[0];
+  }
+  if (typeof action === "string") {
+    return action;
+  } else {
+    return action.type;
+  }
+};
+
+exports.default = getDefaultAction;
 
 /***/ }),
 /* 32 */
@@ -1818,52 +1821,42 @@ Object.defineProperty(exports, "__esModule", {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+var R = __webpack_require__(0);
+
 var getDocs = exports.getDocs = function getDocs(state, action) {
   return [action.doc];
 };
 
 var getActionsFromPaths = function getActionsFromPaths(syncPaths) {
-  var mergedActions = {
-    insert: [],
-    update: [],
-    remove: []
-  };
-  var mergeAction = function mergeAction(actName) {
-    return function (action) {
-      if (typeof action === "string") {
-        mergedActions[actName].push({
-          type: action,
-          getDocs: getDocs
-        });
+  var actionsList = syncPaths.map(function (path) {
+    var actions = R.pick(["insert", "update", "remove"], path.actions);
+    var transformAction = function transformAction(action) {
+      if (Array.isArray(action)) {
+        return R.flatten(action.map(transformAction));
       }
       if ((typeof action === "undefined" ? "undefined" : _typeof(action)) === "object") {
-        mergedActions[actName].push({
+        return [{
           type: action.type,
           getDocs: action.getDocs || getDocs
-        });
+        }];
       }
+      return [{
+        type: action,
+        getDocs: getDocs
+      }];
     };
-  };
-  syncPaths.forEach(function (path) {
-    if (Array.isArray(path.actions.insert)) {
-      path.actions.insert.forEach(mergeAction("insert"));
-    } else {
-      mergeAction("insert")(path.actions.insert);
-    }
-
-    if (Array.isArray(path.actions.update)) {
-      path.actions.update.forEach(mergeAction("update"));
-    } else {
-      mergeAction("update")(path.actions.update);
-    }
-
-    if (Array.isArray(path.actions.remove)) {
-      path.actions.remove.forEach(mergeAction("remove"));
-    } else {
-      mergeAction("remove")(path.actions.remove);
-    }
+    return R.map(transformAction, actions);
   });
-  return mergedActions;
+
+  return actionsList.reduce(function (result, actionObj) {
+    return {
+      insert: [].concat(_toConsumableArray(result.insert), _toConsumableArray(actionObj.insert)),
+      update: [].concat(_toConsumableArray(result.update), _toConsumableArray(actionObj.update)),
+      remove: [].concat(_toConsumableArray(result.remove), _toConsumableArray(actionObj.remove))
+    };
+  });
 };
 
 exports.default = getActionsFromPaths;

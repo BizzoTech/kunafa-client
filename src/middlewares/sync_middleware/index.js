@@ -3,7 +3,6 @@ import PouchDB from "pouchdb";
 import PouchdbFind from "pouchdb-find";
 PouchDB.plugin(PouchdbFind);
 
-import getDefaultAction from "./getDefaultAction";
 import initialLoad from "./initialLoad";
 import syncChanges from "./syncChanges";
 

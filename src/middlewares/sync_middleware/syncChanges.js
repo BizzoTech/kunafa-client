@@ -1,3 +1,5 @@
+import getDefaultAction from "./getDefaultAction";
+
 const syncChanges = (db, syncPaths, store, dispatch, update_seq = "now") => {
   const changes = db.changes({
     since: update_seq,

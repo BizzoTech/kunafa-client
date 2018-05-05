@@ -2,6 +2,8 @@ import PouchDB from "pouchdb";
 import PouchdbFind from "pouchdb-find";
 PouchDB.plugin(PouchdbFind);
 
+const throttle = require("lodash.throttle");
+
 let publicDb = null;
 
 const getDbInstance = config => {
@@ -75,28 +77,28 @@ export const createDocLoader = (loaderName, query) => {
   };
 };
 
-export const loadMoreDocs = (loaderName, { actionCreators }) => (
-  dispatch,
-  getState
-) => {
-  const loaderState = getState().docLoaders[loaderName];
-  if (loaderState) {
-    const { query, loaded, endReached } = loaderState;
-    if (endReached) {
-      return;
-    }
+export const loadMoreDocs = throttle(
+  (loaderName, { actionCreators }) => (dispatch, getState) => {
+    const loaderState = getState().docLoaders[loaderName];
+    if (loaderState) {
+      const { query, loaded, endReached } = loaderState;
+      if (endReached) {
+        return;
+      }
 
-    dispatch(
-      actionCreators.loadDocs(
-        {
-          ...query,
-          skip: loaded > 0 ? loaded : undefined
-        },
-        loaderName
-      )
-    );
-  }
-};
+      dispatch(
+        actionCreators.loadDocs(
+          {
+            ...query,
+            skip: loaded > 0 ? loaded : undefined
+          },
+          loaderName
+        )
+      );
+    }
+  },
+  200
+);
 
 export const refreshLoader = (loaderName, { actionCreators }) => dispatch => {
   dispatch({

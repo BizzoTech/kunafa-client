@@ -7,6 +7,7 @@ import {
 } from "../documents";
 
 describe("Documents action creators tests", () => {
+  jest.useFakeTimers();
   it("loadDocs should query publicdb", async () => {
     const result = {
       docs: [
@@ -165,7 +166,9 @@ describe("Documents action creators tests", () => {
         }
       };
     };
+    jest.runAllTimers();
     loadMoreDocs(loaderName, { actionCreators })(dispatch, getState);
+    jest.runAllTimers();
     expect(dispatch).toHaveBeenCalledTimes(0);
     expect(actionCreators.loadDocs).toHaveBeenCalledTimes(0);
   });
@@ -213,7 +216,9 @@ describe("Documents action creators tests", () => {
         }
       };
     };
+    jest.runAllTimers();
     loadMoreDocs(loaderName, { actionCreators })(dispatch, getState);
+    jest.runAllTimers();
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(actionCreators.loadDocs).toHaveBeenCalledTimes(1);
     expect(actionCreators.loadDocs).toBeCalledWith(

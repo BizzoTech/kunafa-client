@@ -1956,7 +1956,7 @@ exports.default = function (store, config) {
 var updateEventsToSetAppliedOnClient = function updateEventsToSetAppliedOnClient(doc, docEvents, next) {
   docEvents.forEach(function (event) {
     var isAppliedOn = event.appliedOn && event.appliedOn[doc._id];
-    if (isAppliedOn && event.appliedOn[doc._id] <= doc._rev) {
+    if (isAppliedOn && parseInt(event.appliedOn[doc._id]) <= parseInt(doc._rev)) {
       event.appliedOnClient = event.appliedOnClient || {};
       if (!event.appliedOnClient[doc._id]) {
         next({

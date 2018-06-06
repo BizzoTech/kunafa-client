@@ -37,6 +37,7 @@
     ]
   },
   "dependencies": {
+    "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "moment": "^2.17.1",
     "pouchdb": "^6.4.2",

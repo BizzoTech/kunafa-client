@@ -682,6 +682,9 @@ exports.default = function () {
   switch (action.type) {
     case "LOAD_DOCS":
     case "LOAD_DOCS_FROM_CACHE":
+      if (action.docs.length < 1) {
+        return state;
+      }
       var modifiedDocs = action.docs.filter(function (doc) {
         return !state[doc._id] || state[doc._id]._rev !== doc._rev;
       });
@@ -2240,7 +2243,7 @@ var loadDocs = exports.loadDocs = function loadDocs(query, loaderName, config) {
                 });
               }) : [];
 
-              if (docs && docs.length > 0) {
+              if (docs) {
                 dispatch({
                   type: "LOAD_DOCS",
                   docs: docs,

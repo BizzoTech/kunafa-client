@@ -34,7 +34,7 @@ export const loadDocs = (query, loaderName, config) => async dispatch => {
           };
         })
       : [];
-    if (docs && docs.length > 0) {
+    if (docs) {
       dispatch({
         type: "LOAD_DOCS",
         docs,

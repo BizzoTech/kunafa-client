@@ -6,6 +6,9 @@ export default (state = defaultState, action, config) => {
   switch (action.type) {
     case "LOAD_DOCS":
     case "LOAD_DOCS_FROM_CACHE":
+      if (action.docs.length < 1) {
+        return state;
+      }
       const modifiedDocs = action.docs.filter(doc => {
         return !state[doc._id] || state[doc._id]._rev !== doc._rev;
       });

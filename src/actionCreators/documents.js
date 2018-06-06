@@ -2,7 +2,7 @@ import PouchDB from "pouchdb";
 import PouchdbFind from "pouchdb-find";
 PouchDB.plugin(PouchdbFind);
 
-const debounce = require("lodash.debounce");
+const throttle = require("lodash.throttle");
 
 let publicDb = null;
 
@@ -77,7 +77,7 @@ export const createDocLoader = (loaderName, query) => {
   };
 };
 
-export const loadMoreDocs = debounce(
+export const loadMoreDocs = throttle(
   (loaderName, { actionCreators }) => (dispatch, getState) => {
     const loaderState = getState().docLoaders[loaderName];
     if (loaderState) {

@@ -1,12 +1,12 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("ramda"), require("pouchdb"), require("redux"), require("pouchdb-find"), require("react"), require("react-redux"), require("prop-types"), require("redux-thunk"), require("redux-devtools-extension"), require("uuid"), require("reselect"), require("lodash.debounce"));
+		module.exports = factory(require("ramda"), require("pouchdb"), require("redux"), require("pouchdb-find"), require("react"), require("react-redux"), require("prop-types"), require("redux-thunk"), require("redux-devtools-extension"), require("uuid"), require("reselect"), require("lodash.throttle"));
 	else if(typeof define === 'function' && define.amd)
-		define("kunafa", ["ramda", "pouchdb", "redux", "pouchdb-find", "react", "react-redux", "prop-types", "redux-thunk", "redux-devtools-extension", "uuid", "reselect", "lodash.debounce"], factory);
+		define("kunafa", ["ramda", "pouchdb", "redux", "pouchdb-find", "react", "react-redux", "prop-types", "redux-thunk", "redux-devtools-extension", "uuid", "reselect", "lodash.throttle"], factory);
 	else if(typeof exports === 'object')
-		exports["kunafa"] = factory(require("ramda"), require("pouchdb"), require("redux"), require("pouchdb-find"), require("react"), require("react-redux"), require("prop-types"), require("redux-thunk"), require("redux-devtools-extension"), require("uuid"), require("reselect"), require("lodash.debounce"));
+		exports["kunafa"] = factory(require("ramda"), require("pouchdb"), require("redux"), require("pouchdb-find"), require("react"), require("react-redux"), require("prop-types"), require("redux-thunk"), require("redux-devtools-extension"), require("uuid"), require("reselect"), require("lodash.throttle"));
 	else
-		root["kunafa"] = factory(root["ramda"], root["pouchdb"], root["redux"], root["pouchdb-find"], root["react"], root["react-redux"], root["prop-types"], root["redux-thunk"], root["redux-devtools-extension"], root["uuid"], root["reselect"], root["lodash.debounce"]);
+		root["kunafa"] = factory(root["ramda"], root["pouchdb"], root["redux"], root["pouchdb-find"], root["react"], root["react-redux"], root["prop-types"], root["redux-thunk"], root["redux-devtools-extension"], root["uuid"], root["reselect"], root["lodash.throttle"]);
 })(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_7__, __WEBPACK_EXTERNAL_MODULE_8__, __WEBPACK_EXTERNAL_MODULE_9__, __WEBPACK_EXTERNAL_MODULE_11__, __WEBPACK_EXTERNAL_MODULE_12__, __WEBPACK_EXTERNAL_MODULE_34__, __WEBPACK_EXTERNAL_MODULE_36__, __WEBPACK_EXTERNAL_MODULE_42__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -2203,7 +2203,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 _pouchdb2.default.plugin(_pouchdbFind2.default);
 
-var debounce = __webpack_require__(42);
+var throttle = __webpack_require__(42);
 
 var publicDb = null;
 
@@ -2302,7 +2302,7 @@ var createDocLoader = exports.createDocLoader = function createDocLoader(loaderN
   };
 };
 
-var loadMoreDocs = exports.loadMoreDocs = debounce(function (loaderName, _ref3) {
+var loadMoreDocs = exports.loadMoreDocs = throttle(function (loaderName, _ref3) {
   var actionCreators = _ref3.actionCreators;
   return function (dispatch, getState) {
     var loaderState = getState().docLoaders[loaderName];

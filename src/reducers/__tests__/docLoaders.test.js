@@ -23,6 +23,7 @@ describe("DocLoaders reducer", () => {
           testProp: 123
         },
         loaded: 0,
+        loadedDocs: [],
         endReached: false
       }
     };
@@ -74,35 +75,39 @@ describe("DocLoaders reducer", () => {
         query: {
           testProp: 123
         },
-        loaded: 45,
+        loaded: 3,
+        loadedDocs: [1, 2, 3],
         endReached: false
       },
       TestLoader2: {
         query: {
           testProp: 456
         },
-        loaded: 10,
+        loaded: 4,
+        loadedDocs: [5, 6, 7, 8],
         endReached: false
       }
     };
     const action = {
       type: "LOAD_DOCS",
       loaderName: "TestLoader1",
-      docs: ["doc1", "doc2"]
+      docs: [{ _id: 2 }, { _id: 7 }]
     };
     const result = {
       TestLoader1: {
         query: {
           testProp: 123
         },
-        loaded: 47,
+        loaded: 4,
+        loadedDocs: [1, 2, 3, 7],
         endReached: true
       },
       TestLoader2: {
         query: {
           testProp: 456
         },
-        loaded: 10,
+        loaded: 4,
+        loadedDocs: [5, 6, 7, 8],
         endReached: false
       }
     };
@@ -118,20 +123,22 @@ describe("DocLoaders reducer", () => {
         query: {
           testProp: 123
         },
-        loaded: 45,
+        loaded: 3,
+        loadedDocs: [1, 2, 3],
         endReached: false
       },
       TestLoader2: {
         query: {
           testProp: 456
         },
-        loaded: 10,
+        loaded: 4,
+        loadedDocs: [5, 6, 7, 8],
         endReached: false
       }
     };
     const action = {
       type: "LOAD_DOCS",
-      docs: ["doc1", "doc2"]
+      docs: [{ _id: 2 }, { _id: 7 }]
     };
     const result = state;
     Reducer(docLoaders)
@@ -146,14 +153,16 @@ describe("DocLoaders reducer", () => {
         query: {
           testProp: 123
         },
-        loaded: 45,
+        loaded: 3,
+        loadedDocs: [1, 2, 3],
         endReached: false
       },
       TestLoader2: {
         query: {
           testProp: 456
         },
-        loaded: 10,
+        loaded: 4,
+        loadedDocs: [5, 6, 7, 8],
         endReached: false
       }
     };
@@ -167,13 +176,15 @@ describe("DocLoaders reducer", () => {
           testProp: 123
         },
         loaded: 0,
+        loadedDocs: [],
         endReached: false
       },
       TestLoader2: {
         query: {
           testProp: 456
         },
-        loaded: 10,
+        loaded: 4,
+        loadedDocs: [5, 6, 7, 8],
         endReached: false
       }
     };
@@ -189,14 +200,16 @@ describe("DocLoaders reducer", () => {
         query: {
           testProp: 123
         },
-        loaded: 45,
+        loaded: 3,
+        loadedDocs: [1, 2, 3],
         endReached: false
       },
       TestLoader2: {
         query: {
           testProp: 456
         },
-        loaded: 10,
+        loaded: 4,
+        loadedDocs: [5, 6, 7, 8],
         endReached: false
       }
     };

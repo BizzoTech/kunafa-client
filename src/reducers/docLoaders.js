@@ -10,6 +10,7 @@ export default (state = defaultState, action) => {
         [action.loaderName]: {
           query: action.query,
           loaded: 0,
+          loadedDocs: [],
           endReached: false
         }
       };
@@ -20,11 +21,18 @@ export default (state = defaultState, action) => {
         return state;
       }
       const loader = state[action.loaderName];
+
+      const loadedDocs = R.uniq([
+        ...loader.loadedDocs,
+        ...action.docs.map(d => d._id)
+      ]);
+
       return {
         ...state,
         [action.loaderName]: {
           ...loader,
-          loaded: loader.loaded + action.docs.length,
+          loaded: loadedDocs.length,
+          loadedDocs,
           endReached: action.docs.length < (loader.query.limit || 25)
         }
       };
@@ -37,6 +45,7 @@ export default (state = defaultState, action) => {
         [action.loaderName]: {
           ...state[action.loaderName],
           loaded: 0,
+          loadedDocs: [],
           endReached: false
         }
       };

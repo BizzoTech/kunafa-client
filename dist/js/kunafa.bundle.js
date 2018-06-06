@@ -811,6 +811,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var R = __webpack_require__(0);
@@ -826,6 +828,7 @@ exports.default = function () {
       return Object.assign({}, state, _defineProperty({}, action.loaderName, {
         query: action.query,
         loaded: 0,
+        loadedDocs: [],
         endReached: false
       }));
     case "REMOVE_DOCS_LOADER":
@@ -835,8 +838,14 @@ exports.default = function () {
         return state;
       }
       var loader = state[action.loaderName];
+
+      var loadedDocs = R.uniq([].concat(_toConsumableArray(loader.loadedDocs), _toConsumableArray(action.docs.map(function (d) {
+        return d._id;
+      }))));
+
       return Object.assign({}, state, _defineProperty({}, action.loaderName, Object.assign({}, loader, {
-        loaded: loader.loaded + action.docs.length,
+        loaded: loadedDocs.length,
+        loadedDocs: loadedDocs,
         endReached: action.docs.length < (loader.query.limit || 25)
       })));
     case "REFRESH_LOADER":
@@ -845,6 +854,7 @@ exports.default = function () {
       }
       return Object.assign({}, state, _defineProperty({}, action.loaderName, Object.assign({}, state[action.loaderName], {
         loaded: 0,
+        loadedDocs: [],
         endReached: false
       })));
     default:

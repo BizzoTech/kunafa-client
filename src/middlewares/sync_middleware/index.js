@@ -69,7 +69,7 @@ export default (store, { getLocalDbUrl, syncPaths }) => next => {
       next(action);
 
       if (action.type === "LOGIN" || action.type === "LOGOUT") {
-        changes.cancel();
+        changes && changes.cancel();
         const profileId = store.getState().currentProfile._id;
         const localDbUrl = getLocalDbUrl(profileId);
         db = new PouchDB(localDbUrl);

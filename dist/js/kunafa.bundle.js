@@ -1644,7 +1644,7 @@ exports.default = function (store, _ref) {
                   break;
                 }
 
-                changes.cancel();
+                changes && changes.cancel();
                 _profileId = store.getState().currentProfile._id;
                 _localDbUrl = getLocalDbUrl(_profileId);
 

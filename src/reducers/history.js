@@ -3,16 +3,16 @@ const R = require("ramda");
 const startWithHome = {
   path: [""]
 };
-const startWithLogin = {
-  path: ["login"]
-};
+// const startWithLogin = {
+//   path: ["login"]
+// };
 
-export default (state, action, config) => {
-  const defaultState =
-    config && config.profileId ? startWithHome : startWithLogin;
-  if (state === undefined) {
-    return defaultState;
-  }
+export default (state = startWithHome, action, config) => {
+  // const defaultState =
+  //   config && config.profileId ? startWithHome : startWithLogin;
+  // if (state === undefined) {
+  //   return defaultState;
+  // }
   switch (action.type) {
     case "RESET_HISTORY":
       return startWithHome;
@@ -43,15 +43,15 @@ export default (state, action, config) => {
             backFrom: R.dissoc("previous", state)
           }
         : state;
-    case "SKIP_LOGIN":
-    case "LOGIN":
-      if (state.path.length && state.path[0] === "login") {
-        return state.previous ? state.previous : startWithHome;
-      } else {
-        return state;
-      }
-    case "LOGOUT":
-      return startWithLogin;
+    // case "SKIP_LOGIN":
+    // case "LOGIN":
+    //   if (state.path.length && state.path[0] === "login") {
+    //     return state.previous ? state.previous : startWithHome;
+    //   } else {
+    //     return state;
+    //   }
+    // case "LOGOUT":
+    //   return startWithLogin;
     default:
       return state;
   }

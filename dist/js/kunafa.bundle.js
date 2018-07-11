@@ -570,15 +570,20 @@ var R = __webpack_require__(0);
 var startWithHome = {
   path: [""]
 };
-var startWithLogin = {
-  path: ["login"]
-};
+// const startWithLogin = {
+//   path: ["login"]
+// };
 
-exports.default = function (state, action, config) {
-  var defaultState = config && config.profileId ? startWithHome : startWithLogin;
-  if (state === undefined) {
-    return defaultState;
-  }
+exports.default = function () {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : startWithHome;
+  var action = arguments[1];
+  var config = arguments[2];
+
+  // const defaultState =
+  //   config && config.profileId ? startWithHome : startWithLogin;
+  // if (state === undefined) {
+  //   return defaultState;
+  // }
   switch (action.type) {
     case "RESET_HISTORY":
       return startWithHome;
@@ -600,15 +605,15 @@ exports.default = function (state, action, config) {
       return state.previous ? Object.assign({}, state.previous, {
         backFrom: R.dissoc("previous", state)
       }) : state;
-    case "SKIP_LOGIN":
-    case "LOGIN":
-      if (state.path.length && state.path[0] === "login") {
-        return state.previous ? state.previous : startWithHome;
-      } else {
-        return state;
-      }
-    case "LOGOUT":
-      return startWithLogin;
+    // case "SKIP_LOGIN":
+    // case "LOGIN":
+    //   if (state.path.length && state.path[0] === "login") {
+    //     return state.previous ? state.previous : startWithHome;
+    //   } else {
+    //     return state;
+    //   }
+    // case "LOGOUT":
+    //   return startWithLogin;
     default:
       return state;
   }

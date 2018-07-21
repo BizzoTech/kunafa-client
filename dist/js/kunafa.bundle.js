@@ -1638,39 +1638,65 @@ exports.default = function (store, _ref) {
                 setTimeout(function () {
                   db.bulkDocs(bulk);
                 }, 0);
-                _context2.next = 19;
+                _context2.next = 30;
                 break;
 
               case 9:
                 next(action);
 
                 if (!(action.type === "LOGIN" || action.type === "LOGOUT")) {
-                  _context2.next = 19;
+                  _context2.next = 30;
                   break;
                 }
 
+                _context2.prev = 11;
+
                 changes && changes.cancel();
+                _context2.next = 15;
+                return db;
+
+              case 15:
+                _context2.t0 = _context2.sent;
+
+                if (!_context2.t0) {
+                  _context2.next = 18;
+                  break;
+                }
+
+                db.destroy();
+
+              case 18:
+                _context2.next = 23;
+                break;
+
+              case 20:
+                _context2.prev = 20;
+                _context2.t1 = _context2["catch"](11);
+
+                console.log(_context2.t1);
+
+              case 23:
                 _profileId = store.getState().currentProfile._id;
                 _localDbUrl = getLocalDbUrl(_profileId);
 
                 db = new _pouchdb2.default(_localDbUrl);
 
                 //Initial Load docs to improve render performance by tracking new changes only
-                _context2.next = 17;
+                _context2.next = 28;
                 return (0, _initialLoad2.default)(db, syncPaths, next);
 
-              case 17:
+              case 28:
                 result = _context2.sent;
 
 
                 changes = (0, _syncChanges2.default)(db, syncPaths, store, next, result.update_seq);
 
-              case 19:
+              case 30:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, undefined);
+        }, _callee2, undefined, [[11, 20]]);
       }));
 
       return function (_x) {

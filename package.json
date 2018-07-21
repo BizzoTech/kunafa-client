@@ -38,8 +38,8 @@
   },
   "dependencies": {
     "moment": "^2.17.1",
-    "pouchdb": "^6.4.2",
-    "pouchdb-find": "^6.4.2",
+    "pouchdb": "^7.0.0",
+    "pouchdb-find": "^7.0.0",
     "ramda": "^0.25.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",

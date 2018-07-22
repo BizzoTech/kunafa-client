@@ -1409,6 +1409,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 var R = __webpack_require__(0);
 
+var checkToArchive = function checkToArchive(event) {
+  if (!event.relevantDocsIds || event.relevantDocsIds.length === 0) {
+    return true;
+  }
+  return event.appliedOn && event.appliedOnClient && Object.keys(event.appliedOn).every(function (docId) {
+    return event.appliedOnClient[docId];
+  });
+};
+
 exports.default = function (store, _ref) {
   var actionCreators = _ref.actionCreators;
   return function (next) {
@@ -1424,7 +1433,7 @@ exports.default = function (store, _ref) {
           for (var _iterator = action.events[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
             var event = _step.value;
 
-            if (event.relevantDocsIds && event.relevantDocsIds.length > 0 && event.status !== "archived") {
+            if (event.relevantDocsIds && event.relevantDocsIds.length > 0 && event.status !== "archived" && !checkToArchive(event)) {
               next(event.action);
             }
           }

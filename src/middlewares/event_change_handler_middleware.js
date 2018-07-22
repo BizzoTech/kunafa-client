@@ -1,5 +1,16 @@
 const R = require("ramda");
 
+const checkToArchive = event => {
+  if (!event.relevantDocsIds || event.relevantDocsIds.length === 0) {
+    return true;
+  }
+  return (
+    event.appliedOn &&
+    event.appliedOnClient &&
+    Object.keys(event.appliedOn).every(docId => event.appliedOnClient[docId])
+  );
+};
+
 export default (store, { actionCreators }) => next => action => {
   let result = next(action);
 
@@ -8,7 +19,8 @@ export default (store, { actionCreators }) => next => action => {
       if (
         event.relevantDocsIds &&
         event.relevantDocsIds.length > 0 &&
-        event.status !== "archived"
+        event.status !== "archived" &&
+        !checkToArchive(event)
       ) {
         next(event.action);
       }

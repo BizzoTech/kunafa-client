@@ -60,10 +60,9 @@ export default (store, { getLocalDbUrl, syncPaths, startDbSync }) => next => {
   };
 
   const mergedActions = getActionsFromPaths(syncPaths);
-  let bulk = [];
 
   return async action => {
-    await waitForRollup();
+    const bulk = [];
     const state = store.getState();
     mergedActions.insert.forEach(insertAction => {
       if (insertAction.type === action.type) {
@@ -103,12 +102,14 @@ export default (store, { getLocalDbUrl, syncPaths, startDbSync }) => next => {
     });
 
     if (bulk.length) {
-      if (db) {
-        db.bulkDocs(bulk);
-        bulk = [];
-      }
+      setTimeout(async () => {
+        await waitForRollup();
+        db && db.bulkDocs(bulk);
+      }, 0);
     } else {
       next(action);
+
+      await waitForRollup();
 
       if (action.type === "LOGIN" || action.type === "LOGOUT") {
         try {

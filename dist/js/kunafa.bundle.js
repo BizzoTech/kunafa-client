@@ -1568,22 +1568,56 @@ exports.default = function (store, _ref) {
     var localDbUrl = getLocalDbUrl(profileId);
     var db = new _pouchdb2.default(localDbUrl);
     var changes = void 0;
+    var initialRollupDone = false;
     setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-      var result;
+      var tempDb, result;
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.next = 2;
+              console.log("Initial roll up started");
+
+              tempDb = new _pouchdb2.default(localDbUrl + "_temp");
+              _context.next = 4;
+              return db.replicate.to(tempDb, {
+                selector: {
+                  _deleted: {
+                    $exists: false
+                  },
+                  status: "draft",
+                  relevantDocsIds: {
+                    $ne: []
+                  }
+                }
+              });
+
+            case 4:
+              _context.next = 6;
+              return db.destroy();
+
+            case 6:
+              db = new _pouchdb2.default(localDbUrl);
+              _context.next = 9;
+              return tempDb.replicate.to(db);
+
+            case 9:
+              _context.next = 11;
+              return tempDb.destroy();
+
+            case 11:
+              _context.next = 13;
               return (0, _initialLoad2.default)(db, syncPaths, next);
 
-            case 2:
+            case 13:
               result = _context.sent;
               //Initial Load docs to improve render performance by tracking new changes only
 
               changes = (0, _syncChanges2.default)(db, syncPaths, store, next, result.update_seq);
 
-            case 4:
+              initialRollupDone = true;
+              console.log("Initial roll up ended");
+
+            case 17:
             case "end":
               return _context.stop();
           }
@@ -1591,17 +1625,35 @@ exports.default = function (store, _ref) {
       }, _callee, undefined);
     })), 0);
 
+    var waitForRollup = function waitForRollup() {
+      return new Promise(function (resolve, reject) {
+        if (initialRollupDone) {
+          return resolve(true);
+        }
+        var _interval = setInterval(function () {
+          if (initialRollupDone) {
+            clearInterval(_interval);
+            return resolve(true);
+          }
+        }, 50);
+      });
+    };
+
     var mergedActions = (0, _getActionsFromPaths2.default)(syncPaths);
+    var bulk = [];
 
     return function () {
       var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(action) {
-        var bulk, state, _profileId, _localDbUrl, result;
+        var state, _profileId, _localDbUrl, result;
 
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                bulk = [];
+                _context2.next = 2;
+                return waitForRollup();
+
+              case 2:
                 state = store.getState();
 
                 mergedActions.insert.forEach(function (insertAction) {
@@ -1640,69 +1692,70 @@ exports.default = function (store, _ref) {
                 });
 
                 if (!bulk.length) {
-                  _context2.next = 9;
+                  _context2.next = 10;
                   break;
                 }
 
-                setTimeout(function () {
+                if (db) {
                   db.bulkDocs(bulk);
-                }, 0);
-                _context2.next = 29;
+                  bulk = [];
+                }
+                _context2.next = 30;
                 break;
 
-              case 9:
+              case 10:
                 next(action);
 
                 if (!(action.type === "LOGIN" || action.type === "LOGOUT")) {
-                  _context2.next = 29;
+                  _context2.next = 30;
                   break;
                 }
 
-                _context2.prev = 11;
+                _context2.prev = 12;
 
                 changes && changes.cancel();
                 _context2.t0 = db;
 
                 if (!_context2.t0) {
-                  _context2.next = 17;
+                  _context2.next = 18;
                   break;
                 }
 
-                _context2.next = 17;
+                _context2.next = 18;
                 return db.destroy();
 
-              case 17:
-                _context2.next = 22;
+              case 18:
+                _context2.next = 23;
                 break;
 
-              case 19:
-                _context2.prev = 19;
-                _context2.t1 = _context2["catch"](11);
+              case 20:
+                _context2.prev = 20;
+                _context2.t1 = _context2["catch"](12);
 
                 console.log(_context2.t1);
 
-              case 22:
+              case 23:
                 _profileId = store.getState().currentProfile._id;
                 _localDbUrl = getLocalDbUrl(_profileId);
 
                 db = new _pouchdb2.default(_localDbUrl);
 
                 //Initial Load docs to improve render performance by tracking new changes only
-                _context2.next = 27;
+                _context2.next = 28;
                 return (0, _initialLoad2.default)(db, syncPaths, next);
 
-              case 27:
+              case 28:
                 result = _context2.sent;
 
 
                 changes = (0, _syncChanges2.default)(db, syncPaths, store, next, result.update_seq);
 
-              case 29:
+              case 30:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, undefined, [[11, 19]]);
+        }, _callee2, undefined, [[12, 20]]);
       }));
 
       return function (_x) {

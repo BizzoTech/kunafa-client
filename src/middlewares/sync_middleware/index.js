@@ -13,16 +13,55 @@ export default (store, { getLocalDbUrl, syncPaths }) => next => {
   const localDbUrl = getLocalDbUrl(profileId);
   let db = new PouchDB(localDbUrl);
   let changes;
+  let initialRollupDone = false;
   setTimeout(async () => {
+    console.log("Initial roll up started");
+
+    const tempDb = new PouchDB(localDbUrl + "_temp");
+    await db.replicate.to(tempDb, {
+      selector: {
+        _deleted: {
+          $exists: false
+        },
+        status: "draft",
+        relevantDocsIds: {
+          $ne: []
+        }
+      }
+    });
+    await db.destroy();
+    db = new PouchDB(localDbUrl);
+    await tempDb.replicate.to(db);
+
+    await tempDb.destroy();
+
     const result = await initialLoad(db, syncPaths, next); //Initial Load docs to improve render performance by tracking new changes only
 
     changes = syncChanges(db, syncPaths, store, next, result.update_seq);
+
+    initialRollupDone = true;
+    console.log("Initial roll up ended");
   }, 0);
 
+  const waitForRollup = () => {
+    return new Promise(function(resolve, reject) {
+      if (initialRollupDone) {
+        return resolve(true);
+      }
+      const _interval = setInterval(() => {
+        if (initialRollupDone) {
+          clearInterval(_interval);
+          return resolve(true);
+        }
+      }, 50);
+    });
+  };
+
   const mergedActions = getActionsFromPaths(syncPaths);
+  let bulk = [];
 
   return async action => {
-    const bulk = [];
+    await waitForRollup();
     const state = store.getState();
     mergedActions.insert.forEach(insertAction => {
       if (insertAction.type === action.type) {
@@ -62,9 +101,10 @@ export default (store, { getLocalDbUrl, syncPaths }) => next => {
     });
 
     if (bulk.length) {
-      setTimeout(() => {
+      if (db) {
         db.bulkDocs(bulk);
-      }, 0);
+        bulk = [];
+      }
     } else {
       next(action);
 

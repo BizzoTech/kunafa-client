@@ -8,7 +8,7 @@ import syncChanges from "./syncChanges";
 
 import getActionsFromPaths from "./getActionsFromPaths";
 
-export default (store, { getLocalDbUrl, syncPaths }) => next => {
+export default (store, { getLocalDbUrl, syncPaths, startDbSync }) => next => {
   const profileId = store.getState().currentProfile._id;
   const localDbUrl = getLocalDbUrl(profileId);
   let db = new PouchDB(localDbUrl);
@@ -41,6 +41,8 @@ export default (store, { getLocalDbUrl, syncPaths }) => next => {
 
     initialRollupDone = true;
     console.log("Initial roll up ended");
+
+    startDbSync();
   }, 0);
 
   const waitForRollup = () => {

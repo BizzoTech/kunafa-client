@@ -1562,7 +1562,8 @@ _pouchdb2.default.plugin(_pouchdbFind2.default);
 
 exports.default = function (store, _ref) {
   var getLocalDbUrl = _ref.getLocalDbUrl,
-      syncPaths = _ref.syncPaths;
+      syncPaths = _ref.syncPaths,
+      startDbSync = _ref.startDbSync;
   return function (next) {
     var profileId = store.getState().currentProfile._id;
     var localDbUrl = getLocalDbUrl(profileId);
@@ -1617,7 +1618,9 @@ exports.default = function (store, _ref) {
               initialRollupDone = true;
               console.log("Initial roll up ended");
 
-            case 17:
+              startDbSync();
+
+            case 18:
             case "end":
               return _context.stop();
           }

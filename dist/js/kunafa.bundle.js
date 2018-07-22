@@ -1643,20 +1643,16 @@ exports.default = function (store, _ref) {
     };
 
     var mergedActions = (0, _getActionsFromPaths2.default)(syncPaths);
-    var bulk = [];
 
     return function () {
-      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(action) {
-        var state, _profileId, _localDbUrl, result;
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(action) {
+        var bulk, state, _profileId, _localDbUrl, result;
 
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
-                _context2.next = 2;
-                return waitForRollup();
-
-              case 2:
+                bulk = [];
                 state = store.getState();
 
                 mergedActions.insert.forEach(function (insertAction) {
@@ -1695,70 +1691,88 @@ exports.default = function (store, _ref) {
                 });
 
                 if (!bulk.length) {
-                  _context2.next = 10;
+                  _context3.next = 9;
                   break;
                 }
 
-                if (db) {
-                  db.bulkDocs(bulk);
-                  bulk = [];
-                }
-                _context2.next = 30;
+                setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+                  return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                    while (1) {
+                      switch (_context2.prev = _context2.next) {
+                        case 0:
+                          _context2.next = 2;
+                          return waitForRollup();
+
+                        case 2:
+                          db && db.bulkDocs(bulk);
+
+                        case 3:
+                        case "end":
+                          return _context2.stop();
+                      }
+                    }
+                  }, _callee2, undefined);
+                })), 0);
+                _context3.next = 31;
                 break;
 
-              case 10:
+              case 9:
                 next(action);
 
+                _context3.next = 12;
+                return waitForRollup();
+
+              case 12:
                 if (!(action.type === "LOGIN" || action.type === "LOGOUT")) {
-                  _context2.next = 30;
+                  _context3.next = 31;
                   break;
                 }
 
-                _context2.prev = 12;
+                _context3.prev = 13;
 
                 changes && changes.cancel();
-                _context2.t0 = db;
+                _context3.t0 = db;
 
-                if (!_context2.t0) {
-                  _context2.next = 18;
+                if (!_context3.t0) {
+                  _context3.next = 19;
                   break;
                 }
 
-                _context2.next = 18;
+                _context3.next = 19;
                 return db.destroy();
 
-              case 18:
-                _context2.next = 23;
+              case 19:
+                _context3.next = 24;
                 break;
 
-              case 20:
-                _context2.prev = 20;
-                _context2.t1 = _context2["catch"](12);
+              case 21:
+                _context3.prev = 21;
+                _context3.t1 = _context3["catch"](13);
 
-                console.log(_context2.t1);
+                console.log(_context3.t1);
 
-              case 23:
+              case 24:
                 _profileId = store.getState().currentProfile._id;
                 _localDbUrl = getLocalDbUrl(_profileId);
 
                 db = new _pouchdb2.default(_localDbUrl);
 
                 //Initial Load docs to improve render performance by tracking new changes only
-                _context2.next = 28;
+                _context3.next = 29;
                 return (0, _initialLoad2.default)(db, syncPaths, next);
 
-              case 28:
-                result = _context2.sent;
+              case 29:
+                result = _context3.sent;
 
 
                 changes = (0, _syncChanges2.default)(db, syncPaths, store, next, result.update_seq);
 
-              case 30:
+              case 31:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2, undefined, [[12, 20]]);
+        }, _callee3, undefined, [[13, 21]]);
       }));
 
       return function (_x) {

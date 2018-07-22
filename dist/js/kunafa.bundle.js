@@ -1647,7 +1647,7 @@ var waitForRollup = function waitForRollup() {
 exports.default = function (store, _ref2) {
   var getLocalDbUrl = _ref2.getLocalDbUrl,
       syncPaths = _ref2.syncPaths,
-      startDbSync = _ref2.startDbSync;
+      dbSyncObj = _ref2.dbSyncObj;
   return function (next) {
     var profileId = store.getState().currentProfile._id;
     var localDbUrl = getLocalDbUrl(profileId);
@@ -1661,7 +1661,7 @@ exports.default = function (store, _ref2) {
               return createDatabase(localDbUrl, syncPaths, store, next);
 
             case 2:
-              startDbSync();
+              dbSyncObj && dbSyncObj.start();
 
             case 3:
             case "end":
@@ -1779,10 +1779,14 @@ exports.default = function (store, _ref2) {
                     while (1) {
                       switch (_context4.prev = _context4.next) {
                         case 0:
-                          _context4.next = 2;
+                          dbSyncObj && dbSyncObj.stop();
+                          _context4.next = 3;
                           return createDatabase(_localDbUrl, syncPaths, store, next);
 
-                        case 2:
+                        case 3:
+                          dbSyncObj && dbSyncObj.start();
+
+                        case 4:
                         case "end":
                           return _context4.stop();
                       }

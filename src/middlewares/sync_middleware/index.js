@@ -59,13 +59,13 @@ const waitForRollup = () => {
   });
 };
 
-export default (store, { getLocalDbUrl, syncPaths, startDbSync }) => next => {
+export default (store, { getLocalDbUrl, syncPaths, dbSyncObj }) => next => {
   const profileId = store.getState().currentProfile._id;
   const localDbUrl = getLocalDbUrl(profileId);
 
   setTimeout(async () => {
     await createDatabase(localDbUrl, syncPaths, store, next);
-    startDbSync();
+    dbSyncObj && dbSyncObj.start();
   }, 0);
 
   const mergedActions = getActionsFromPaths(syncPaths);
@@ -133,7 +133,9 @@ export default (store, { getLocalDbUrl, syncPaths, startDbSync }) => next => {
         }
 
         setTimeout(async () => {
+          dbSyncObj && dbSyncObj.stop();
           await createDatabase(localDbUrl, syncPaths, store, next);
+          dbSyncObj && dbSyncObj.start();
         }, 0);
       }
     }

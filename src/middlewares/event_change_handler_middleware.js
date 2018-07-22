@@ -5,7 +5,11 @@ export default (store, { actionCreators }) => next => action => {
 
   if (action.type === "LOAD_EVENTS") {
     for (const event of action.events) {
-      if (event.relevantDocsIds && event.relevantDocsIds.length > 0) {
+      if (
+        event.relevantDocsIds &&
+        event.relevantDocsIds.length > 0 &&
+        event.status !== "archived"
+      ) {
         next(event.action);
       }
     }

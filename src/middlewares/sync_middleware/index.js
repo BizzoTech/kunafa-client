@@ -71,7 +71,7 @@ export default (store, { getLocalDbUrl, syncPaths }) => next => {
       if (action.type === "LOGIN" || action.type === "LOGOUT") {
         try {
           changes && changes.cancel();
-          (await db) && db.destroy();
+          db && (await db.destroy());
         } catch (err) {
           console.log(err);
         }

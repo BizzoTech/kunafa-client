@@ -1566,7 +1566,7 @@ var initialRollupDone = false;
 var currentDbUrl = void 0;
 
 var createDatabase = function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(localDbUrl) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(localDbUrl, syncPaths, store, next) {
     var tempDb, result;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
@@ -1625,7 +1625,7 @@ var createDatabase = function () {
     }, _callee, undefined);
   }));
 
-  return function createDatabase(_x) {
+  return function createDatabase(_x, _x2, _x3, _x4) {
     return _ref.apply(this, arguments);
   };
 }();
@@ -1658,7 +1658,7 @@ exports.default = function (store, _ref2) {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.next = 2;
-              return createDatabase(localDbUrl);
+              return createDatabase(localDbUrl, syncPaths, store, next);
 
             case 2:
               startDbSync();
@@ -1780,7 +1780,7 @@ exports.default = function (store, _ref2) {
                       switch (_context4.prev = _context4.next) {
                         case 0:
                           _context4.next = 2;
-                          return createDatabase(_localDbUrl);
+                          return createDatabase(_localDbUrl, syncPaths, store, next);
 
                         case 2:
                         case "end":
@@ -1798,7 +1798,7 @@ exports.default = function (store, _ref2) {
         }, _callee5, undefined);
       }));
 
-      return function (_x2) {
+      return function (_x5) {
         return _ref4.apply(this, arguments);
       };
     }();

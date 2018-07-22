@@ -13,7 +13,7 @@ let changes;
 let initialRollupDone = false;
 let currentDbUrl;
 
-const createDatabase = async localDbUrl => {
+const createDatabase = async (localDbUrl, syncPaths, store, next) => {
   currentDbUrl = localDbUrl;
   initialRollupDone = false;
   db = new PouchDB(localDbUrl);
@@ -64,7 +64,7 @@ export default (store, { getLocalDbUrl, syncPaths, startDbSync }) => next => {
   const localDbUrl = getLocalDbUrl(profileId);
 
   setTimeout(async () => {
-    await createDatabase(localDbUrl);
+    await createDatabase(localDbUrl, syncPaths, store, next);
     startDbSync();
   }, 0);
 
@@ -133,7 +133,7 @@ export default (store, { getLocalDbUrl, syncPaths, startDbSync }) => next => {
         }
 
         setTimeout(async () => {
-          await createDatabase(localDbUrl);
+          await createDatabase(localDbUrl, syncPaths, store, next);
         }, 0);
       }
     }

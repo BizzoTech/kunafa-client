@@ -1560,97 +1560,126 @@ var R = __webpack_require__(0);
 
 _pouchdb2.default.plugin(_pouchdbFind2.default);
 
-exports.default = function (store, _ref) {
-  var getLocalDbUrl = _ref.getLocalDbUrl,
-      syncPaths = _ref.syncPaths,
-      startDbSync = _ref.startDbSync;
+var db = void 0;
+var changes = void 0;
+var initialRollupDone = false;
+var currentDbUrl = void 0;
+
+var createDatabase = function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(localDbUrl) {
+    var tempDb, result;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            currentDbUrl = localDbUrl;
+            initialRollupDone = false;
+            db = new _pouchdb2.default(localDbUrl);
+            console.log("Roll up started", localDbUrl);
+
+            tempDb = new _pouchdb2.default(localDbUrl + "_temp");
+            _context.next = 7;
+            return db.replicate.to(tempDb, {
+              selector: {
+                _deleted: {
+                  $exists: false
+                },
+                status: "draft",
+                relevantDocsIds: {
+                  $ne: []
+                }
+              }
+            });
+
+          case 7:
+            _context.next = 9;
+            return db.destroy();
+
+          case 9:
+            db = new _pouchdb2.default(localDbUrl);
+            _context.next = 12;
+            return tempDb.replicate.to(db);
+
+          case 12:
+            _context.next = 14;
+            return tempDb.destroy();
+
+          case 14:
+            _context.next = 16;
+            return (0, _initialLoad2.default)(db, syncPaths, next);
+
+          case 16:
+            result = _context.sent;
+            //Initial Load docs to improve render performance by tracking new changes only
+
+            changes = (0, _syncChanges2.default)(db, syncPaths, store, next, result.update_seq);
+
+            initialRollupDone = true;
+            console.log("Roll up ended", localDbUrl);
+
+          case 20:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, undefined);
+  }));
+
+  return function createDatabase(_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+var waitForRollup = function waitForRollup() {
+  return new Promise(function (resolve, reject) {
+    if (initialRollupDone) {
+      return resolve(true);
+    }
+    var _interval = setInterval(function () {
+      if (initialRollupDone) {
+        clearInterval(_interval);
+        return resolve(true);
+      }
+    }, 50);
+  });
+};
+
+exports.default = function (store, _ref2) {
+  var getLocalDbUrl = _ref2.getLocalDbUrl,
+      syncPaths = _ref2.syncPaths,
+      startDbSync = _ref2.startDbSync;
   return function (next) {
     var profileId = store.getState().currentProfile._id;
     var localDbUrl = getLocalDbUrl(profileId);
-    var db = new _pouchdb2.default(localDbUrl);
-    var changes = void 0;
-    var initialRollupDone = false;
-    setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-      var tempDb, result;
-      return regeneratorRuntime.wrap(function _callee$(_context) {
+
+    setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
         while (1) {
-          switch (_context.prev = _context.next) {
+          switch (_context2.prev = _context2.next) {
             case 0:
-              console.log("Initial roll up started");
+              _context2.next = 2;
+              return createDatabase(localDbUrl);
 
-              tempDb = new _pouchdb2.default(localDbUrl + "_temp");
-              _context.next = 4;
-              return db.replicate.to(tempDb, {
-                selector: {
-                  _deleted: {
-                    $exists: false
-                  },
-                  status: "draft",
-                  relevantDocsIds: {
-                    $ne: []
-                  }
-                }
-              });
-
-            case 4:
-              _context.next = 6;
-              return db.destroy();
-
-            case 6:
-              db = new _pouchdb2.default(localDbUrl);
-              _context.next = 9;
-              return tempDb.replicate.to(db);
-
-            case 9:
-              _context.next = 11;
-              return tempDb.destroy();
-
-            case 11:
-              _context.next = 13;
-              return (0, _initialLoad2.default)(db, syncPaths, next);
-
-            case 13:
-              result = _context.sent;
-              //Initial Load docs to improve render performance by tracking new changes only
-
-              changes = (0, _syncChanges2.default)(db, syncPaths, store, next, result.update_seq);
-
-              initialRollupDone = true;
-              console.log("Initial roll up ended");
-
+            case 2:
               startDbSync();
 
-            case 18:
+            case 3:
             case "end":
-              return _context.stop();
+              return _context2.stop();
           }
         }
-      }, _callee, undefined);
+      }, _callee2, undefined);
     })), 0);
-
-    var waitForRollup = function waitForRollup() {
-      return new Promise(function (resolve, reject) {
-        if (initialRollupDone) {
-          return resolve(true);
-        }
-        var _interval = setInterval(function () {
-          if (initialRollupDone) {
-            clearInterval(_interval);
-            return resolve(true);
-          }
-        }, 50);
-      });
-    };
 
     var mergedActions = (0, _getActionsFromPaths2.default)(syncPaths);
 
     return function () {
-      var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(action) {
-        var bulk, state, _profileId, _localDbUrl, result;
+      var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(action) {
+        var bulk, state, _profileId, _localDbUrl;
 
-        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context5.prev = _context5.next) {
               case 0:
                 bulk = [];
                 state = store.getState();
@@ -1691,16 +1720,16 @@ exports.default = function (store, _ref) {
                 });
 
                 if (!bulk.length) {
-                  _context3.next = 9;
+                  _context5.next = 9;
                   break;
                 }
 
-                setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-                  return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+                  return regeneratorRuntime.wrap(function _callee3$(_context3) {
                     while (1) {
-                      switch (_context2.prev = _context2.next) {
+                      switch (_context3.prev = _context3.next) {
                         case 0:
-                          _context2.next = 2;
+                          _context3.next = 2;
                           return waitForRollup();
 
                         case 2:
@@ -1708,75 +1737,69 @@ exports.default = function (store, _ref) {
 
                         case 3:
                         case "end":
-                          return _context2.stop();
+                          return _context3.stop();
                       }
                     }
-                  }, _callee2, undefined);
+                  }, _callee3, undefined);
                 })), 0);
-                _context3.next = 31;
+                _context5.next = 19;
                 break;
 
               case 9:
                 next(action);
 
-                _context3.next = 12;
+                _context5.next = 12;
                 return waitForRollup();
 
               case 12:
                 if (!(action.type === "LOGIN" || action.type === "LOGOUT")) {
-                  _context3.next = 31;
+                  _context5.next = 19;
                   break;
                 }
 
-                _context3.prev = 13;
-
-                changes && changes.cancel();
-                _context3.t0 = db;
-
-                if (!_context3.t0) {
-                  _context3.next = 19;
-                  break;
-                }
-
-                _context3.next = 19;
-                return db.destroy();
-
-              case 19:
-                _context3.next = 24;
-                break;
-
-              case 21:
-                _context3.prev = 21;
-                _context3.t1 = _context3["catch"](13);
-
-                console.log(_context3.t1);
-
-              case 24:
                 _profileId = store.getState().currentProfile._id;
                 _localDbUrl = getLocalDbUrl(_profileId);
 
-                db = new _pouchdb2.default(_localDbUrl);
+                if (!(_localDbUrl === currentDbUrl)) {
+                  _context5.next = 17;
+                  break;
+                }
 
-                //Initial Load docs to improve render performance by tracking new changes only
-                _context3.next = 29;
-                return (0, _initialLoad2.default)(db, syncPaths, next);
+                return _context5.abrupt("return");
 
-              case 29:
-                result = _context3.sent;
+              case 17:
+                try {
+                  changes && changes.cancel();
+                } catch (err) {
+                  console.log(err);
+                }
 
+                setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
+                  return regeneratorRuntime.wrap(function _callee4$(_context4) {
+                    while (1) {
+                      switch (_context4.prev = _context4.next) {
+                        case 0:
+                          _context4.next = 2;
+                          return createDatabase(_localDbUrl);
 
-                changes = (0, _syncChanges2.default)(db, syncPaths, store, next, result.update_seq);
+                        case 2:
+                        case "end":
+                          return _context4.stop();
+                      }
+                    }
+                  }, _callee4, undefined);
+                })), 0);
 
-              case 31:
+              case 19:
               case "end":
-                return _context3.stop();
+                return _context5.stop();
             }
           }
-        }, _callee3, undefined, [[13, 21]]);
+        }, _callee5, undefined);
       }));
 
-      return function (_x) {
-        return _ref3.apply(this, arguments);
+      return function (_x2) {
+        return _ref4.apply(this, arguments);
       };
     }();
   };

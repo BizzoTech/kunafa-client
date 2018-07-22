@@ -8,56 +8,65 @@ import syncChanges from "./syncChanges";
 
 import getActionsFromPaths from "./getActionsFromPaths";
 
+let db;
+let changes;
+let initialRollupDone = false;
+let currentDbUrl;
+
+const createDatabase = async localDbUrl => {
+  currentDbUrl = localDbUrl;
+  initialRollupDone = false;
+  db = new PouchDB(localDbUrl);
+  console.log("Roll up started", localDbUrl);
+
+  const tempDb = new PouchDB(localDbUrl + "_temp");
+  await db.replicate.to(tempDb, {
+    selector: {
+      _deleted: {
+        $exists: false
+      },
+      status: "draft",
+      relevantDocsIds: {
+        $ne: []
+      }
+    }
+  });
+  await db.destroy();
+  db = new PouchDB(localDbUrl);
+  await tempDb.replicate.to(db);
+
+  await tempDb.destroy();
+
+  const result = await initialLoad(db, syncPaths, next); //Initial Load docs to improve render performance by tracking new changes only
+
+  changes = syncChanges(db, syncPaths, store, next, result.update_seq);
+
+  initialRollupDone = true;
+  console.log("Roll up ended", localDbUrl);
+};
+
+const waitForRollup = () => {
+  return new Promise(function(resolve, reject) {
+    if (initialRollupDone) {
+      return resolve(true);
+    }
+    const _interval = setInterval(() => {
+      if (initialRollupDone) {
+        clearInterval(_interval);
+        return resolve(true);
+      }
+    }, 50);
+  });
+};
+
 export default (store, { getLocalDbUrl, syncPaths, startDbSync }) => next => {
   const profileId = store.getState().currentProfile._id;
   const localDbUrl = getLocalDbUrl(profileId);
-  let db = new PouchDB(localDbUrl);
-  let changes;
-  let initialRollupDone = false;
+
   setTimeout(async () => {
-    console.log("Initial roll up started");
-
-    const tempDb = new PouchDB(localDbUrl + "_temp");
-    await db.replicate.to(tempDb, {
-      selector: {
-        _deleted: {
-          $exists: false
-        },
-        status: "draft",
-        relevantDocsIds: {
-          $ne: []
-        }
-      }
-    });
-    await db.destroy();
-    db = new PouchDB(localDbUrl);
-    await tempDb.replicate.to(db);
-
-    await tempDb.destroy();
-
-    const result = await initialLoad(db, syncPaths, next); //Initial Load docs to improve render performance by tracking new changes only
-
-    changes = syncChanges(db, syncPaths, store, next, result.update_seq);
-
-    initialRollupDone = true;
-    console.log("Initial roll up ended");
-
+    await createDatabase(localDbUrl);
     startDbSync();
   }, 0);
-
-  const waitForRollup = () => {
-    return new Promise(function(resolve, reject) {
-      if (initialRollupDone) {
-        return resolve(true);
-      }
-      const _interval = setInterval(() => {
-        if (initialRollupDone) {
-          clearInterval(_interval);
-          return resolve(true);
-        }
-      }, 50);
-    });
-  };
 
   const mergedActions = getActionsFromPaths(syncPaths);
 
@@ -112,21 +121,20 @@ export default (store, { getLocalDbUrl, syncPaths, startDbSync }) => next => {
       await waitForRollup();
 
       if (action.type === "LOGIN" || action.type === "LOGOUT") {
+        const profileId = store.getState().currentProfile._id;
+        const localDbUrl = getLocalDbUrl(profileId);
+        if (localDbUrl === currentDbUrl) {
+          return;
+        }
         try {
           changes && changes.cancel();
-          db && (await db.destroy());
         } catch (err) {
           console.log(err);
         }
 
-        const profileId = store.getState().currentProfile._id;
-        const localDbUrl = getLocalDbUrl(profileId);
-        db = new PouchDB(localDbUrl);
-
-        //Initial Load docs to improve render performance by tracking new changes only
-        const result = await initialLoad(db, syncPaths, next);
-
-        changes = syncChanges(db, syncPaths, store, next, result.update_seq);
+        setTimeout(async () => {
+          await createDatabase(localDbUrl);
+        }, 0);
       }
     }
   };

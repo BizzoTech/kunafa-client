@@ -44,6 +44,31 @@ export const loadDocs = (query, loaderName, config) => async dispatch => {
   }
 };
 
+const loadDocById = (docId, config) => async dispatch => {
+  try {
+    const publicDb = config.getDbInstance
+      ? config.getDbInstance()
+      : getDbInstance(config);
+    const result = await publicDb.get(docId);
+    const docs = result
+      ? [
+          {
+            ...doc,
+            fetchedAt: Date.now()
+          }
+        ]
+      : [];
+    if (docs) {
+      dispatch({
+        type: "LOAD_DOCS",
+        docs
+      });
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const TTL = 5 * 60 * 1000; //5 minuts
 //const TTL = 0; // Live Update
 
@@ -55,16 +80,7 @@ export const fetchDoc = (doc, { actionCreators }) => dispatch => {
     //console.log("loaded from cache");
     return Promise.resolve();
   }
-  dispatch(
-    actionCreators.loadDocs(
-      {
-        selector: {
-          _id: doc._id
-        }
-      },
-      undefined
-    )
-  );
+  dispatch(actionCreators.loadDocById(doc._id));
 };
 
 export const fetchDocsByIds = (docsIds, { actionCreators }) => dispatch => {

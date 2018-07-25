@@ -54,10 +54,10 @@ describe("Documents action creators tests", () => {
     expect(dispatch).toHaveBeenCalledTimes(0);
   });
 
-  it("fetchDoc should dispatch loadDoc with a selector of doc _id ", async () => {
+  it("fetchDoc should dispatch loadDocById  ", async () => {
     const dispatch = jest.fn();
     const actionCreators = {
-      loadDocs: jest.fn(() => "LOAD_DOCS_RETURN")
+      loadDocById: jest.fn(() => "LOAD_DOCS_RETURN")
     };
     const doc = {
       _id: "testId",
@@ -66,22 +66,15 @@ describe("Documents action creators tests", () => {
     };
     await fetchDoc(doc, { actionCreators })(dispatch);
     expect(dispatch).toHaveBeenCalledTimes(1);
-    expect(actionCreators.loadDocs).toHaveBeenCalledTimes(1);
-    expect(actionCreators.loadDocs).toBeCalledWith(
-      {
-        selector: {
-          _id: "testId"
-        }
-      },
-      undefined
-    );
+    expect(actionCreators.loadDocById).toHaveBeenCalledTimes(1);
+    expect(actionCreators.loadDocById).toBeCalledWith("testId");
     expect(dispatch).toBeCalledWith("LOAD_DOCS_RETURN");
   });
 
-  it("fetchDoc should dispatch loadDocs to a doc with invalidCache even if loaded within 5 minuts ", async () => {
+  it("fetchDoc should dispatch loadDocById to a doc with invalidCache even if loaded within 5 minuts ", async () => {
     const dispatch = jest.fn();
     const actionCreators = {
-      loadDocs: jest.fn(() => "LOAD_DOCS_RETURN")
+      loadDocById: jest.fn(() => "LOAD_DOCS_RETURN")
     };
     const doc = {
       _id: "testId",
@@ -91,15 +84,8 @@ describe("Documents action creators tests", () => {
     };
     await fetchDoc(doc, { actionCreators })(dispatch);
     expect(dispatch).toHaveBeenCalledTimes(1);
-    expect(actionCreators.loadDocs).toHaveBeenCalledTimes(1);
-    expect(actionCreators.loadDocs).toBeCalledWith(
-      {
-        selector: {
-          _id: "testId"
-        }
-      },
-      undefined
-    );
+    expect(actionCreators.loadDocById).toHaveBeenCalledTimes(1);
+    expect(actionCreators.loadDocById).toBeCalledWith("testId");
     expect(dispatch).toBeCalledWith("LOAD_DOCS_RETURN");
   });
 

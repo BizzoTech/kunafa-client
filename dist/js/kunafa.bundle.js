@@ -2253,7 +2253,7 @@ exports.default = function (store, _ref) {
         next(actionCreators.removeDocsToLoad(docsIds));
         store.dispatch(actionCreators.fetchDocsByIds(docsIds));
       }
-    }, 1000);
+    }, 5000);
 
     return function (action) {
       return next(action);

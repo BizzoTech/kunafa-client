@@ -30,7 +30,10 @@ export default (store, { actionCreators }) => next => action => {
   if (action.type === "UPDATE_EVENT" || action.type === "ADD_EVENT") {
     if (!action.doc.draft && action.doc.appliedOn) {
       for (const docId of Object.keys(action.doc.appliedOn)) {
-        store.dispatch(actionCreators.addDocsToLoad([docId]));
+        const doc = store.getState().documents[docId];
+        if (!doc || doc._rev < action.doc.appliedOn[docId]) {
+          store.dispatch(actionCreators.addDocsToLoad([docId]));
+        }
       }
     }
   }

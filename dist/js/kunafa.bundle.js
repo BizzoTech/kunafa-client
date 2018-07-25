@@ -1514,7 +1514,10 @@ exports.default = function (store, _ref) {
             for (var _iterator2 = Object.keys(action.doc.appliedOn)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
               var docId = _step2.value;
 
-              store.dispatch(actionCreators.addDocsToLoad([docId]));
+              var doc = store.getState().documents[docId];
+              if (!doc || doc._rev < action.doc.appliedOn[docId]) {
+                store.dispatch(actionCreators.addDocsToLoad([docId]));
+              }
             }
           } catch (err) {
             _didIteratorError2 = true;

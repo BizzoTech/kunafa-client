@@ -74,7 +74,12 @@ describe("Event change handler middleware tests", () => {
   it("should dispatch ADD_DOCS_TO_LOAD on all docs affected by UPDATE_EVENT", () => {
     const next = jest.fn();
     const store = {
-      dispatch: jest.fn()
+      dispatch: jest.fn(),
+      getState: () => {
+        return {
+          documents: {}
+        };
+      }
     };
     const actionCreators = {
       addDocsToLoad: jest.fn()
@@ -102,7 +107,12 @@ describe("Event change handler middleware tests", () => {
   it("should dispatch ADD_DOCS_TO_LOAD on all docs affected by ADD_EVENT", () => {
     const next = jest.fn();
     const store = {
-      dispatch: jest.fn()
+      dispatch: jest.fn(),
+      getState: () => {
+        return {
+          documents: {}
+        };
+      }
     };
     const actionCreators = {
       addDocsToLoad: jest.fn()
@@ -130,7 +140,12 @@ describe("Event change handler middleware tests", () => {
   it("should ignore draft events", () => {
     const next = jest.fn();
     const store = {
-      dispatch: jest.fn()
+      dispatch: jest.fn(),
+      getState: () => {
+        return {
+          documents: {}
+        };
+      }
     };
     const actionCreators = {
       fetchDoc: jest.fn()

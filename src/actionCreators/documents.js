@@ -69,6 +69,34 @@ export const loadDocById = (docId, config) => async dispatch => {
   }
 };
 
+export const loadDocsByIds = (docsIds, config) => async dispatch => {
+  try {
+    const publicDb = config.getDbInstance
+      ? config.getDbInstance()
+      : getDbInstance(config);
+    const result = await publicDb.allDocs({
+      include_docs: true,
+      keys: docsIds
+    });
+    const docs = result
+      ? result.rows.map(row => {
+          return {
+            ...row.doc,
+            fetchedAt: Date.now()
+          };
+        })
+      : [];
+    if (docs) {
+      dispatch({
+        type: "LOAD_DOCS",
+        docs
+      });
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const TTL = 5 * 60 * 1000; //5 minuts
 //const TTL = 0; // Live Update
 
@@ -87,18 +115,7 @@ export const fetchDocsByIds = (docsIds, { actionCreators }) => dispatch => {
   if (!docsIds || docsIds.length === 0) {
     return Promise.resolve();
   }
-  dispatch(
-    actionCreators.loadDocs(
-      {
-        selector: {
-          _id: {
-            $in: docsIds
-          }
-        }
-      },
-      undefined
-    )
-  );
+  dispatch(actionCreators.loadDocsByIds(docsIds));
 };
 
 export const createDocLoader = (loaderName, query) => {

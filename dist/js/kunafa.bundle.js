@@ -2402,7 +2402,7 @@ var clickExternalNotification = exports.clickExternalNotification = function cli
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.removeDocsToLoad = exports.addDocsToLoad = exports.refreshLoader = exports.loadMoreDocs = exports.createDocLoader = exports.fetchDocsByIds = exports.fetchDoc = exports.loadDocById = exports.loadDocs = undefined;
+exports.removeDocsToLoad = exports.addDocsToLoad = exports.refreshLoader = exports.loadMoreDocs = exports.createDocLoader = exports.fetchDocsByIds = exports.fetchDoc = exports.loadDocsByIds = exports.loadDocById = exports.loadDocs = undefined;
 
 var _pouchdb = __webpack_require__(1);
 
@@ -2535,11 +2535,65 @@ var loadDocById = exports.loadDocById = function loadDocById(docId, config) {
   }();
 };
 
+var loadDocsByIds = exports.loadDocsByIds = function loadDocsByIds(docsIds, config) {
+  return function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(dispatch) {
+      var _publicDb3, result, docs;
+
+      return regeneratorRuntime.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              _publicDb3 = config.getDbInstance ? config.getDbInstance() : getDbInstance(config);
+              _context3.next = 4;
+              return _publicDb3.allDocs({
+                include_docs: true,
+                keys: docsIds
+              });
+
+            case 4:
+              result = _context3.sent;
+              docs = result ? result.rows.map(function (row) {
+                return Object.assign({}, row.doc, {
+                  fetchedAt: Date.now()
+                });
+              }) : [];
+
+              if (docs) {
+                dispatch({
+                  type: "LOAD_DOCS",
+                  docs: docs
+                });
+              }
+              _context3.next = 12;
+              break;
+
+            case 9:
+              _context3.prev = 9;
+              _context3.t0 = _context3["catch"](0);
+
+              console.log(_context3.t0);
+
+            case 12:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, undefined, [[0, 9]]);
+    }));
+
+    return function (_x3) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+};
+
 var TTL = 5 * 60 * 1000; //5 minuts
 //const TTL = 0; // Live Update
 
-var fetchDoc = exports.fetchDoc = function fetchDoc(doc, _ref3) {
-  var actionCreators = _ref3.actionCreators;
+var fetchDoc = exports.fetchDoc = function fetchDoc(doc, _ref4) {
+  var actionCreators = _ref4.actionCreators;
   return function (dispatch) {
     if (!doc || !doc._id) {
       return Promise.resolve();
@@ -2552,19 +2606,13 @@ var fetchDoc = exports.fetchDoc = function fetchDoc(doc, _ref3) {
   };
 };
 
-var fetchDocsByIds = exports.fetchDocsByIds = function fetchDocsByIds(docsIds, _ref4) {
-  var actionCreators = _ref4.actionCreators;
+var fetchDocsByIds = exports.fetchDocsByIds = function fetchDocsByIds(docsIds, _ref5) {
+  var actionCreators = _ref5.actionCreators;
   return function (dispatch) {
     if (!docsIds || docsIds.length === 0) {
       return Promise.resolve();
     }
-    dispatch(actionCreators.loadDocs({
-      selector: {
-        _id: {
-          $in: docsIds
-        }
-      }
-    }, undefined));
+    dispatch(actionCreators.loadDocsByIds(docsIds));
   };
 };
 
@@ -2576,8 +2624,8 @@ var createDocLoader = exports.createDocLoader = function createDocLoader(loaderN
   };
 };
 
-var loadMoreDocs = exports.loadMoreDocs = function loadMoreDocs(loaderName, _ref5) {
-  var actionCreators = _ref5.actionCreators;
+var loadMoreDocs = exports.loadMoreDocs = function loadMoreDocs(loaderName, _ref6) {
+  var actionCreators = _ref6.actionCreators;
   return function (dispatch, getState) {
     var loaderState = getState().docLoaders[loaderName];
     if (loaderState) {
@@ -2596,8 +2644,8 @@ var loadMoreDocs = exports.loadMoreDocs = function loadMoreDocs(loaderName, _ref
   };
 };
 
-var refreshLoader = exports.refreshLoader = function refreshLoader(loaderName, _ref6) {
-  var actionCreators = _ref6.actionCreators;
+var refreshLoader = exports.refreshLoader = function refreshLoader(loaderName, _ref7) {
+  var actionCreators = _ref7.actionCreators;
   return function (dispatch) {
     dispatch({
       type: "REFRESH_LOADER",

@@ -6,7 +6,7 @@ export default (store, { actionCreators }) => next => {
       next(actionCreators.removeDocsToLoad(docsIds));
       store.dispatch(actionCreators.fetchDocsByIds(docsIds));
     }
-  }, 1000);
+  }, 5000);
 
   return action => {
     return next(action);

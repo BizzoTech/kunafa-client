@@ -2402,7 +2402,7 @@ var clickExternalNotification = exports.clickExternalNotification = function cli
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.removeDocsToLoad = exports.addDocsToLoad = exports.refreshLoader = exports.loadMoreDocs = exports.createDocLoader = exports.fetchDocsByIds = exports.fetchDoc = exports.loadDocs = undefined;
+exports.removeDocsToLoad = exports.addDocsToLoad = exports.refreshLoader = exports.loadMoreDocs = exports.createDocLoader = exports.fetchDocsByIds = exports.fetchDoc = exports.loadDocById = exports.loadDocs = undefined;
 
 var _pouchdb = __webpack_require__(1);
 
@@ -2486,7 +2486,7 @@ var loadDocs = exports.loadDocs = function loadDocs(query, loaderName, config) {
   }();
 };
 
-var loadDocById = function loadDocById(docId, config) {
+var loadDocById = exports.loadDocById = function loadDocById(docId, config) {
   return function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(dispatch) {
       var _publicDb2, result, docs;

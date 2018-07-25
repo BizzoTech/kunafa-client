@@ -44,7 +44,7 @@ export const loadDocs = (query, loaderName, config) => async dispatch => {
   }
 };
 
-const loadDocById = (docId, config) => async dispatch => {
+export const loadDocById = (docId, config) => async dispatch => {
   try {
     const publicDb = config.getDbInstance
       ? config.getDbInstance()

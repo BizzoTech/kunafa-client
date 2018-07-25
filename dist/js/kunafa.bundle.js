@@ -2502,7 +2502,7 @@ var loadDocById = exports.loadDocById = function loadDocById(docId, config) {
 
             case 4:
               result = _context2.sent;
-              docs = result ? [Object.assign({}, doc, {
+              docs = result ? [Object.assign({}, result, {
                 fetchedAt: Date.now()
               })] : [];
 

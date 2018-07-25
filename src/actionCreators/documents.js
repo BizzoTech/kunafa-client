@@ -53,7 +53,7 @@ export const loadDocById = (docId, config) => async dispatch => {
     const docs = result
       ? [
           {
-            ...doc,
+            ...result,
             fetchedAt: Date.now()
           }
         ]

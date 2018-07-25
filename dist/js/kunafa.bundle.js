@@ -2249,7 +2249,7 @@ exports.default = function (store, _ref) {
     setInterval(function () {
       var docsToLoad = store.getState().docsToLoad;
       var docsIds = Object.keys(docsToLoad);
-      if (docsIds && docsIds.length > 1) {
+      if (docsIds && docsIds.length > 0) {
         next(actionCreators.removeDocsToLoad(docsIds));
         store.dispatch(actionCreators.fetchDocsByIds(docsIds));
       }

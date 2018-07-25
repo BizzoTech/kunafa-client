@@ -71,13 +71,13 @@ describe("Event change handler middleware tests", () => {
     expect(next).toBeCalledWith(action);
   });
 
-  it("shoudl dispatch fetch action on all docs affected by UPDATE_EVENT", () => {
+  it("should dispatch ADD_DOCS_TO_LOAD on all docs affected by UPDATE_EVENT", () => {
     const next = jest.fn();
     const store = {
       dispatch: jest.fn()
     };
     const actionCreators = {
-      fetchDoc: jest.fn()
+      addDocsToLoad: jest.fn()
     };
     const action = {
       type: "UPDATE_EVENT",
@@ -93,23 +93,19 @@ describe("Event change handler middleware tests", () => {
     eventChangeHandlerMiddleware(store, { actionCreators })(next)(action);
     expect(next).toHaveBeenCalledTimes(1);
     expect(next).toBeCalledWith(action);
-    expect(actionCreators.fetchDoc).toHaveBeenCalledTimes(2);
-    expect(actionCreators.fetchDoc).toBeCalledWith({
-      _id: "doc_1"
-    });
-    expect(actionCreators.fetchDoc).toBeCalledWith({
-      _id: "doc_2"
-    });
+    expect(actionCreators.addDocsToLoad).toHaveBeenCalledTimes(2);
+    expect(actionCreators.addDocsToLoad).toBeCalledWith(["doc_1"]);
+    expect(actionCreators.addDocsToLoad).toBeCalledWith(["doc_2"]);
     expect(store.dispatch).toHaveBeenCalledTimes(2);
   });
 
-  it("shoudl dispatch fetch action on all docs affected by ADD_EVENT", () => {
+  it("should dispatch ADD_DOCS_TO_LOAD on all docs affected by ADD_EVENT", () => {
     const next = jest.fn();
     const store = {
       dispatch: jest.fn()
     };
     const actionCreators = {
-      fetchDoc: jest.fn()
+      addDocsToLoad: jest.fn()
     };
     const action = {
       type: "UPDATE_EVENT",
@@ -125,13 +121,9 @@ describe("Event change handler middleware tests", () => {
     eventChangeHandlerMiddleware(store, { actionCreators })(next)(action);
     expect(next).toHaveBeenCalledTimes(1);
     expect(next).toBeCalledWith(action);
-    expect(actionCreators.fetchDoc).toHaveBeenCalledTimes(2);
-    expect(actionCreators.fetchDoc).toBeCalledWith({
-      _id: "doc_1"
-    });
-    expect(actionCreators.fetchDoc).toBeCalledWith({
-      _id: "doc_2"
-    });
+    expect(actionCreators.addDocsToLoad).toHaveBeenCalledTimes(2);
+    expect(actionCreators.addDocsToLoad).toBeCalledWith(["doc_1"]);
+    expect(actionCreators.addDocsToLoad).toBeCalledWith(["doc_2"]);
     expect(store.dispatch).toHaveBeenCalledTimes(2);
   });
 

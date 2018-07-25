@@ -8,6 +8,8 @@ import docLoaders from "./docLoaders";
 import notifications from "./notifications";
 import sharedDocs from "./sharedDocs";
 
+import docsToLoad from "./docsToLoad";
+
 export default {
   currentProfile,
   history,
@@ -17,5 +19,6 @@ export default {
   dialog,
   docLoaders,
   notifications,
-  sharedDocs
+  sharedDocs,
+  docsToLoad
 };

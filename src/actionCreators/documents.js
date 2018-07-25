@@ -67,6 +67,24 @@ export const fetchDoc = (doc, { actionCreators }) => dispatch => {
   );
 };
 
+export const fetchDocsByIds = (docsIds, { actionCreators }) => dispatch => {
+  if (!docsIds || docsIds.length === 0) {
+    return Promise.resolve();
+  }
+  dispatch(
+    actionCreators.loadDocs(
+      {
+        selector: {
+          _id: {
+            $in: docsIds
+          }
+        }
+      },
+      undefined
+    )
+  );
+};
+
 export const createDocLoader = (loaderName, query) => {
   return {
     type: "CREATE_DOCS_LOADER",
@@ -104,4 +122,18 @@ export const refreshLoader = (loaderName, { actionCreators }) => dispatch => {
     loaderName
   });
   dispatch(actionCreators.loadMoreDocs(loaderName));
+};
+
+export const addDocsToLoad = docsIds => {
+  return {
+    type: "ADD_DOCS_TO_LOAD",
+    docsIds
+  };
+};
+
+export const removeDocsToLoad = docsIds => {
+  return {
+    type: "REMOVE_DOCS_TO_LOAD",
+    docsIds
+  };
 };

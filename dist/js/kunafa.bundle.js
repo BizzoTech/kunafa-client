@@ -7,7 +7,7 @@
 		exports["kunafa"] = factory(require("ramda"), require("pouchdb"), require("redux"), require("pouchdb-find"), require("react"), require("react-redux"), require("prop-types"), require("redux-thunk"), require("redux-devtools-extension"), require("uuid"), require("reselect"));
 	else
 		root["kunafa"] = factory(root["ramda"], root["pouchdb"], root["redux"], root["pouchdb-find"], root["react"], root["react-redux"], root["prop-types"], root["redux-thunk"], root["redux-devtools-extension"], root["uuid"], root["reselect"]);
-})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_7__, __WEBPACK_EXTERNAL_MODULE_8__, __WEBPACK_EXTERNAL_MODULE_9__, __WEBPACK_EXTERNAL_MODULE_11__, __WEBPACK_EXTERNAL_MODULE_12__, __WEBPACK_EXTERNAL_MODULE_34__, __WEBPACK_EXTERNAL_MODULE_36__) {
+})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_7__, __WEBPACK_EXTERNAL_MODULE_8__, __WEBPACK_EXTERNAL_MODULE_9__, __WEBPACK_EXTERNAL_MODULE_11__, __WEBPACK_EXTERNAL_MODULE_12__, __WEBPACK_EXTERNAL_MODULE_35__, __WEBPACK_EXTERNAL_MODULE_37__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -108,7 +108,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _events = __webpack_require__(35);
+var _events = __webpack_require__(36);
 
 var eventsSelectors = _interopRequireWildcard(_events);
 
@@ -265,7 +265,7 @@ var _reducers = __webpack_require__(13);
 
 var _reducers2 = _interopRequireDefault(_reducers);
 
-var _middlewares = __webpack_require__(23);
+var _middlewares = __webpack_require__(24);
 
 var _middlewares2 = _interopRequireDefault(_middlewares);
 
@@ -273,11 +273,11 @@ var _selectors = __webpack_require__(4);
 
 var _selectors2 = _interopRequireDefault(_selectors);
 
-var _actionCreators = __webpack_require__(37);
+var _actionCreators = __webpack_require__(39);
 
 var _actionCreators2 = _interopRequireDefault(_actionCreators);
 
-var _defaultConfig = __webpack_require__(42);
+var _defaultConfig = __webpack_require__(44);
 
 var _defaultConfig2 = _interopRequireDefault(_defaultConfig);
 
@@ -509,6 +509,10 @@ var _sharedDocs = __webpack_require__(22);
 
 var _sharedDocs2 = _interopRequireDefault(_sharedDocs);
 
+var _docsToLoad = __webpack_require__(23);
+
+var _docsToLoad2 = _interopRequireDefault(_docsToLoad);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
@@ -520,7 +524,8 @@ exports.default = {
   dialog: _dialog2.default,
   docLoaders: _docLoaders2.default,
   notifications: _notifications2.default,
-  sharedDocs: _sharedDocs2.default
+  sharedDocs: _sharedDocs2.default,
+  docsToLoad: _docsToLoad2.default
 };
 
 /***/ }),
@@ -954,36 +959,82 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _process_local_events_middleware = __webpack_require__(24);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var _process_local_events_middleware2 = _interopRequireDefault(_process_local_events_middleware);
+var R = __webpack_require__(0);
 
-var _local_cache_middleware = __webpack_require__(25);
+var defaultState = {};
 
-var _local_cache_middleware2 = _interopRequireDefault(_local_cache_middleware);
+exports.default = function () {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultState;
+  var action = arguments[1];
+  var config = arguments[2];
 
-var _event_change_handler_middleware = __webpack_require__(26);
-
-var _event_change_handler_middleware2 = _interopRequireDefault(_event_change_handler_middleware);
-
-var _click_notification_middleware = __webpack_require__(27);
-
-var _click_notification_middleware2 = _interopRequireDefault(_click_notification_middleware);
-
-var _sync_middleware = __webpack_require__(28);
-
-var _sync_middleware2 = _interopRequireDefault(_sync_middleware);
-
-var _event_sourcing_middleware = __webpack_require__(33);
-
-var _event_sourcing_middleware2 = _interopRequireDefault(_event_sourcing_middleware);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = [_process_local_events_middleware2.default, _local_cache_middleware2.default, _event_sourcing_middleware2.default, _sync_middleware2.default, _click_notification_middleware2.default, _event_change_handler_middleware2.default];
+  switch (action.type) {
+    case "ADD_DOCS_TO_LOAD":
+      return R.reduce(function (accum, docId) {
+        return Object.assign({}, accum, _defineProperty({}, docId, 1));
+      }, state, action.docsIds);
+    case "REMOVE_DOCS_TO_LOAD":
+      return R.omit(action.docsIds, state);
+    case "LOAD_DOCS":
+      if (action.docs.length < 1) {
+        return state;
+      }
+      var loadedDocsIds = action.docs.map(function (d) {
+        return d._id;
+      });
+      return R.omit(loadedDocsIds, state);
+    default:
+      return state;
+  }
+};
 
 /***/ }),
 /* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _process_local_events_middleware = __webpack_require__(25);
+
+var _process_local_events_middleware2 = _interopRequireDefault(_process_local_events_middleware);
+
+var _local_cache_middleware = __webpack_require__(26);
+
+var _local_cache_middleware2 = _interopRequireDefault(_local_cache_middleware);
+
+var _event_change_handler_middleware = __webpack_require__(27);
+
+var _event_change_handler_middleware2 = _interopRequireDefault(_event_change_handler_middleware);
+
+var _click_notification_middleware = __webpack_require__(28);
+
+var _click_notification_middleware2 = _interopRequireDefault(_click_notification_middleware);
+
+var _sync_middleware = __webpack_require__(29);
+
+var _sync_middleware2 = _interopRequireDefault(_sync_middleware);
+
+var _event_sourcing_middleware = __webpack_require__(34);
+
+var _event_sourcing_middleware2 = _interopRequireDefault(_event_sourcing_middleware);
+
+var _periodic_load_docs_middleware = __webpack_require__(38);
+
+var _periodic_load_docs_middleware2 = _interopRequireDefault(_periodic_load_docs_middleware);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = [_process_local_events_middleware2.default, _local_cache_middleware2.default, _event_sourcing_middleware2.default, _sync_middleware2.default, _click_notification_middleware2.default, _event_change_handler_middleware2.default, _periodic_load_docs_middleware2.default];
+
+/***/ }),
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1164,7 +1215,7 @@ exports.default = function (store, _ref2) {
 };
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1398,7 +1449,7 @@ exports.default = function (store, _ref2) {
 };
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1463,9 +1514,7 @@ exports.default = function (store, _ref) {
             for (var _iterator2 = Object.keys(action.doc.appliedOn)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
               var docId = _step2.value;
 
-              store.dispatch(actionCreators.fetchDoc({
-                _id: docId
-              }));
+              store.dispatch(actionCreators.addDocsToLoad([docId]));
             }
           } catch (err) {
             _didIteratorError2 = true;
@@ -1490,7 +1539,7 @@ exports.default = function (store, _ref) {
 };
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1522,7 +1571,7 @@ exports.default = function (store, _ref) {
 };
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1540,15 +1589,15 @@ var _pouchdbFind = __webpack_require__(3);
 
 var _pouchdbFind2 = _interopRequireDefault(_pouchdbFind);
 
-var _initialLoad = __webpack_require__(29);
+var _initialLoad = __webpack_require__(30);
 
 var _initialLoad2 = _interopRequireDefault(_initialLoad);
 
-var _syncChanges = __webpack_require__(30);
+var _syncChanges = __webpack_require__(31);
 
 var _syncChanges2 = _interopRequireDefault(_syncChanges);
 
-var _getActionsFromPaths = __webpack_require__(32);
+var _getActionsFromPaths = __webpack_require__(33);
 
 var _getActionsFromPaths2 = _interopRequireDefault(_getActionsFromPaths);
 
@@ -1810,7 +1859,7 @@ exports.default = function (store, _ref2) {
 };
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1867,7 +1916,7 @@ var initialLoad = function () {
 exports.default = initialLoad;
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1877,7 +1926,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _getDefaultAction = __webpack_require__(31);
+var _getDefaultAction = __webpack_require__(32);
 
 var _getDefaultAction2 = _interopRequireDefault(_getDefaultAction);
 
@@ -1932,7 +1981,7 @@ var syncChanges = function syncChanges(db, syncPaths, store, dispatch) {
 exports.default = syncChanges;
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1956,7 +2005,7 @@ var getDefaultAction = function getDefaultAction(act) {
 exports.default = getDefaultAction;
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2009,7 +2058,7 @@ var getActionsFromPaths = function getActionsFromPaths(syncPaths) {
 exports.default = getActionsFromPaths;
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2019,7 +2068,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _uuid = __webpack_require__(34);
+var _uuid = __webpack_require__(35);
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
@@ -2121,13 +2170,13 @@ var updateEventsToSetAppliedOnClient = function updateEventsToSetAppliedOnClient
 };
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_34__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_35__;
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2138,7 +2187,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.eventsByRelevantDocSelector = undefined;
 
-var _reselect = __webpack_require__(36);
+var _reselect = __webpack_require__(37);
 
 var R = __webpack_require__(0);
 
@@ -2178,13 +2227,13 @@ var eventsByRelevantDocSelector = exports.eventsByRelevantDocSelector = (0, _res
 });
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_36__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_37__;
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2194,19 +2243,49 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _history = __webpack_require__(38);
+exports.default = function (store, _ref) {
+  var actionCreators = _ref.actionCreators;
+  return function (next) {
+
+    setInterval(function () {
+      var docsToLoad = store.getState().docsToLoad;
+      var docsIds = Object.keys(docsToLoad);
+      if (docsIds && docsIds.length > 1) {
+        next(actionCreators.removeDocsToLoad(docsIds));
+        next(actionCreators.fetchDocsByIds(docsIds));
+      }
+    }, 1000);
+
+    return function (action) {
+      return next(action);
+    };
+  };
+};
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _history = __webpack_require__(40);
 
 var historyActions = _interopRequireWildcard(_history);
 
-var _dialog = __webpack_require__(39);
+var _dialog = __webpack_require__(41);
 
 var dialogActions = _interopRequireWildcard(_dialog);
 
-var _notifications = __webpack_require__(40);
+var _notifications = __webpack_require__(42);
 
 var notificationActions = _interopRequireWildcard(_notifications);
 
-var _documents = __webpack_require__(41);
+var _documents = __webpack_require__(43);
 
 var documentsActions = _interopRequireWildcard(_documents);
 
@@ -2215,7 +2294,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 exports.default = Object.assign({}, documentsActions, historyActions, dialogActions, notificationActions);
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2264,7 +2343,7 @@ var goTo = exports.goTo = function goTo(path) {
 };
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2287,7 +2366,7 @@ var closeDialog = exports.closeDialog = function closeDialog() {
 };
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2312,7 +2391,7 @@ var clickExternalNotification = exports.clickExternalNotification = function cli
 };
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2321,7 +2400,7 @@ var clickExternalNotification = exports.clickExternalNotification = function cli
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.refreshLoader = exports.loadMoreDocs = exports.createDocLoader = exports.fetchDoc = exports.loadDocs = undefined;
+exports.removeDocsToLoad = exports.addDocsToLoad = exports.refreshLoader = exports.loadMoreDocs = exports.createDocLoader = exports.fetchDocsByIds = exports.fetchDoc = exports.loadDocs = undefined;
 
 var _pouchdb = __webpack_require__(1);
 
@@ -2426,6 +2505,22 @@ var fetchDoc = exports.fetchDoc = function fetchDoc(doc, _ref2) {
   };
 };
 
+var fetchDocsByIds = exports.fetchDocsByIds = function fetchDocsByIds(docsIds, _ref3) {
+  var actionCreators = _ref3.actionCreators;
+  return function (dispatch) {
+    if (!docsIds || docsIds.length === 0) {
+      return Promise.resolve();
+    }
+    dispatch(actionCreators.loadDocs({
+      selector: {
+        _id: {
+          $in: docsIds
+        }
+      }
+    }, undefined));
+  };
+};
+
 var createDocLoader = exports.createDocLoader = function createDocLoader(loaderName, query) {
   return {
     type: "CREATE_DOCS_LOADER",
@@ -2434,8 +2529,8 @@ var createDocLoader = exports.createDocLoader = function createDocLoader(loaderN
   };
 };
 
-var loadMoreDocs = exports.loadMoreDocs = function loadMoreDocs(loaderName, _ref3) {
-  var actionCreators = _ref3.actionCreators;
+var loadMoreDocs = exports.loadMoreDocs = function loadMoreDocs(loaderName, _ref4) {
+  var actionCreators = _ref4.actionCreators;
   return function (dispatch, getState) {
     var loaderState = getState().docLoaders[loaderName];
     if (loaderState) {
@@ -2454,8 +2549,8 @@ var loadMoreDocs = exports.loadMoreDocs = function loadMoreDocs(loaderName, _ref
   };
 };
 
-var refreshLoader = exports.refreshLoader = function refreshLoader(loaderName, _ref4) {
-  var actionCreators = _ref4.actionCreators;
+var refreshLoader = exports.refreshLoader = function refreshLoader(loaderName, _ref5) {
+  var actionCreators = _ref5.actionCreators;
   return function (dispatch) {
     dispatch({
       type: "REFRESH_LOADER",
@@ -2465,8 +2560,22 @@ var refreshLoader = exports.refreshLoader = function refreshLoader(loaderName, _
   };
 };
 
+var addDocsToLoad = exports.addDocsToLoad = function addDocsToLoad(docsIds) {
+  return {
+    type: 'ADD_DOCS_TO_LOAD',
+    docsIds: docsIds
+  };
+};
+
+var removeDocsToLoad = exports.removeDocsToLoad = function removeDocsToLoad(docsIds) {
+  return {
+    type: 'REMOVE_DOCS_TO_LOAD',
+    docsIds: docsIds
+  };
+};
+
 /***/ }),
-/* 42 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -2246,13 +2246,12 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = function (store, _ref) {
   var actionCreators = _ref.actionCreators;
   return function (next) {
-
     setInterval(function () {
       var docsToLoad = store.getState().docsToLoad;
       var docsIds = Object.keys(docsToLoad);
       if (docsIds && docsIds.length > 1) {
         next(actionCreators.removeDocsToLoad(docsIds));
-        next(actionCreators.fetchDocsByIds(docsIds));
+        store.dispatch(actionCreators.fetchDocsByIds(docsIds));
       }
     }, 1000);
 
@@ -2562,14 +2561,14 @@ var refreshLoader = exports.refreshLoader = function refreshLoader(loaderName, _
 
 var addDocsToLoad = exports.addDocsToLoad = function addDocsToLoad(docsIds) {
   return {
-    type: 'ADD_DOCS_TO_LOAD',
+    type: "ADD_DOCS_TO_LOAD",
     docsIds: docsIds
   };
 };
 
 var removeDocsToLoad = exports.removeDocsToLoad = function removeDocsToLoad(docsIds) {
   return {
-    type: 'REMOVE_DOCS_TO_LOAD',
+    type: "REMOVE_DOCS_TO_LOAD",
     docsIds: docsIds
   };
 };

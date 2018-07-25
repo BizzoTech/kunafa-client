@@ -4,7 +4,7 @@ export default (store, { actionCreators }) => next => {
     const docsIds = Object.keys(docsToLoad);
     if (docsIds && docsIds.length > 1) {
       next(actionCreators.removeDocsToLoad(docsIds));
-      next(actionCreators.fetchDocsByIds(docsIds));
+      store.dispatch(actionCreators.fetchDocsByIds(docsIds));
     }
   }, 1000);
 

@@ -13,36 +13,43 @@ let changes;
 let initialRollupDone = false;
 let currentDbUrl;
 
-const createDatabase = async (localDbUrl, syncPaths, store, next) => {
+const createDatabase = async (
+  localDbUrl,
+  syncPaths,
+  isOpenInOtherTab,
+  store,
+  next
+) => {
   currentDbUrl = localDbUrl;
   initialRollupDone = false;
   db = new PouchDB(localDbUrl);
-  console.log("Roll up started", localDbUrl);
-
-  const tempDb = new PouchDB(localDbUrl + "_temp");
-  await db.replicate.to(tempDb, {
-    selector: {
-      _deleted: {
-        $exists: false
-      },
-      status: "draft",
-      relevantDocsIds: {
-        $ne: []
+  const skipRollUp = isOpenInOtherTab && (await isOpenInOtherTab());
+  if (!skipRollUp) {
+    console.log("Roll up started", localDbUrl);
+    const tempDb = new PouchDB(localDbUrl + "_temp");
+    await db.replicate.to(tempDb, {
+      selector: {
+        _deleted: {
+          $exists: false
+        },
+        status: "draft",
+        relevantDocsIds: {
+          $ne: []
+        }
       }
-    }
-  });
-  await db.destroy();
-  db = new PouchDB(localDbUrl);
-  await tempDb.replicate.to(db);
-
-  await tempDb.destroy();
+    });
+    await db.destroy();
+    db = new PouchDB(localDbUrl);
+    await tempDb.replicate.to(db);
+    await tempDb.destroy();
+    console.log("Roll up ended", localDbUrl);
+  }
 
   const result = await initialLoad(db, syncPaths, next); //Initial Load docs to improve render performance by tracking new changes only
 
   changes = syncChanges(db, syncPaths, store, next, result.update_seq);
 
   initialRollupDone = true;
-  console.log("Roll up ended", localDbUrl);
 };
 
 const waitForRollup = () => {
@@ -59,12 +66,15 @@ const waitForRollup = () => {
   });
 };
 
-export default (store, { getLocalDbUrl, syncPaths, dbSyncObj }) => next => {
+export default (
+  store,
+  { getLocalDbUrl, syncPaths, dbSyncObj, isOpenInOtherTab }
+) => next => {
   const profileId = store.getState().currentProfile._id;
   const localDbUrl = getLocalDbUrl(profileId);
 
   setTimeout(async () => {
-    await createDatabase(localDbUrl, syncPaths, store, next);
+    await createDatabase(localDbUrl, syncPaths, isOpenInOtherTab, store, next);
     dbSyncObj && dbSyncObj.start();
   }, 0);
 
@@ -134,7 +144,13 @@ export default (store, { getLocalDbUrl, syncPaths, dbSyncObj }) => next => {
 
         setTimeout(async () => {
           dbSyncObj && dbSyncObj.stop();
-          await createDatabase(localDbUrl, syncPaths, store, next);
+          await createDatabase(
+            localDbUrl,
+            syncPaths,
+            isOpenInOtherTab,
+            store,
+            next
+          );
           dbSyncObj && dbSyncObj.start();
         }, 0);
       }

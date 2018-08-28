@@ -1,14 +1,5 @@
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("ramda"), require("pouchdb"), require("redux"), require("pouchdb-find"), require("reselect"), require("react"), require("react-redux"), require("prop-types"), require("redux-thunk"), require("redux-devtools-extension"), require("uuid"));
-	else if(typeof define === 'function' && define.amd)
-		define("kunafa", ["ramda", "pouchdb", "redux", "pouchdb-find", "reselect", "react", "react-redux", "prop-types", "redux-thunk", "redux-devtools-extension", "uuid"], factory);
-	else if(typeof exports === 'object')
-		exports["kunafa"] = factory(require("ramda"), require("pouchdb"), require("redux"), require("pouchdb-find"), require("reselect"), require("react"), require("react-redux"), require("prop-types"), require("redux-thunk"), require("redux-devtools-extension"), require("uuid"));
-	else
-		root["kunafa"] = factory(root["ramda"], root["pouchdb"], root["redux"], root["pouchdb-find"], root["reselect"], root["react"], root["react-redux"], root["prop-types"], root["redux-thunk"], root["redux-devtools-extension"], root["uuid"]);
-})(window, function(__WEBPACK_EXTERNAL_MODULE__0__, __WEBPACK_EXTERNAL_MODULE__1__, __WEBPACK_EXTERNAL_MODULE__2__, __WEBPACK_EXTERNAL_MODULE__3__, __WEBPACK_EXTERNAL_MODULE__4__, __WEBPACK_EXTERNAL_MODULE__5__, __WEBPACK_EXTERNAL_MODULE__6__, __WEBPACK_EXTERNAL_MODULE__7__, __WEBPACK_EXTERNAL_MODULE__8__, __WEBPACK_EXTERNAL_MODULE__9__, __WEBPACK_EXTERNAL_MODULE__10__) {
-return /******/ (function(modules) { // webpackBootstrap
+module.exports =
+/******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -98,67 +89,67 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__0__;
+module.exports = require("ramda");
 
 /***/ }),
 /* 1 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__1__;
+module.exports = require("pouchdb");
 
 /***/ }),
 /* 2 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__2__;
+module.exports = require("redux");
 
 /***/ }),
 /* 3 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__3__;
+module.exports = require("pouchdb-find");
 
 /***/ }),
 /* 4 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__4__;
+module.exports = require("reselect");
 
 /***/ }),
 /* 5 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__5__;
+module.exports = require("react");
 
 /***/ }),
 /* 6 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__6__;
+module.exports = require("react-redux");
 
 /***/ }),
 /* 7 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__7__;
+module.exports = require("prop-types");
 
 /***/ }),
 /* 8 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__8__;
+module.exports = require("redux-thunk");
 
 /***/ }),
 /* 9 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__9__;
+module.exports = require("redux-devtools-extension");
 
 /***/ }),
 /* 10 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__10__;
+module.exports = require("uuid");
 
 /***/ }),
 /* 11 */
@@ -1656,4 +1647,3 @@ const createStore_R = __webpack_require__(0);
 
 /***/ })
 /******/ ]);
-});

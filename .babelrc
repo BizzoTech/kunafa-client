@@ -1,14 +1,12 @@
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
-        "browsers": ["last 2 versions"],
+        "browsers": ["last 2 versions", "not last 2 Explorer versions", "not last 2 Android versions"],
         "node": "current"
       }
     }],
-		"react"
+		"@babel/react"
 	],
-  "plugins": [
-    ["transform-object-rest-spread", { "useBuiltIns": true }]
-  ]
+  "plugins": ["@babel/plugin-proposal-object-rest-spread"]
 }

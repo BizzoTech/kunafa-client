@@ -1,16 +1,4 @@
-const debug = process.env.NODE_ENV !== "production";
-const webpack = require('webpack');
-
-
 const path = require('path');
-
-if (!debug) {
-  plugins.push(new webpack.DefinePlugin({
-    'process.env': {
-      NODE_ENV: JSON.stringify('production')
-    }
-  }));
-}
 
 module.exports = {
   entry: './src/index.js',
@@ -20,18 +8,12 @@ module.exports = {
     library: 'kunafa',
     libraryTarget: 'umd',
     umdNamedDefine: true,
-    filename: debug
-      ? 'js/kunafa.bundle.js'
-      : 'js/kunafa.bundle.min.js'
+    filename: 'js/kunafa.bundle.js'
   },
-  // externals: {
-  //   react: "react",
-  //   redux: "redux",
-  //   "react-redux": "react-redux",
-  //   pouchdb: "pouchdb",
-  //   "pouchdb-find": "pouchdb-find",
-
-  // },
+  mode: 'production',
+  optimization: {
+    minimize: false
+  },
   externals: function(context, request, callback) {
     // Absolute & Relative paths are not externals
     if (request.match(/^(\.{0,2})\//)) {
@@ -49,7 +31,7 @@ module.exports = {
   },
   plugins: [],
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         loader: 'babel-loader',
